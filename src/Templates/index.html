@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Visual EPI</title>
+    <link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='/css/select2.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/app.css') }}">
+  </head>
+  <body>
+    <header class="bg-dark-subtle">
+      <div class="container">
+        <div class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+          <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <span class="fs-4">Visual EPI</span>
+          </a>
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a href="/" class="nav-link" aria-current="page">Relatórios</a></li>
+            <li class="nav-item"><a href="/importar-arquivo" class="nav-link">Importar Arquivo</a></li>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <form id="chart-form">
+              <div class="row mb-4">
+                  <div class="col-3">
+                    <select id="input-sickness" class="select2 form-select"></select>
+                  </div>
+                  <div class="col-3">
+                    <select id="input-regions" class="select2 form-select"></select>
+                  </div>
+                  <div class="col-3">
+                    <select id="input-states" class="select2 form-select" disabled></select>
+                  </div>
+                  <div class="col-3">
+                    <select id="input-cities" class="select2 form-select" disabled></select>
+                  </div>
+              </div>
+              <div class="row mb-4">
+                <div class="col-3">
+                    <input id="input-years" class="form-select" placeholder="Intervalo de datas" style="height: 28px">
+                </div>
+              </div>
+          </form>
+          </div>
+          <div class="col-12 mb-4">
+            <div class="border-round row-state" style="position: relative">
+              <div id="map-container"></div>
+              <a id="btn-back" style="position: absolute; top: 12px; left: 24px; display: none;" onclick="printMapChart()" href="#">Voltar</a>
+            </div>
+          </div>
+          <div class="row">
+              <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                      <button class="nav-link active" id="tab1-tab" data-bs-toggle="tab" data-bs-target="#tab1" type="button" role="tab" aria-controls="tab1" aria-selected="true">Casos por data</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2" type="button" role="tab" aria-controls="tab2" aria-selected="false">Tab 2</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3" type="button" role="tab" aria-controls="tab3" aria-selected="false">Tab 3</button>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                      <button class="nav-link" id="tab4-tab" data-bs-toggle="tab" data-bs-target="#tab4" type="button" role="tab" aria-controls="tab4" aria-selected="false">Tab 4</button>
+                  </li>
+              </ul>
+              <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+                       <canvas id="chart-line"></canvas>
+                  </div>
+                  <div class="tab-pane fade" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                      <h2>Tab 2</h2>
+                      <p>Conteúdo da aba 2.</p>
+                  </div>
+                  <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                      <h2>Tab 3</h2>
+                      <p>Conteúdo da aba 3.</p>
+                  </div>
+                  <div class="tab-pane fade" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+                      <h2>Tab 4</h2>
+                      <p>Conteúdo da aba 4.</p>
+                  </div>
+              </div>
+        </div>
+      </div>
+      </div>
+    </main>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
+    <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+  </body>
+</html>
