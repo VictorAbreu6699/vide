@@ -7,6 +7,6 @@ alembic~=1.13.1
 mysqlclient
 pydantic~=2.7.0
 python-multipart
-starlette~=0.39.1
+starlette>=0.37.2
 uvicorn~=0.31.0
 jinja2~=3.1.4
