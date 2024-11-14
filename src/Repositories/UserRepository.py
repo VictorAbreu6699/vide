@@ -1,7 +1,7 @@
 from typing import Optional, Type
 
 from src.Database.Database import Database
-from src.Helpers.CryptHelper import CryptoHelper
+from src.Helpers.CryptHelper import CryptHelper
 from src.Models.User import User
 
 
@@ -12,7 +12,7 @@ class UserRepository:
     def create(self, data: dict) -> User:
         """Cria um novo usuário no banco de dados."""
         db_user = User(**data)
-        password = CryptoHelper().encrypt(data["password"])
+        password = CryptHelper().encrypt(data["password"])
         db_user.password = password
         self.db_session.add(db_user)
         self.db_session.commit()

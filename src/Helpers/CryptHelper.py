@@ -3,13 +3,13 @@ import os
 from cryptography.fernet import Fernet
 
 
-class CryptoHelper:
+class CryptHelper:
     def __init__(self):
-        """Inicia a classe CryptoHelper com uma chave do .env ou gera uma nova chave se não encontrada"""
-        self.key = os.getenv("CRYPTO_KEY")
+        """Inicia a classe CryptoHelper com uma chave do .env"""
+        self.key = os.getenv("HASH_KEY")
 
         if not self.key:
-            raise Exception('Váriavel de ambiente CRYPTO_KEY não preenchida.')
+            raise Exception('Váriavel de ambiente HASH_KEY não preenchida.')
 
         self.cipher = Fernet(self.key.encode())
 
@@ -24,7 +24,3 @@ class CryptoHelper:
         encrypted_data_bytes = encrypted_data.encode()  # Converte os dados criptografados de volta para bytes
         decrypted_data = self.cipher.decrypt(encrypted_data_bytes)
         return decrypted_data.decode()  # Retorna o texto original
-
-    def get_key(self) -> str:
-        """Retorna a chave usada para criptografia e descriptografia"""
-        return self.key
