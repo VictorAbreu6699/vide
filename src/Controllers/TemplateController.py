@@ -12,8 +12,8 @@ def home(request: Request):
     )
 
 
-@router.get("/importar-arquivo")
-def home(request: Request):
+@router.get("/login")
+def login(request: Request):
     return templates.TemplateResponse(
-        request=request, name="uploadFile.html"
+        request=request, name="login.html"
     )
