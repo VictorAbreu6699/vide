@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>VIDE - Criar conta</title>
+</head>
+<head>
+	<title>Login</title>
+	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', path='/css/app.css') }}">
+</head>
+<body>
+    <div class="container h-100 pt-5">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<div class="brand_logo_container">
+						<img src="{{ url_for('static', path='/img/logo.png') }}" class="brand_logo" alt="Logo" height="150">
+					</div>
+				</div>
+				<div class="form_container p-3 pb-5" style="background-color: #33384E; color: white">
+					<form id="form-create-account">
+						<div id="alert-create-account" style="display: none" class="alert mt-3" role="alert"></div>
+                        <div class="mb-3">
+							<label>Usuário</label>
+							<input required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control input_user" value="" placeholder="Usuário">
+						</div>
+						<div class="mb-3">
+							<label>E-mail</label>
+							<input required style="background-color: #4E598D; color: white" type="email" name="email" class="form-control input_user" value="" placeholder="E-mail">
+						</div>
+						<div class="mb-2">
+							<label for="">Senha</label>
+							<input required style="background-color: #4E598D; color: white" type="password" name="password" class="form-control input_pass" value="" placeholder="Senha">
+						</div>
+						<div class="d-flex justify-content-center mt-3 login_container">
+							<button id="form-create-account-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn login_btn">Criar conta</button>
+						</div>
+					</form>
+					<div class="mt-4">
+						<div class="links text-center">
+							<a style="color: white" href="/login" class="ml-2">Fazer login</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
+    <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+	<script src="{{ url_for('static', path='/js/create-account.js') }}"></script>
+</body>
+</html>

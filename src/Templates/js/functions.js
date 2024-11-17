@@ -28,8 +28,63 @@ function request(metod, url, params = []) {
       }
     });
 
-    return result;;
+    return result;
   }
+
+  function getFormData(formElement) {
+    var formData = {};
+    $(formElement).serializeArray().forEach(function(field) {
+        formData[field.name] = field.value;
+    });
+    return formData;
+}
+
+  function requestPost(endpoint, data, successCallback, errorCallback) {
+    $.ajax({
+        url: endpoint,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function(response) {
+            if (typeof successCallback === 'function') {
+                successCallback(response);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (typeof errorCallback === 'function') {
+                errorCallback(jqXHR, textStatus, errorThrown);
+            }
+        }
+    });
+}
+
+function setCookie(name, value, minutes) {
+    let expires = "";
+    if (minutes) {
+        const date = new Date();
+        date.setTime(date.getTime() + minutes * 60 * 1000); // Converte minutos em milissegundos
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = `${name}=${value || ""}${expires}; path=/; secure; samesite=strict`;
+}
+
+function isTokenExpired(token) {
+    if (!token) return true; // Considera expirado se não houver token
+
+    // Decodifica o token para acessar o payload
+    const payload = JSON.parse(atob(token.split('.')[1]));
+
+    // Verifica se o tempo atual está além do tempo de expiração
+    const currentTime = Math.floor(Date.now() / 1000); // Tempo atual em segundos
+    return currentTime > payload.exp; // Retorna true se expirado
+}
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null; // Retorna null se o cookie não existir
+}
 
  function sendFile(file, url, callbackSuccess, callbackError) {
     var formData = new FormData();

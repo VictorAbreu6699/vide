@@ -1,7 +1,6 @@
-from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
-
 from src.Controllers import TemplateController, UserController, AuthController
+from fastapi import FastAPI
 
 app = FastAPI()
 

@@ -1,33 +1,31 @@
 
-function login(callbackSuccess, callbackError) {
-    var formData = new FormData();
-    console.log(formData)
-    $.ajax({
-        url: "/auth/login",
-        type: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-            if (typeof callbackSuccess === 'function') {
-                callbackSuccess(response.message);
-            }
-            else{
-                console.error('Login realizado com sucesso!');
-            }
+function login() {
+    $("#alert-login").hide()
+    requestPost(
+        "/auth/login",
+        getFormData("#form-login"),
+        function(response){
+            message = response.message
+            showAlertForm('alert-login', message, false)
+            setCookie("authToken", `${response.token_type} ${response.access_token}`, 1); // Expira em 60 minutos
+            // Após 2 segundos, redireciona para o login
+            setTimeout(function () {
+                window.location.href = "/";
+            }, 2000);
         },
-        error: function(xhr, status, error) {
-            if (typeof callbackError === 'function') {
-                response = xhr.responseJSON.detail
-                callbackError(response);
-            }
-            else{
-                console.error('Erro ao fazer login:', error);
-            }
+        function(response){
+            response = response.responseJSON.message
+            showAlertForm('alert-login', response, true)
         }
-    });
+    )
 }
 
-$('#form-login-btn-submit').on('click', function(e){
-    console.log('entrou')
-})
+function userIsLogged(){
+    token = getCookie("authToken")
+    // Caso o token exista e não esteja expirado, redireciona para a home
+    if(token != null && !isTokenExpired(token))
+        window.location.href = "/";
+}
+
+$('#form-login-btn-submit').on('click', (e) => login())
+$(document).ready(userIsLogged);

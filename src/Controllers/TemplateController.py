@@ -15,5 +15,12 @@ def home(request: Request):
 @router.get("/login")
 def login(request: Request):
     return templates.TemplateResponse(
-        request=request, name="login.html"
+        request=request, name="login/login.html"
+    )
+
+
+@router.get("/create-account")
+def login(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="login/createAccount.html"
     )

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-	<title>Login</title>
+	<meta charset="UTF-8">
+	<title>VIDE - Login</title>
 	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ url_for('static', path='/css/app.css') }}">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
-<body style="background-color: #2B2F42">
+<body>
 	<div class="container h-100 pt-5">
 		<div class="d-flex justify-content-center h-100">
 			<div class="user_card">
@@ -17,9 +17,10 @@
 				</div>
 				<div class="form_container p-3 pb-5" style="background-color: #33384E; color: white">
 					<form id="form-login">
+						<div id="alert-login" style="display: none" class="alert mt-3" role="alert"></div>
 						<div class="mb-3">
 							<label>E-mail</label>
-							<input required style="background-color: #4E598D; color: white" type="text" name="email" class="form-control input_user" value="" placeholder="E-mail">
+							<input required style="background-color: #4E598D; color: white" type="email" name="email" class="form-control input_user" value="" placeholder="E-mail">
 						</div>
 						<div class="mb-2">
 							<label for="">Senha</label>
@@ -34,7 +35,7 @@
 					</form>
 					<div class="mt-4">
 						<div class="links text-center">
-							<a style="color: white" href="#" class="ml-2">Criar conta</a>
+							<a style="color: white" href="/create-account" class="ml-2">Criar conta</a>
 						</div>
 					</div>
 				</div>
@@ -45,7 +46,6 @@
     <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
     <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', path='/js/vendor/select2.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/app.js') }}"></script>
 	<script src="{{ url_for('static', path='/js/login.js') }}"></script>
 </body>
