@@ -24,3 +24,9 @@ def login(request: Request):
     return templates.TemplateResponse(
         request=request, name="login/createAccount.html"
     )
+
+@router.get("/relatorio")
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="relatorio.html"
+    )
