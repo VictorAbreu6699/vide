@@ -1,4 +1,4 @@
-src/storage/tmp/
+.env
 __pycache__
 venv
-.env
+storage/datasets

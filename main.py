@@ -1,5 +1,5 @@
 from starlette.staticfiles import StaticFiles
-from src.Controllers import TemplateController, UserController, AuthController
+from src.Controllers import TemplateController, UserController, AuthController, DatasetController
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -11,3 +11,4 @@ app.mount("/static", StaticFiles(directory="src/Templates"), name="static")
 app.include_router(TemplateController.router)
 app.include_router(UserController.router)
 app.include_router(AuthController.router)
+app.include_router(DatasetController.router)
