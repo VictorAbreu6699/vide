@@ -19,11 +19,19 @@ def login(request: Request):
     )
 
 
-@router.get("/create-account")
+@router.get("/criar-conta")
 def login(request: Request):
     return templates.TemplateResponse(
         request=request, name="login/createAccount.html"
     )
+
+
+@router.get("/cadastro-dataset")
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="datasets/index.html"
+    )
+
 
 @router.get("/relatorio")
 def home(request: Request):

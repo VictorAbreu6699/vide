@@ -86,9 +86,14 @@ function getCookie(name) {
     return null; // Retorna null se o cookie não existir
 }
 
- function sendFile(file, url, callbackSuccess, callbackError) {
+ function sendFile(file, props, url, callbackSuccess, callbackError) {
     var formData = new FormData();
     formData.append('file', file);
+
+    if(props != null)
+        Object.keys(props).forEach(key => {
+            formData.append(key, props[key])
+        });
 
     $.ajax({
         url: url,
@@ -96,6 +101,10 @@ function getCookie(name) {
         data: formData,
         processData: false,
         contentType: false,
+        beforeSend: function(xhr) {
+            // Adiciona o token JWT no header Authorization
+            xhr.setRequestHeader("Authorization", getCookie("authToken"));
+        },
         success: function(response) {
             if (typeof callbackSuccess === 'function') {
                 callbackSuccess(response.message);
@@ -106,8 +115,7 @@ function getCookie(name) {
         },
         error: function(xhr, status, error) {
             if (typeof callbackError === 'function') {
-                response = xhr.responseJSON.detail
-                callbackError(response);
+                callbackError(xhr.responseJSON);
             }
             else{
                 console.error('Erro ao enviar arquivo:', error);
@@ -276,4 +284,11 @@ function buildSelect2Sickness(){
     })
 
     buildSelect2('input-sickness', 'Enfermidades', options_formated)
+}
+
+function userIsNotLogged(){
+    token = getCookie("authToken")
+    // Caso o token não exista ou esteja expirado, redireciona para o login
+    if(token == null || isTokenExpired(token))
+        window.location.href = "/login";
 }

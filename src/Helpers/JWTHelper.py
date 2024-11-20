@@ -1,12 +1,16 @@
 import os
 from datetime import datetime, timedelta
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Header
 from fastapi.security import OAuth2PasswordBearer
 
 from src.Helpers.CryptHelper import CryptHelper
 import jwt
 from dotenv import load_dotenv
+
+from src.Models.User import User
+from src.Repositories.UserRepository import UserRepository
+
 
 class JWTHelper:
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -53,3 +57,17 @@ class JWTHelper:
                 detail="Token inválido ou expirado",
                 headers={"WWW-Authenticate": "Bearer"}
             )
+
+    @staticmethod
+    def get_token_from_header(authorization: str = Header(...)) -> str:
+        if not authorization.startswith("Bearer "):
+            raise HTTPException(status_code=400, detail="Token inválido ou expirado")
+        return authorization.split(" ")[1]  # Retorna apenas o token (após "Bearer")
+
+    @staticmethod
+    def get_user_from_token(token: str) -> User:
+        payload = JWTHelper.decode_access_token(token)
+        user_email = payload["sub"]
+        user = UserRepository().get_by_email(user_email)
+
+        return user

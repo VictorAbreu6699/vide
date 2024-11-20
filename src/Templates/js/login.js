@@ -7,7 +7,7 @@ function login() {
         function(response){
             message = response.message
             showAlertForm('alert-login', message, false)
-            setCookie("authToken", `${response.token_type} ${response.access_token}`, 1); // Expira em 60 minutos
+            setCookie("authToken", `${response.token_type} ${response.access_token}`, 60); // Expira em 60 minutos
             // Após 2 segundos, redireciona para o login
             setTimeout(function () {
                 window.location.href = "/";

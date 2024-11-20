@@ -11,7 +11,9 @@ router = APIRouter(prefix="/datasets", tags=['Auth'])
 
 
 @router.post("/", dependencies=[Depends(JWTHelper.validate_token)])
-async def upload_file(name: str = Form(...), file: UploadFile = File(...)):
+async def upload_file(
+    name: str = Form(...), file: UploadFile = File(...), token: str = Depends(JWTHelper.get_token_from_header)
+):
     # Tipos de arquivos permitidos
     allowed_content_types = [
         "text/csv",  # Arquivo CSV
@@ -32,5 +34,11 @@ async def upload_file(name: str = Form(...), file: UploadFile = File(...)):
     file_path = os.path.join("storage/datasets", uuid.uuid4().__str__() + extension)
     with open(file_path, "wb") as f:
         f.write(await file.read())
+    user = JWTHelper.get_user_from_token(token)
 
-    DatasetRepository().create({"name": name, "path": file_path})
+    DatasetRepository().create({"name": name, "path": file_path, "user_id": user.id})
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Arquivo enviado com sucesso!"}
+    )
