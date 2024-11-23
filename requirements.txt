@@ -1,5 +1,5 @@
 fastapi~=0.110.1
-SQLAlchemy~=2.0.20
+SQLAlchemy~=2.0.29
 greenlet~=3.0.3
 python-dotenv~=1.0.1
 pandas~=2.2.2
