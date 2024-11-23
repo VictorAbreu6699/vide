@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>VIDE - Fonte de dados</title>
+	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+</head>
+<body>
+    <!-- Logo no topo -->
+    <header class="logo">
+        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+    </header>
+    <div class="w-100">
+        <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
+            <h1 class="text-center">Envie sua fonte de dados</h1>
+            <div class="d-flex justify-content-center h-100">
+                <div class="form_container p-3 pb-5" style="color: white">
+                    <form id="form-dataset-upload">
+                        <div id="alert-form-dataset-upload" style="display: none" class="alert mt-3" role="alert"></div>
+                        <div class="mb-3 text-center">
+                            <label class="mb-2">Nome (sem a extensão)</label>
+                            <input id="form-dataset-upload-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-center" value="" placeholder="Nome">
+                        </div>
+                        <div class="mb-3">
+                            <label for="input-file-upload" class="form-label">Arquivo (suportado somente nos formatos CSV, XLS e XLSX)</label>
+                            <input class="form-control" style="background-color: #4E598D; color: white" type="file" id="input-file-upload" accept=".csv, .xls, .xlsx">
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button disabled id="form-dataset-upload-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
+    <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/dataset/create-dataset.js') }}"></script>
+</body>
+</html>

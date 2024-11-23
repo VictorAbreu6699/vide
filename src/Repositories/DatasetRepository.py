@@ -1,7 +1,11 @@
-from typing import Optional, Type
+import pandas as pd
+from typing import Optional
+
+from sqlalchemy import or_, func
 
 from src.Database.Database import Database
 from src.Models.Dataset import Dataset
+from src.Models.User import User
 
 
 class DatasetRepository:
@@ -20,8 +24,21 @@ class DatasetRepository:
         """Retorna um dataset pelo ID."""
         return self.db_session.query(Dataset).filter(Dataset.id == dataset_id).first()
 
-    def get_all(self) -> list[Type[Dataset]]:
-        return self.db_session.query(Dataset).all()
+    def get_all(self, search: str = None) -> pd.DataFrame:
+        query = self.db_session.query(Dataset, User).join(User, User.id == Dataset.user_id)
+
+        query = query.with_entities(Dataset.id, Dataset.name, User.name.label("user_name"), User.email.label("user_email"))
+
+        if search:
+            query = query.filter(
+                or_(
+                    func.lower(User.name).like(f"%{search.lower()}%"),
+                    func.lower(User.email).like(f"%{search.lower()}%"),
+                    func.lower(Dataset.name).like(f"%{search.lower()}%"),
+                )
+            )
+
+        return pd.read_sql(query.statement, self.db_session.bind)
 
     def update(self, dataset_id: int, data: dict) -> Optional[Dataset]:
         dataset = self.get_by_id(dataset_id)

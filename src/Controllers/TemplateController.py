@@ -27,6 +27,13 @@ def login(request: Request):
 
 
 @router.get("/cadastro-dataset")
+def cadastro_datasets(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="datasets/storeDataset.html"
+    )
+
+
+@router.get("/datasets")
 def home(request: Request):
     return templates.TemplateResponse(
         request=request, name="datasets/index.html"
@@ -34,7 +41,7 @@ def home(request: Request):
 
 
 @router.get("/relatorio")
-def home(request: Request):
+def relatorios(request: Request):
     return templates.TemplateResponse(
         request=request, name="relatorio.html"
     )

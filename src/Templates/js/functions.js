@@ -292,3 +292,9 @@ function userIsNotLogged(){
     if(token == null || isTokenExpired(token))
         window.location.href = "/login";
 }
+
+function checkUserLogin(){
+    token = getCookie("authToken")
+
+    return token != null && !isTokenExpired(token)
+}

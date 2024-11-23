@@ -1,13 +1,23 @@
 import os
 import uuid
+from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, UploadFile, File
+from fastapi import APIRouter, Depends, Form, UploadFile, File, Query
 from starlette.responses import JSONResponse
-
 from src.Helpers.JWTHelper import JWTHelper
 from src.Repositories.DatasetRepository import DatasetRepository
 
 router = APIRouter(prefix="/datasets", tags=['Auth'])
+
+
+@router.get("/get-datasets")
+def get_datasets(search: Optional[str] = Query(None)):
+    data = DatasetRepository().get_all(search).to_dict(orient="records")
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Sucesso!", "data": data}
+    )
 
 
 @router.post("/", dependencies=[Depends(JWTHelper.validate_token)])
