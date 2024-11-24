@@ -27,7 +27,9 @@ class DatasetRepository:
     def get_all(self, search: str = None) -> pd.DataFrame:
         query = self.db_session.query(Dataset, User).join(User, User.id == Dataset.user_id)
 
-        query = query.with_entities(Dataset.id, Dataset.name, User.name.label("user_name"), User.email.label("user_email"))
+        query = query.with_entities(
+            Dataset.id, Dataset.name, Dataset.description, User.name.label("user_name"), User.email.label("user_email")
+        )
 
         if search:
             query = query.filter(
@@ -37,6 +39,8 @@ class DatasetRepository:
                     func.lower(Dataset.name).like(f"%{search.lower()}%"),
                 )
             )
+
+        query = query.limit(30)
 
         return pd.read_sql(query.statement, self.db_session.bind)
 

@@ -18,9 +18,13 @@
                 <div class="form_container p-3 pb-5" style="color: white">
                     <form id="form-dataset-upload">
                         <div id="alert-form-dataset-upload" style="display: none" class="alert mt-3" role="alert"></div>
-                        <div class="mb-3 text-center">
+                        <div class="mb-3 text-start">
                             <label class="mb-2">Nome (sem a extensão)</label>
-                            <input id="form-dataset-upload-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-center" value="" placeholder="Nome">
+                            <input id="form-dataset-upload-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Nome">
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">Descrição (opcional, mas aconselhável)</label>
+                            <textarea id="form-dataset-upload-description" required style="background-color: #4E598D; color: white" type="text" name="description" class="form-control text-start" rows="8" cols="50" placeholder="Descrição"></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="input-file-upload" class="form-label">Arquivo (suportado somente nos formatos CSV, XLS e XLSX)</label>

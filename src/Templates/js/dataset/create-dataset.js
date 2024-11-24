@@ -8,9 +8,10 @@ $('#form-dataset-upload-btn-submit').on('click', function(e){
     if($('#input-file-upload')[0].files.length){
         file = $('#input-file-upload').prop('files')[0]
         name = $("#form-dataset-upload-name").val()
+        description = $("#form-dataset-upload-description").val()
         sendFile(
             file,
-            {"name": name},
+            {"name": name, "description": description},
             '/datasets/',
             function(response){
                 showAlertForm('alert-form-dataset-upload', response, false)
@@ -35,6 +36,7 @@ $('#form-dataset-upload-btn-submit').on('click', function(e){
         )
         $('#input-file-upload').val(null).trigger('change');
         $("#form-dataset-upload-name").val(null);
+        $("#form-dataset-upload-description").val(null);
     }
 })
 

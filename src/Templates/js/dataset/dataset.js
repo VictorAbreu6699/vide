@@ -25,13 +25,37 @@ function createDatabaseCards() {
                               <i style="font-size: 150px; color: white" class="fa fa-database" aria-hidden="true"></i>
                               </br>
                               <div class="dataset-title mt-2">Criado por <i data-bs-toggle="tooltip" data-bs-placement="top" title="${dataset.user_email}">${dataset.user_name}</i></div>
-                              <a href="/cadastro-dataset" style="background-color: #4E598D; color: white" class="btn mt-3" target="_blank">
+                              <button dataset-id="${dataset.id}" type="button" style="background-color: #4E598D; color: white" class="btn mt-3 btn-visualization-modal">
                                   Visualizar
-                              </a>
+                              </button>
                           </div>
                       </div>
                     </div>
                 </div>`
         $("#row-datasets").append(hmtl);
     });
+    $(".btn-visualization-modal").off("click")
+    $(".btn-visualization-modal").on("click", function(e) {
+        dataset_id = $(this).attr("dataset-id");
+        fillModalDataset(dataset_id)
+    })
 }
+
+function fillModalDataset(dataset_id){
+    result = request("GET", "/datasets/show-dataset/"+dataset_id)
+    if(result.status != 201)
+        return;
+
+    data = result.data.data
+    $("#dataset-show-modal-label").text(data.name)
+    $("#dataset-show-modal-description").text(data.description)
+    $("#dataset-show-modal-download").attr("download", data.name + data.extension)
+    $("#dataset-show-modal-download").attr("href", "/datasets/download-file/" + data.id)
+
+    let dataset_modal = new bootstrap.Modal(document.getElementById('dataset-show-modal'), {
+      keyboard: false
+    })
+
+    dataset_modal.show()
+}
+

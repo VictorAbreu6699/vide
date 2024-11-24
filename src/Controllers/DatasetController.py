@@ -3,11 +3,12 @@ import uuid
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Form, UploadFile, File, Query
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, FileResponse
 from src.Helpers.JWTHelper import JWTHelper
+from src.Helpers.ModelHelper import ModelHelper
 from src.Repositories.DatasetRepository import DatasetRepository
 
-router = APIRouter(prefix="/datasets", tags=['Auth'])
+router = APIRouter(prefix="/datasets", tags=['Datasets'])
 
 
 @router.get("/get-datasets")
@@ -20,9 +21,27 @@ def get_datasets(search: Optional[str] = Query(None)):
     )
 
 
+@router.get("/show-dataset/{dataset_id}")
+async def show_dataset(dataset_id: int):
+    # Verificando se o dataset existe
+    dataset = DatasetRepository().get_by_id(dataset_id)
+    if not dataset:
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Fonte de dados não encontrada!"}
+        )
+    dataset = ModelHelper.model_to_dict(dataset)
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Sucesso!", "data": dataset}
+    )
+
+
 @router.post("/", dependencies=[Depends(JWTHelper.validate_token)])
 async def upload_file(
-    name: str = Form(...), file: UploadFile = File(...), token: str = Depends(JWTHelper.get_token_from_header)
+        name: str = Form(...), description: str = Form(...), file: UploadFile = File(...),
+        token: str = Depends(JWTHelper.get_token_from_header)
 ):
     # Tipos de arquivos permitidos
     allowed_content_types = [
@@ -46,9 +65,29 @@ async def upload_file(
         f.write(await file.read())
     user = JWTHelper.get_user_from_token(token)
 
-    DatasetRepository().create({"name": name, "path": file_path, "user_id": user.id})
+    DatasetRepository().create({
+        "name": name, "description": description, "extension": extension, "path": file_path, "user_id": user.id
+    })
 
     return JSONResponse(
         status_code=201,
         content={"message": "Arquivo enviado com sucesso!"}
+    )
+
+
+@router.get("/download-file/{dataset_id}")
+async def download_file(dataset_id: int):
+    # Verificando se o dataset existe
+    dataset = DatasetRepository().get_by_id(dataset_id)
+    if not dataset:
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Fonte de dados não encontrada!"}
+        )
+
+    # Retorna o arquivo para download
+    return FileResponse(
+        path=dataset.path,
+        filename=dataset.name + dataset.extension,
+        media_type="application/octet-stream",
     )
