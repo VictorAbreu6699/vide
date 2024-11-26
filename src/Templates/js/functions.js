@@ -298,3 +298,27 @@ function checkUserLogin(){
 
     return token != null && !isTokenExpired(token)
 }
+
+function setUrlParam(param) {
+    let urlAtual = window.location.href;
+    param = `${param.key}=${param.value}`
+    // Verifica se a URL já tem parâmetros
+    const novaUrl = urlAtual.includes("?") ? `${urlAtual}&${param}` : `${urlAtual}?${param}`;
+    // Atualiza a URL sem recarregar
+    window.history.pushState(null, null, novaUrl);
+}
+
+function removeURLParam(key) {
+    // Obter a URL atual
+    const currentUrl = new URL(window.location.href);
+
+    // Usar URLSearchParams para manipular os parâmetros da query
+    const params = currentUrl.searchParams;
+
+    // Remover o parâmetro pela chave
+    params.delete(key);
+
+    // Atualizar a URL sem recarregar a página
+    const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${params.toString()}`;
+    window.history.pushState(null, null, newUrl);
+}
