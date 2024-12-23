@@ -45,6 +45,13 @@ function request(metod, url, params = []) {
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            // Adiciona o token JWT no header Authorization
+            token = getCookie("authToken")
+            if (token){
+                xhr.setRequestHeader("Authorization", token);
+            }
+        },
         success: function(response) {
             if (typeof successCallback === 'function') {
                 successCallback(response);

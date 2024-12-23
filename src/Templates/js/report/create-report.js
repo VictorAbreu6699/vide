@@ -22,60 +22,36 @@ function fillModalDataset(dataset_id){
     dataset_modal.show()
 }
 
-$('#form-report-upload-btn-submit').on('click', function(e){
-    if($('#input-file-upload')[0].files.length){
-        file = $('#input-file-upload').prop('files')[0]
-        name = $("#form-report-upload-name").val()
-        description = $("#form-report-upload-description").val()
-        sendFile(
-            file,
-            {"name": name, "description": description},
-            '/reports/',
-            function(response){
-                showAlertForm('alert-form-report-upload', response, false)
-                setTimeout(function () {
-                    window.location.href = "/";
-                }, 2000);
-            },
-            function(response){
-                let message = ""
-
-                if(!response){
-                    message = "Erro interno!"
-                }
-                else if(response.detail){
-                    message = response.detail
-                }
-                else if (response.message){
-                    message = response.message
-                }
-                showAlertForm('alert-form-report-upload', message, true)
-            }
-        )
-        $('#input-file-upload').val(null).trigger('change');
-        $("#form-report-upload-name").val(null);
-        $("#form-report-upload-description").val(null);
-    }
-})
-
-// Ao selecionar/remover um arquivo, habilita ou desabilita o botão de envio
-$('#input-file-upload').on('change', function(e){
-    if($('#input-file-upload')[0].files.length){
-        $('#form-report-upload-btn-submit').prop("disabled", false);
-    }
-    else{
-        $('#form-report-upload-btn-submit').prop("disabled", true);
-    }
-    $('#alert-form-report-upload').hide()
+$('#form-report-btn-submit').on('click', function(e){
+    $("#alert-form-report").hide()
+    requestPost(
+        "/reports",
+        getFormData("#form-report"),
+        function(response){
+            message = response.message
+            showAlertForm('alert-form-report', message, false)
+            // Após 2 segundos, redireciona para os relatorios
+            setTimeout(function () {
+                window.location.href = "/relatorios";
+            }, 2000);
+        },
+        function(response){
+            response = response.responseJSON.message
+            showAlertForm('alert-form-report', response, true)
+        }
+    )
 })
 
 $("#form-report-dataset-id").on("change.select2", function(e) {
     if($(this).val() != null){
         $("#btn-dataset-visualization-modal").prop("disabled", false)
+        $('#form-report-btn-submit').prop("disabled", false)
     }
     else{
         $("#btn-dataset-visualization-modal").prop("disabled", true)
+        $('#form-report-btn-submit').prop("disabled", true)
     }
+    $('#alert-form-report').hide()
 })
 
 $("#btn-dataset-visualization-modal").on("click", () => fillModalDataset($("#form-report-dataset-id").val()))
