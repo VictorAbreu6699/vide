@@ -40,6 +40,20 @@ def home(request: Request):
     )
 
 
+@router.get("/cadastro-relatorio")
+def cadastro_datasets(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="reports/storeReport.html"
+    )
+
+
+@router.get("/relatorios")
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="reports/index.html"
+    )
+
+
 @router.get("/relatorio")
 def relatorios(request: Request):
     return templates.TemplateResponse(

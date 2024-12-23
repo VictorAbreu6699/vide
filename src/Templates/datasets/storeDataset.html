@@ -5,11 +5,14 @@
 	<title>VIDE - Fonte de dados</title>
 	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
 </head>
 <body>
     <!-- Logo no topo -->
     <header class="logo">
-        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+        <a href="/">
+            <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+        </a>
     </header>
     <div class="w-100">
         <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">

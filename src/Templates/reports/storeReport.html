@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>VIDE - Relatórios</title>
+	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/select2.min.css') }}">
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/select2CustomStyle.css') }}">
+</head>
+<body>
+    <!-- Logo no topo -->
+    <header class="logo">
+        <a href="/">
+            <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+        </a>
+    </header>
+    <div class="w-100">
+        <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
+            <h1 class="text-center">Cadastrar relátorio</h1>
+            <div class="d-flex justify-content-center h-100">
+                <div class="form_container p-3 pb-5" style="color: white">
+                    <form id="form-report">
+                        <div id="alert-form-report" style="display: none" class="alert mt-3" role="alert"></div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">Nome</label>
+                            <input id="form-report-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Nome">
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">Fonte de dados</label>
+                            <div class="d-flex">
+                                <div class="w-75">
+                                    <select id="form-report-dataset-id" required style="background-color: #4E598D; color: white" name="name" class="form-control text-start">
+                                        <option value="" disabled selected>Selecione uma opção</option>
+                                    </select>
+                                </div>
+                                <div class="w-25 ms-3">
+                                    <button disabled id="btn-dataset-visualization-modal" type="button" style="background-color: #4E598D; color: white" class="btn btn-visualization-modal">
+                                        Visualizar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">Descrição (opcional, mas aconselhável)</label>
+                            <textarea id="form-report-description" required style="background-color: #4E598D; color: white" type="text" name="description" class="form-control text-start" rows="8" cols="50" placeholder="Descrição"></textarea>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button disabled id="form-report-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Enviar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para exibir informações do dataset-->
+    <div class="modal fade" id="dataset-show-modal" tabindex="-1" aria-labelledby="datasetShowModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1E1E2E">
+          <div class="modal-header">
+            <h5 class="modal-title" id="dataset-show-modal-label"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <h6 style="font-weight: bold">Descrição:</h6>
+              <p id="dataset-show-modal-description">-</p>
+              <a id="dataset-show-modal-download" type="button" style="background-color: #4E598D; color: white" class="btn me-2" href="" download="">
+                  Baixar arquivo
+              </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
+    <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/report/create-report.js') }}"></script>
+</body>
+</html>

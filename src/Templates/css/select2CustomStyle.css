@@ -1,0 +1,85 @@
+/* Cor de fundo e texto no elemento Select2 */
+.select2-container .select2-selection {
+  background-color: #4E598D; /* Cor de fundo */
+  color: white; /* Cor do texto */
+  border: 1px solid #4E598D; /* Bordas */
+  border-radius: 4px; /* Bordas arredondadas */
+  height: auto;
+}
+
+/* Placeholder */
+.select2-container .select2-selection__placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Cor do placeholder */
+}
+
+/* Texto selecionado */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: white; /* Cor do texto selecionado */
+  line-height: 1.6;
+}
+
+/* Dropdown (lista de opções) */
+.select2-container--default .select2-results > .select2-results__options {
+  background-color: #4E598D; /* Cor de fundo do dropdown */
+  color: white; /* Cor das opções */
+  border-radius: 4px;
+}
+
+/* Opção em foco (hover) */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #6A74A1; /* Fundo para hover */
+  color: white; /* Cor do texto em hover */
+  cursor: pointer;
+}
+
+/* Botão de limpar seleção (quando disponível) */
+.select2-container--default .select2-selection__clear {
+  color: white; /* Cor do botão de limpar */
+  margin-right: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Setinha (dropdown indicator) */
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+  border-color: white transparent transparent transparent; /* Cor da setinha */
+  border-width: 5px 4px 0 4px; /* Tamanho da setinha */
+}
+
+/* Hover no campo de seleção */
+.select2-container .select2-selection:hover {
+  background-color: #6A74A1; /* Fundo mais claro para hover */
+  color: white; /* Mantém a cor do texto branca */
+  border: 1px solid #6A74A1; /* Bordas no hover */
+}
+
+/* Hover nos itens da lista */
+.select2-container--default .select2-results__option:hover {
+  background-color: #6A74A1; /* Fundo mais claro no hover */
+  color: white; /* Texto permanece branco */
+  cursor: pointer;
+}
+
+
+/* Caixa de busca dentro do dropdown */
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  background-color: #4E598D; /* Cor de fundo da caixa de busca */
+  color: white; /* Cor do texto na caixa de busca */
+  border: 1px solid #4E598D; /* Bordas da caixa de busca */
+  border-radius: 4px; /* Bordas arredondadas */
+  padding: 5px;
+}
+
+/* Placeholder na caixa de busca */
+.select2-container--default .select2-search--dropdown .select2-search__field::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Cor do placeholder */
+  opacity: 1; /* Força a visibilidade do placeholder */
+}
+
+/* Foco na caixa de busca */
+.select2-container--default .select2-search--dropdown .select2-search__field:focus {
+  background-color: #6A74A1; /* Cor de fundo no foco */
+  color: white; /* Cor do texto no foco */
+  border: 1px solid #6A74A1; /* Bordas ao focar */
+  outline: none; /* Remove a borda padrão de foco */
+}

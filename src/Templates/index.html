@@ -3,10 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Vide</title>
+    <title>VIDE</title>
     <link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', path='/css/select2.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', path='/css/app.css') }}">
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='/favicon.ico') }}"/>
   </head>
   <body>
     <header class="bg-dark-subtle">
@@ -16,8 +17,9 @@
             <span class="fs-4">Visual EPI</span>
           </a>
           <ul class="nav nav-pills">
-            <li class="nav-item"><a href="/relatorio" class="nav-link" aria-current="page">Relatórios</a></li>
+            <li class="nav-item"><a href="/relatorios" class="nav-link" aria-current="page">Relatórios</a></li>
             <li class="nav-item"><a href="/datasets" class="nav-link">Importar Arquivo</a></li>
+            <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
           </ul>
         </div>
       </div>

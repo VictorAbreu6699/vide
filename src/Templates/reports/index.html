@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
 	<meta charset="UTF-8">
-	<title>VIDE - Fonte de dados</title>
+	<title>VIDE - Relatórios</title>
 	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='font-awesome-4.7.0/css/font-awesome.min.css') }}">
@@ -17,20 +17,20 @@
     </header>
     <div class="w-100">
         <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
-            <form id="form-input-datasets">
+            <form id="form-input-reports">
                 <div class="input-group p-4">
-                    <input id="search-input-datasets" type="search" class="form-control" name="search" placeholder="Pesquisar">
+                    <input id="search-input-reports" type="search" class="form-control" name="search" placeholder="Pesquisar">
                 </div>
             </form>
-            <div class="row p-4" id="row-datasets">
-                <div class="col-3 mb-4" id="create-database-card" style="display: none">
+            <div class="row p-4" id="row-reports">
+                <div class="col-3 mb-4" id="create-report-card" style="display: none">
                     <div class="card" style="width: 18rem; background-color: #1E1E2E; min-height: 302px">
                       <div class="card-body">
                           <div class="text-center card-text">
                               <i style="font-size: 150px; color: white" class="fa fa-plus" aria-hidden="true"></i>
                               </br>
-                              <a href="/cadastro-dataset" style="background-color: #4E598D; color: white" class="btn mt-3" target="_blank">
-                                  Importar nova Base de dados
+                              <a href="/cadastro-relatorio" style="background-color: #4E598D; color: white" class="btn mt-3" target="_blank">
+                                  Criar novo Relatório
                               </a>
                           </div>
                       </div>
@@ -40,23 +40,20 @@
             </div>
         </div>
     </div>
-    <!-- Modal para exibir informações do dataset-->
-    <div class="modal fade" id="dataset-show-modal" tabindex="-1" aria-labelledby="datasetShowModal" aria-hidden="true">
+    <!-- Modal para exibir informações do relatório-->
+    <div class="modal fade" id="report-show-modal" tabindex="-1" aria-labelledby="reportShowModal" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" style="background-color: #1E1E2E">
           <div class="modal-header">
-            <h5 class="modal-title" id="dataset-show-modal-label"></h5>
+            <h5 class="modal-title" id="report-show-modal-label"></h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
               <h6 style="font-weight: bold">Descrição:</h6>
-              <p id="dataset-show-modal-description">-</p>
-              <a id="dataset-show-modal-download" type="button" style="background-color: #4E598D; color: white" class="btn me-2" href="" download="">
-                  Baixar arquivo
+              <p id="report-show-modal-description">-</p>
+              <a id="button-access-link" style="background-color: #4E598D; color: white" class="btn" target="_blank">
+                Acessar Relatório <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
-              <button id="button-share-link" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Copiar Link para a área de transferencia">
-                Compartilhar <i class="fa fa-share-alt" aria-hidden="true"></i>
-              </button>
           </div>
         </div>
       </div>
@@ -66,6 +63,6 @@
     <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/app.js') }}"></script>
-    <script src="{{ url_for('static', path='/js/dataset/dataset.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/report/report.js') }}"></script>
 </body>
 </html>

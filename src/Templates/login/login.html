@@ -5,6 +5,7 @@
 	<title>VIDE - Login</title>
 	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 	<link rel="stylesheet" href="{{ url_for('static', path='/css/app.css') }}">
+	<link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
 </head>
 <body>
 	<div class="container h-100 pt-5">
@@ -12,7 +13,9 @@
 			<div class="user_card">
 				<div class="d-flex justify-content-center">
 					<div class="brand_logo_container">
-						<img src="{{ url_for('static', path='/img/logo.png') }}" class="brand_logo" alt="Logo" height="150">
+						<a href="/">
+							<img src="{{ url_for('static', path='/img/logo.png') }}" class="brand_logo" alt="Logo" height="150">
+						</a>
 					</div>
 				</div>
 				<div class="form_container p-3 pb-5" style="background-color: #33384E; color: white">
