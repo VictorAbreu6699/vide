@@ -16,7 +16,7 @@ $('#form-dataset-upload-btn-submit').on('click', function(e){
             function(response){
                 showAlertForm('alert-form-dataset-upload', response, false)
                 setTimeout(function () {
-                    window.location.href = "/";
+                    window.location.href = "/datasets";
                 }, 2000);
             },
             function(response){
