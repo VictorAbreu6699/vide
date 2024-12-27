@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  fastapi_backend_mvp:
+    build:
+      context: ./
+      dockerfile: ./.ci/app/Dockerfile
+    container_name: 'fastapi'
+    restart: on-failure
+    user: "1000:1000"
+    ports:
+      - '7878:7878'
+    volumes:
+      - './src:/src'
+    networks:
+      - network_vide
+
+  mysql:
+    image: mysql:8.0.32
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: vide
+      MYSQL_TCP_PORT: '3355'
+    ports:
+      - '3355:3355'
+    volumes:
+      - './.ci/mysql/data:/var/lib/mysql'
+    networks:
+      - network_vide
+
+networks:
+  network_vide:
+    name: docker_fastapi_mysql
+    driver: bridge

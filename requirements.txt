@@ -4,7 +4,7 @@ greenlet~=3.0.3
 python-dotenv~=1.0.1
 pandas~=2.2.2
 alembic~=1.13.1
-mysqlclient
+mysqlclient~=2.2.6
 pydantic~=2.7.0
 python-multipart
 starlette>=0.37.2
