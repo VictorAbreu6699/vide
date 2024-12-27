@@ -57,6 +57,10 @@ function fillModalReport(report_id){
     data = result.data.data
     $("#report-show-modal-label").text(data.name)
     $("#report-show-modal-description").text(data.description)
+    created_at = moment(data.created_at, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')
+    updated_at = moment(data.updated_at, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')
+    $("#report-show-modal-created-at").text(created_at)
+    $("#report-show-modal-updated-at").text(updated_at)
     $("#report-show-modal-download").attr("download", data.name + data.extension)
     $("#report-show-modal-download").attr("href", "/reports/download-file/" + data.id)
     $("#button-access-link").attr("href", "/relatorios/" + data.id)

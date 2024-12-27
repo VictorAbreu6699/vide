@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, func, TIMESTAMP
 from sqlalchemy.orm import declarative_base
 
 from src.Models.Dataset import Dataset
@@ -14,3 +14,5 @@ class Report(Base):
     description = Column(Text, nullable=True)
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     dataset_id = Column(Integer, ForeignKey(Dataset.id), nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False, server_default=func.now())
+    updated_at = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=func.now())

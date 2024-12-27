@@ -51,6 +51,10 @@
           <div class="modal-body">
               <h6 style="font-weight: bold">Descrição:</h6>
               <p id="report-show-modal-description">-</p>
+              <h6 style="font-weight: bold">Criado em:</h6>
+              <p id="report-show-modal-created-at">-</p>
+              <h6 style="font-weight: bold">Ultima atualização:</h6>
+              <p id="report-show-modal-updated-at">-</p>
               <a id="button-access-link" style="background-color: #4E598D; color: white" class="btn" target="_blank">
                 Acessar Relatório <i class="fa fa-external-link" aria-hidden="true"></i>
               </a>
@@ -59,6 +63,7 @@
       </div>
     </div>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/moment.js') }}"></script>
     <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
     <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
