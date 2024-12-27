@@ -51,6 +51,8 @@
           <div class="modal-body">
               <h6 style="font-weight: bold">Descrição:</h6>
               <p id="dataset-show-modal-description">-</p>
+              <h6 style="font-weight: bold">Importado em:</h6>
+              <p id="dataset-show-modal-created-at">-</p>
               <a id="dataset-show-modal-download" type="button" style="background-color: #4E598D; color: white" class="btn me-2" href="" download="">
                   Baixar arquivo
               </a>
@@ -62,6 +64,7 @@
       </div>
     </div>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/moment.js') }}"></script>
     <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
     <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>

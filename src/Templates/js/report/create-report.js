@@ -12,6 +12,8 @@ function fillModalDataset(dataset_id){
     data = result.data.data
     $("#dataset-show-modal-label").text(data.name)
     $("#dataset-show-modal-description").text(data.description)
+    created_at = moment(data.created_at, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')
+    $("#dataset-show-modal-created-at").text(created_at)
     $("#dataset-show-modal-download").attr("download", data.name + data.extension)
     $("#dataset-show-modal-download").attr("href", "/datasets/download-file/" + data.id)
 
