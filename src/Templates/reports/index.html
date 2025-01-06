@@ -7,6 +7,43 @@
 	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', path='font-awesome-4.7.0/css/font-awesome.min.css') }}">
     <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
+    <style>
+        /* Estilo geral para o <p> */
+        #report-show-modal-description {
+          width: 100%; /* Ajuste conforme necessário */
+          max-height: 200px; /* Define uma altura máxima para ativar o scroll */
+          background-color: #1E1E2E; /* Cor de fundo */
+          color: #FFF; /* Cor do texto */
+          overflow-y: auto; /* Ativa o scroll vertical */
+          padding: 10px;
+          border-radius: 8px;
+          font-size: 16px; /* Ajuste conforme o design */
+          line-height: 1.5;
+        }
+
+        /* Estilo do scrollbar para navegadores com Webkit */
+        #report-show-modal-description::-webkit-scrollbar {
+          width: 10px; /* Largura da barra de rolagem */
+        }
+
+        #report-show-modal-description::-webkit-scrollbar-track {
+          background: #1E1E2E; /* Cor do fundo do track */
+          border-radius: 10px;
+        }
+
+        #report-show-modal-description::-webkit-scrollbar-thumb {
+          background-color: #3E3E56; /* Cor do indicador */
+          border-radius: 10px; /* Deixa o indicador arredondado */
+          border: 2px solid #1E1E2E; /* Espaço entre o indicador e o track */
+        }
+
+        /* Suporte para navegadores que usam scrollbar-color */
+        #report-show-modal-description {
+          scrollbar-color: #3E3E56 #1E1E2E; /* thumb e track */
+          scrollbar-width: thin; /* Scrollbar mais fino */
+        }
+
+    </style>
 </head>
 <body>
     <!-- Logo no topo -->
@@ -50,7 +87,7 @@
           </div>
           <div class="modal-body">
               <h6 style="font-weight: bold">Descrição:</h6>
-              <p id="report-show-modal-description">-</p>
+              <p id="report-show-modal-description" style="overflow-y: scroll; height: 300px;">-</p>
               <h6 style="font-weight: bold">Criado em:</h6>
               <p id="report-show-modal-created-at">-</p>
               <h6 style="font-weight: bold">Ultima atualização:</h6>
