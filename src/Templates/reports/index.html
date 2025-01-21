@@ -45,12 +45,12 @@
 
     </style>
 </head>
-<body style="overflow-x: hidden">
-    <!-- Logo no topo -->
+<body>
     <div class="w-100">
         <div class="row">
             {% include "components/sidebar.html" %}
             <div class="col-11">
+                <!-- Logo no topo -->
                 <header class="logo">
                     <a href="/">
                         <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
@@ -62,9 +62,9 @@
                             <input id="search-input-reports" type="search" class="form-control" name="search" placeholder="Pesquisar">
                         </div>
                     </form>
-                    <div class="row p-4" id="row-reports">
+                    <div class="main-content row p-4" id="row-reports">
                         <div class="col-3 mb-4" id="create-report-card" style="display: none">
-                            <div class="card" style="width: 18rem; background-color: #1E1E2E; min-height: 302px">
+                            <div class="card card-reports">
                                 <div class="card-body">
                                     <div class="text-center card-text">
                                         <i style="font-size: 150px; color: white" class="fa fa-plus" aria-hidden="true"></i>

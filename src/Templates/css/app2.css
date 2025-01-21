@@ -96,3 +96,21 @@ header.logo img {
 }
 
 /* estilo do sidebar */
+
+.main-content{
+    max-height: 62vh;
+    overflow-y: auto;
+    overflow-x: hidden !important;
+    scrollbar-color: #3E3E56 #1E1E2E;
+    scrollbar-width: thin;
+}
+
+.card-reports{
+    background-color: #1E1E2E;
+    min-height: 302px;
+}
+
+.card-datasets{
+    background-color: #1E1E2E;
+    min-height: 302px;
+}

@@ -26,7 +26,7 @@ function createDatabaseCards() {
     data = result.data.data
     data.forEach(function(dataset) {
         hmtl = `<div class="col-3 mb-4">
-                    <div class="card" style="width: 18rem; background-color: #1E1E2E;">
+                    <div class="card card-datasets">
                       <div class="card-body text-center" style="color: white">
                           <div class="card-title">${dataset.name}</div>
                           <div class="text-center card-text">

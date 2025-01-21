@@ -24,7 +24,7 @@ function createReportCards() {
     data = result.data.data
     data.forEach(function(report) {
         hmtl = `<div class="col-3 mb-4">
-                    <div class="card" style="width: 18rem; background-color: #1E1E2E;">
+                    <div class="card card-reports">
                       <div class="card-body text-center" style="color: white">
                           <div class="card-title">${report.name}</div>
                           <div class="text-center card-text">
