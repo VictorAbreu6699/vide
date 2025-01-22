@@ -346,3 +346,24 @@ function setSidebarActiveMenu() {
 
     matchingElement.addClass("active")
 }
+
+function changeSidebarAfterLogin() {
+    userIsLogged = checkUserLogin()
+
+    if(userIsLogged) {
+        $("#sidebar-my-account-button").show()
+        $("#sidebar-user-icon").addClass("fa-user-circle-o")
+        $("#sidebar-user-icon").removeClass("fa-sign-in")
+        $("#sidebar-dropdown-divider").show()
+        $("#sidebar-login-button").hide()
+        $("#sidebar-logout-button").show()
+    }
+    else{
+        $("#sidebar-my-account-button").hide()
+        $("#sidebar-user-icon").addClass("fa-sign-in")
+        $("#sidebar-user-icon").removeClass("fa-user-circle-o")
+        $("#sidebar-dropdown-divider").hide()
+        $("#sidebar-login-button").show()
+        $("#sidebar-logout-button").hide()
+    }
+}
