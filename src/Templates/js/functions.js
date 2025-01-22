@@ -329,3 +329,20 @@ function removeURLParam(key) {
     const newUrl = `${currentUrl.origin}${currentUrl.pathname}?${params.toString()}`;
     window.history.pushState(null, null, newUrl);
 }
+
+function setSidebarActiveMenu() {
+    sidebar = $("#sidebar").first()
+    if(sidebar.length < 0) return;
+
+    // Obter a URL atual
+    const currentUrl = window.location.pathname;
+
+    // Encontra o elemento <a> com href correspondente à URL atual
+    const matchingElement = sidebar.find("a").filter(function () {
+        const href = $(this).attr("href");
+        // Compara o href absoluto ou relativo com a URL atual
+        return href && href === currentUrl;
+    }).first();
+
+    matchingElement.addClass("active")
+}

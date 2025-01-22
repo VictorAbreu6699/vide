@@ -26,6 +26,11 @@ function userIsLogged(){
     if(token != null && !isTokenExpired(token))
         window.location.href = "/";
 }
-
+$('#form-login').on('keydown', function (e) {
+    if (e.key === "Enter" || e.keyCode === 13) {
+        e.preventDefault();
+        login();
+    }
+});
 $('#form-login-btn-submit').on('click', (e) => login())
 $(document).ready(userIsLogged);

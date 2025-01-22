@@ -9,20 +9,23 @@
     <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
 </head>
 <body>
-    <!-- Logo no topo -->
-    <header class="logo">
-        <a href="/">
-            <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
-        </a>
-    </header>
     <div class="w-100">
-        <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
+        <div class="row">
+            {% include "components/sidebar.html" %}
+            <div class="col-11">
+                <!-- Logo no topo -->
+                <header class="logo">
+                    <a href="/">
+                        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+                    </a>
+                </header>
+                <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
             <form id="form-input-datasets">
                 <div class="input-group p-4">
                     <input id="search-input-datasets" type="search" class="form-control" name="search" placeholder="Pesquisar">
                 </div>
             </form>
-            <div class="row p-4" id="row-datasets">
+            <div class="main-content row p-4" id="row-datasets">
                 <div class="col-3 mb-4" id="create-database-card" style="display: none">
                     <div class="card card-datasets">
                       <div class="card-body">
@@ -37,6 +40,8 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
             </div>
         </div>
     </div>
