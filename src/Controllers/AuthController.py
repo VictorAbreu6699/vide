@@ -35,6 +35,16 @@ def login(request: LoginRequest):
     )
 
 
+@router.post("/logout", dependencies=[Depends(JWTHelper.validate_token)])
+def logout(token: str = Depends(JWTHelper.get_token_from_header)):
+    JWTHelper.add_token_to_blacklist(token)
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Logout realizado com sucesso!"}
+    )
+
+
 @router.get('/check-login-test', dependencies=[Depends(JWTHelper.validate_token)])
 def test_login():
     return {'message': 'logado'}
@@ -42,7 +52,6 @@ def test_login():
 
 @router.post("/create-account")
 def store(request: CreateAccountRequest):
-
     if request.name is None or request.name == "":
         return JSONResponse(
             status_code=400,

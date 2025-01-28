@@ -9,6 +9,7 @@ import jwt
 from dotenv import load_dotenv
 
 from src.Models.User import User
+from src.Repositories.RevokedTokenRepository import RevokedTokenRepository
 from src.Repositories.UserRepository import UserRepository
 
 
@@ -44,9 +45,12 @@ class JWTHelper:
 
     @staticmethod
     def is_user_logged_in(token: str) -> bool:
+        """Retorna True se o token for válido e nao está na lista negra, caso contrário False"""
         payload = JWTHelper.decode_access_token(token)
-        # Retorna True se o token for válido, caso contrário False
-        return payload is not None
+        if payload is None or JWTHelper.is_token_blacklisted(token):
+            return False
+
+        return True
 
     @staticmethod
     def validate_token(token: str = Depends(oauth2_scheme)):
@@ -71,3 +75,16 @@ class JWTHelper:
         user = UserRepository().get_by_email(user_email)
 
         return user
+
+    @staticmethod
+    def add_token_to_blacklist(token: str):
+        """Adiciona um token para a lista de negra"""
+        RevokedTokenRepository().create({"token": token})
+
+    @staticmethod
+    def is_token_blacklisted(token: str):
+        revoked_token = RevokedTokenRepository().get_by_token(token)
+        if revoked_token:
+            return True
+        else:
+            return False

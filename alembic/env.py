@@ -10,6 +10,7 @@ from src.Models.Dataset import Dataset
 from src.Models.Field import Field
 from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization
+from src.Models.RevokedToken import RevokedToken
 from src.Models.User import User
 from src.Models.Visualization import Visualization
 from src.Models.VisualizationField import VisualizationField
@@ -35,7 +36,8 @@ target_metadata = [
     Dataset.metadata,
     Report.metadata,
     ReportVisualization.metadata,
-    ReportVisualizationDatasetColumn.metadata
+    ReportVisualizationDatasetColumn.metadata,
+    RevokedToken.metadata
 ]
 
 # other values from the config, defined by the needs of env.py,
