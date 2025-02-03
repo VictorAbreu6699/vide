@@ -75,6 +75,10 @@ function setCookie(name, value, minutes) {
     document.cookie = `${name}=${value || ""}${expires}; path=/; secure; samesite=strict`;
 }
 
+function expireCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; samesite=strict`;
+}
+
 function isTokenExpired(token) {
     if (!token) return true; // Considera expirado se não houver token
 
@@ -365,5 +369,26 @@ function changeSidebarAfterLogin() {
         $("#sidebar-dropdown-divider").hide()
         $("#sidebar-login-button").show()
         $("#sidebar-logout-button").hide()
+    }
+}
+
+function logout(){
+    userIsLogged = checkUserLogin()
+    if(userIsLogged){
+        requestPost(
+            "/auth/logout",
+            {},
+            function(response){
+                message = response.message
+                console.log(message)
+                expireCookie("authToken")
+                // atualiza a pagina
+                window.location.reload()
+            },
+            function(response){
+                message = response.responseJSON.message
+                alert("Erro ao fazer logout. Erro: "+message)
+            }
+        )
     }
 }
