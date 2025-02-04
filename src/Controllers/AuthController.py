@@ -7,6 +7,7 @@ from src.Helpers.JWTHelper import JWTHelper
 from src.Repositories.UserRepository import UserRepository
 from src.Requests.LoginRequest import LoginRequest
 from src.Requests.CreateAccountRequest import CreateAccountRequest
+from src.Requests.UpdateAccountRequest import UpdateAccountRequest
 
 router = APIRouter(prefix="/auth", tags=['Auth'])
 
@@ -92,4 +93,47 @@ def store(request: CreateAccountRequest):
     return JSONResponse(
         status_code=201,
         content={"message": "Conta criada com sucesso!"}
+    )
+
+
+@router.post("/update-account", dependencies=[Depends(JWTHelper.validate_token)])
+def update(request: UpdateAccountRequest, token: str = Depends(JWTHelper.get_token_from_header)):
+
+    if request.name is None or request.name == "":
+        return JSONResponse(
+            status_code=400,
+            content={"message": "É obrigatorio inserir o Usuário"}
+        )
+    if request.email is None or request.email == "":
+        return JSONResponse(
+            status_code=400,
+            content={"message": "É obrigatorio inserir o E-mail"}
+        )
+    elif not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', request.email):
+        return JSONResponse(
+            status_code=400,
+            content={"message": "E-mail inválido"}
+        )
+
+    user = JWTHelper.get_user_from_token(token)
+    user_email = UserRepository().get_by_email(request.email)
+    # valida se o e-mail ja está em uso, e valida se é igual ou diferente ao e-mail do usuário que está sendo atualizado
+    email_exists = user_email is not None and user_email.id != user.id
+
+    if email_exists:
+        return JSONResponse(
+            status_code=400,
+            content={"message": "E-mail já está em uso por outro usuário"}
+        )
+    try:
+        UserRepository().create(request.dict())
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": "Erro interno ao realizar atualização."}
+        )
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Conta atualizada com sucesso!"}
     )
