@@ -19,6 +19,13 @@ def login(request: Request):
     )
 
 
+@router.get("/minha-conta")
+def login(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="login/myAccount.html"
+    )
+
+
 @router.get("/criar-conta")
 def create_account(request: Request):
     return templates.TemplateResponse(

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>VIDE - Minha conta</title>
+	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
+</head>
+<body>
+    <div class="w-100">
+        <div class="row">
+            {% include "components/sidebar.html" %}
+            <div class="col-11">
+                <!-- Logo no topo -->
+                <header class="logo">
+                    <a href="/">
+                        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+                    </a>
+                </header>
+                <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
+            <h1 class="text-center">Atualizar dados</h1>
+            <div class="d-flex justify-content-center h-100">
+                <div class="form_container p-3 pb-5" style="color: white">
+                    <form id="form-user-update">
+                        <div id="alert-form-user-update" style="display: none" class="alert mt-3" role="alert"></div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">Usuário</label>
+                            <input id="form-user-update-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Usuário">
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">E-mail</label>
+                            <input id="form-user-update-email" required style="background-color: #4E598D; color: white" type="email" name="email" class="form-control text-start" value="" placeholder="E-mail">
+                        </div>
+                        <div class="mb-3 text-start">
+                            <label class="mb-2">Senha</label>
+                            <input id="form-user-update-password" required style="background-color: #4E598D; color: white" type="password" name="password" class="form-control text-start" value="" placeholder="Senha">
+                        </div>
+                        <div class="d-flex justify-content-between mt-4">
+                            <button id="form-user-update-btn-delete" style="color: white" type="button" name="button" class="btn btn-danger">Excluir conta</button>
+                            <button disabled id="form-user-update-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Atualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
+    <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/dataset/create-dataset.js') }}"></script>
+</body>
+</html>
