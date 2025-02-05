@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette.responses import JSONResponse
 
 from src.Helpers.JWTHelper import JWTHelper
+from src.Helpers.ModelHelper import ModelHelper
 from src.Repositories.UserRepository import UserRepository
 from src.Requests.LoginRequest import LoginRequest
 from src.Requests.CreateAccountRequest import CreateAccountRequest
@@ -98,7 +99,6 @@ def store(request: CreateAccountRequest):
 
 @router.post("/update-account", dependencies=[Depends(JWTHelper.validate_token)])
 def update(request: UpdateAccountRequest, token: str = Depends(JWTHelper.get_token_from_header)):
-
     if request.name is None or request.name == "":
         return JSONResponse(
             status_code=400,
@@ -115,6 +115,10 @@ def update(request: UpdateAccountRequest, token: str = Depends(JWTHelper.get_tok
             content={"message": "E-mail inválido"}
         )
 
+    user_data = request.dict()
+    if request.password is not None and request.password == "":
+        user_data.pop("password")
+
     user = JWTHelper.get_user_from_token(token)
     user_email = UserRepository().get_by_email(request.email)
     # valida se o e-mail ja está em uso, e valida se é igual ou diferente ao e-mail do usuário que está sendo atualizado
@@ -126,7 +130,7 @@ def update(request: UpdateAccountRequest, token: str = Depends(JWTHelper.get_tok
             content={"message": "E-mail já está em uso por outro usuário"}
         )
     try:
-        UserRepository().create(request.dict())
+        UserRepository().update(user.id, user_data)
     except Exception as e:
         return JSONResponse(
             status_code=500,
@@ -137,3 +141,28 @@ def update(request: UpdateAccountRequest, token: str = Depends(JWTHelper.get_tok
         status_code=201,
         content={"message": "Conta atualizada com sucesso!"}
     )
+
+
+@router.get("/show-logged-user", dependencies=[Depends(JWTHelper.validate_token)])
+def show_logged_user(token: str = Depends(JWTHelper.get_token_from_header)):
+    try:
+        user = JWTHelper.get_user_from_token(token)
+        if user is None:
+            return JSONResponse(
+                status_code=404,
+                content={"message": "Usuário não encontrado!"}
+            )
+
+        user_dict = ModelHelper.model_to_dict(user)
+
+        user_dict.pop("password")
+
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Conta atualizada com sucesso!", "data": user_dict}
+        )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": "Erro interno ao buscar dados do usuário."}
+        )

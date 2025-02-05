@@ -23,6 +23,13 @@ function request(metod, url, params = []) {
       success: function(data, textStatus, xhr) {
         result = { data: data, status: xhr.status };
       },
+      beforeSend: function(xhr) {
+        // Adiciona o token JWT no header Authorization
+        token = getCookie("authToken")
+        if (token){
+            xhr.setRequestHeader("Authorization", token);
+        }
+      },
       error: function(xhr, textStatus, errorThrown) {
         result = { data: null, status: xhr.status };
       }

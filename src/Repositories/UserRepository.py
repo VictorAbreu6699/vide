@@ -34,6 +34,8 @@ class UserRepository:
         db_user = self.get_by_id(user_id)
         if db_user:
             for key, value in data.items():
+                if key == "password":
+                    value = CryptHelper().encrypt(value)
                 setattr(db_user, key, value)
             self.db_session.commit()
             self.db_session.refresh(db_user)
