@@ -14,6 +14,7 @@ class UserRepository:
         db_user = User(**data)
         password = CryptHelper().encrypt(data["password"])
         db_user.password = password
+        db_user.is_active = True
         self.db_session.add(db_user)
         self.db_session.commit()
         self.db_session.refresh(db_user)

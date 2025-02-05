@@ -166,3 +166,33 @@ def show_logged_user(token: str = Depends(JWTHelper.get_token_from_header)):
             status_code=500,
             content={"message": "Erro interno ao buscar dados do usuário."}
         )
+
+
+@router.post("/delete-logged-user", dependencies=[Depends(JWTHelper.validate_token)])
+def delete_logged_user(token: str = Depends(JWTHelper.get_token_from_header)):
+    try:
+        user = JWTHelper.get_user_from_token(token)
+        if user is None:
+            return JSONResponse(
+                status_code=404,
+                content={"message": "Usuário não encontrado!"}
+            )
+
+        empty_data_user = {
+            "name": "usuario_excluido_" + str(user.id),
+            "email": "usuario_excluido_" + str(user.id),
+            "is_active": False
+        }
+
+        UserRepository().update(user.id, empty_data_user)
+
+        return JSONResponse(
+            status_code=200,
+            content={"message": "Usuário excluido com sucesso."}
+        )
+
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": "Erro interno ao excluir usuário."}
+        )

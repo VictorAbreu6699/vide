@@ -21,6 +21,23 @@ function updateAccount() {
     )
 }
 
+function deleteAccount() {
+    $("#alert-form-user-update").hide()
+    requestPost(
+        "/auth/delete-logged-user",
+        [],
+        function(response){
+            response = response.message
+            showAlertForm('alert-form-user-update', response, false)
+            logout()
+        },
+        function(response){
+            response = response.responseJSON.message
+            showAlertForm('alert-form-user-update', response, true)
+        }
+    )
+}
+
 function fillUpdateForm(){
     result = request("GET", "/auth/show-logged-user")
     if(result.status != 200)
@@ -33,6 +50,14 @@ function fillUpdateForm(){
 }
 
 $('#form-user-update-btn-submit').on('click', (e) => updateAccount())
+$('#form-user-update-btn-delete').on('click', (e) => deleteAccount())
+$('#btn-show-delete-user-confirmation-modal').on('click', function(){
+    let delete_user_confirmation = new bootstrap.Modal(document.getElementById('delete-user-confirmation-modal'), {
+      keyboard: false
+    })
+
+    delete_user_confirmation.show()
+})
 $("#form-user-update").on("change", function(e){
     $("#form-user-update-btn-submit").prop("disabled", false)
 })

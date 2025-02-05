@@ -38,7 +38,7 @@
                             <input id="form-user-update-password" required style="background-color: #4E598D; color: white" type="password" name="password" class="form-control text-start" value="" placeholder="Senha">
                         </div>
                         <div class="d-flex justify-content-between mt-4">
-                            <button id="form-user-update-btn-delete" style="color: white" type="button" name="button" class="btn btn-danger">Excluir conta</button>
+                            <button id="btn-show-delete-user-confirmation-modal" style="color: white" type="button" name="button" class="btn btn-danger">Excluir conta</button>
                             <button disabled id="form-user-update-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Atualizar</button>
                         </div>
                     </form>
@@ -47,6 +47,23 @@
         </div>
             </div>
         </div>
+    </div>
+    <div class="modal fade" id="delete-user-confirmation-modal" tabindex="-1" aria-labelledby="deleteUserConfirmationShowModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1E1E2E">
+          <div class="modal-header">
+            <h5 class="modal-title" id="delete-user-confirmation-modal-label"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <h6 style="font-weight: bold">Tem certeza que deseja excluir sua conta?</h6>
+              <p>Os relatorios e fontes de dados importados vão continuar ativos na plataforma.</p>
+              <button id="form-user-update-btn-delete" class="btn btn-danger">
+                Excluir conta
+              </button>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
