@@ -64,6 +64,23 @@ function fillModalReport(report_id){
     $("#report-show-modal-download").attr("download", data.name + data.extension)
     $("#report-show-modal-download").attr("href", "/reports/download-file/" + data.id)
     $("#button-access-link").attr("href", "/relatorios/" + data.id)
+    user_id = data.user_id
+    user_is_logged = checkUserLogin()
+
+    if(user_is_logged){
+        user_logged_request = request("GET", "/auth/show-logged-user")
+        if(user_logged_request.status == 200 && user_logged_request.data.data.id == user_id)
+        {
+            $("#button-access-edit-link").show()
+        }
+        else{
+            $("#button-access-edit-link").hide()
+        }
+
+    }
+    else{
+        $("#button-access-edit-link").hide()
+    }
 
     let report_modal = new bootstrap.Modal(document.getElementById('report-show-modal'), {
       keyboard: false

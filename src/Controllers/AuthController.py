@@ -159,7 +159,7 @@ def show_logged_user(token: str = Depends(JWTHelper.get_token_from_header)):
 
         return JSONResponse(
             status_code=200,
-            content={"message": "Conta atualizada com sucesso!", "data": user_dict}
+            content={"message": "Usuário encontrado com sucesso!", "data": user_dict}
         )
     except Exception as e:
         return JSONResponse(
