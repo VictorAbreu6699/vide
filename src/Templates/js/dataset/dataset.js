@@ -25,7 +25,7 @@ function createDatabaseCards() {
 
     data = result.data.data
     data.forEach(function(dataset) {
-        hmtl = `<div class="col-3 mb-4">
+        html = `<div class="col-3 mb-4">
                     <div class="card card-datasets">
                       <div class="card-body text-center" style="color: white">
                           <div class="card-title">${dataset.name}</div>
@@ -40,7 +40,7 @@ function createDatabaseCards() {
                       </div>
                     </div>
                 </div>`
-        $("#row-datasets").append(hmtl);
+        $("#row-datasets").append(html);
     });
     $(".btn-visualization-modal").off("click")
     $(".btn-visualization-modal").on("click", function(e) {

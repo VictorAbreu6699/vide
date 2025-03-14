@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<title>VIDE - Editar Visualizações de Relatório</title>
+	<link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+	<link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', path='font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/select2CustomStyle.css') }}">
+</head>
+<body>
+    <div class="w-100">
+        <div class="row">
+            {% include "components/sidebar.html" %}
+            <div class="col-11">
+                <!-- Logo no topo -->
+                <header class="logo">
+                    <a href="/">
+                        <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+                    </a>
+                </header>
+                <div class="w-100">
+                    <div class="pt-3" style="margin: 2%; background-color: #353A50; min-height: 300px">
+                        <h1 class="text-center">Editar Visualizações de Relatório</h1>
+                        <div class="d-flex justify-content-center h-100">
+                            <div class="p-3 pb-5" style="color: white">
+                                <form id="form-edit-report-visualization">
+                                    <div id="row-visualizations" class="row" style="width: 450px;">
+                                        <!-- Será preenchido com Javascript -->
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <a id="link-show-report" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Visualizar alterações</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal para criar um vinculo de relatorio com visualização-->
+    <div class="modal fade" id="report-add-new-visualziation-modal" tabindex="-1" aria-labelledby="reportAddNewVisualziationModal" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1E1E2E">
+          <div class="modal-header">
+            <h5 class="modal-title" id="report-add-new-visualziation-modal-label">Incluir visualização ao relatório</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="form-report-visualization">
+                <div class="mb-3 text-start">
+                    <label class="mb-2">Nome</label>
+                    <input id="form-report-visualization-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Nome">
+                    <small>Caso não informar um nome, será utilizado um nome padrão.</small>
+                </div>
+                <div class="mb-3 text-start">
+                    <label class="mb-2">Visualização</label>
+                    <div class="d-flex">
+                        <select id="form-report-visualization-visualization-id" required style="background-color: #4E598D; color: white" name="visualization_id" class="form-control text-start">
+                            <option value="" disabled selected>Selecione uma opção</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: none" id="visualization-fields-div" class="mb-3 text-start">
+                    <label class="mb-2">Campos da visualização</label>
+                    <div class="d-flex">
+                    </div>
+                    <small>Atráves desse(s) campo(s), relaciona as colunas do relatorio com a fonte de dados.</small>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button disabled id="form-report-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Adicionar</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/moment.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
+    <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/vendor/select2.min.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/report/update-report-visualization.js') }}"></script>
+</body>
+</html>

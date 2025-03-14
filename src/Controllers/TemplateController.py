@@ -54,6 +54,19 @@ def store_report(request: Request):
     )
 
 
+@router.get("/editar-relatorio/{report_id}")
+def update_report(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="reports/updateReport.html"
+    )
+
+@router.get("/editar-relatorio/visualizacoes/{report_id}")
+def update_report(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="reports/updateReportVisualization.html"
+    )
+
+
 @router.get("/relatorio")
 def reports(request: Request):
     return templates.TemplateResponse(

@@ -64,6 +64,7 @@ function fillModalReport(report_id){
     $("#report-show-modal-download").attr("download", data.name + data.extension)
     $("#report-show-modal-download").attr("href", "/reports/download-file/" + data.id)
     $("#button-access-link").attr("href", "/relatorios/" + data.id)
+    $("#button-access-edit-link").attr("href", "/editar-relatorio/" + data.id)
     user_id = data.user_id
     user_is_logged = checkUserLogin()
 

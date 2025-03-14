@@ -1,6 +1,7 @@
 from typing import Optional
 
 import pandas as pd
+from sqlalchemy import or_, func
 
 from src.Database.Database import Database
 from src.Models.Field import Field
@@ -28,7 +29,9 @@ class VisualizationRepository:
         query = self.db_session.query(Visualization)
 
         if name:
-            query = query.filter(Visualization.name.in_(name))
+            query = query.filter(
+                func.lower(Visualization.name).like(f"%{name.lower()}%")
+            )
 
         return pd.read_sql(query.statement, self.db_session.bind)
 

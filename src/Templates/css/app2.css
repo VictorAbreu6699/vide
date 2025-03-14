@@ -114,3 +114,22 @@ header.logo img {
     background-color: #1E1E2E;
     min-height: 302px;
 }
+
+.cell-visualization{
+  background-color: black;
+  text-align: center;
+  padding: 10px;
+  border-right-color: #353A50 !important;
+  border-right: solid 5px;
+  border-top-color: #353A50 !important;
+  border-top: solid 5px;
+}
+
+/* Mantem select 2 acima dos outros elementos */
+span.select2-container.select2-container--default.select2-container--open {
+    z-index: 9999 !important;
+}
+
+span.select2.select2-container.select2-container--default.select2-container--below{
+    max-width: 100% !important;
+}
