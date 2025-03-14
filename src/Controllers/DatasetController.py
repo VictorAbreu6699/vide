@@ -8,6 +8,7 @@ from src.Helpers.JWTHelper import JWTHelper
 from src.Helpers.ModelHelper import ModelHelper
 from src.Repositories.DatasetRepository import DatasetRepository
 from src.Repositories.ReportRepository import ReportRepository
+from src.Services.DatasetService import DatasetService
 
 router = APIRouter(prefix="/datasets", tags=['Datasets'])
 
@@ -56,19 +57,13 @@ async def upload_file(
             content={"message": "Tipo de arquivo não suportado."}
         )
 
-    # Cria a pasta storage/datasets, caso não exista.
-    if not os.path.exists("storage/datasets"):
-        os.makedirs("storage/datasets")
-    # Salva o arquivo na pasta storage
-    _, extension = os.path.splitext(file.filename)
-    file_path = os.path.join("storage/datasets", uuid.uuid4().__str__() + extension)
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
-    user = JWTHelper.get_user_from_token(token)
-
-    DatasetRepository().create({
-        "name": name, "description": description, "extension": extension, "path": file_path, "user_id": user.id
-    })
+    try:
+        DatasetService.upload_file(name, description, file, token)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": "Erro ao enviar arquivo. Erro: " + str(e)}
+        )
 
     return JSONResponse(
         status_code=201,
