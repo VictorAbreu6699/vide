@@ -399,3 +399,16 @@ function logout(){
         )
     }
 }
+
+/*
+    Gera um elemento hmtl contendo campos a serem preenchidos para gerar uma visualização
+*/
+function generateVisualizationFields(container_id, visualization_id) {
+    result = request('GET', '/visualizations/get-visualization-fields/' + visualization_id)
+    if (result.status != 200) return;
+    data = result.data.data
+    html = ""
+    $("#"+container_id).empty()
+
+    $("#"+container_id).append(html)
+}

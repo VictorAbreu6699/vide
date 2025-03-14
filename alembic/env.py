@@ -5,6 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 
+from src.Models.DatasetColumn import DatasetColumn
 from src.Models.ReportVisualizationDatasetColumn import ReportVisualizationDatasetColumn
 from src.Models.Dataset import Dataset
 from src.Models.Field import Field
@@ -37,7 +38,8 @@ target_metadata = [
     Report.metadata,
     ReportVisualization.metadata,
     ReportVisualizationDatasetColumn.metadata,
-    RevokedToken.metadata
+    RevokedToken.metadata,
+    DatasetColumn.metadata
 ]
 
 # other values from the config, defined by the needs of env.py,

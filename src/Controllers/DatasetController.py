@@ -7,6 +7,7 @@ from starlette.responses import JSONResponse, FileResponse
 from src.Helpers.JWTHelper import JWTHelper
 from src.Helpers.ModelHelper import ModelHelper
 from src.Repositories.DatasetRepository import DatasetRepository
+from src.Repositories.ReportRepository import ReportRepository
 
 router = APIRouter(prefix="/datasets", tags=['Datasets'])
 
@@ -90,4 +91,22 @@ async def download_file(dataset_id: int):
         path=dataset.path,
         filename=dataset.name + dataset.extension,
         media_type="application/octet-stream",
+    )
+
+
+@router.get("/get-dataset-columns/{report_id}")
+async def get_dataset_columns(report_id: int):
+    # Verificando se o relatorio existe
+    report = ReportRepository().get_by_id(report_id)
+    if not report:
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Relatório não encontrado!"}
+        )
+    dataset = DatasetRepository().get_by_id(report.dataset_id)
+    dataset = ModelHelper.model_to_dict(dataset)
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Sucesso!", "data": dataset}
     )

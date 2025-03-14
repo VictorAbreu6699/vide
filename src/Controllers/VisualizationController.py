@@ -12,7 +12,7 @@ def get_visualizations(search: Optional[str] = Query(None)):
     data = VisualizationRepository().get_all(search).to_dict(orient="records")
 
     return JSONResponse(
-        status_code=201,
+        status_code=200,
         content={"message": "Sucesso!", "data": data}
     )
 
@@ -22,6 +22,6 @@ def get_visualization_fields(visualization_id: int):
     data = VisualizationRepository().get_visualization_fields(visualization_id)
 
     return JSONResponse(
-        status_code=201,
+        status_code=200,
         content={"message": "Sucesso!", "data": data.to_dict(orient='records')}
     )

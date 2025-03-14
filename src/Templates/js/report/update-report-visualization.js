@@ -114,9 +114,14 @@ $('#form-report-visualization-visualization-id').select2({
 });
 
 $('#form-report-visualization-visualization-id').on("change.select2", function(){
-
-
-    $("#visualization-fields-div").show()
+    visualization_id = $('#form-report-visualization-visualization-id').val()
+    if (visualization_id != null){
+        generateVisualizationFields("visualization-fields", visualization_id)
+        $("#visualization-fields-div").show()
+    }
+    else{
+        $("#visualization-fields-div").hide()
+    }
 })
 
 $(document).ready(function(){
