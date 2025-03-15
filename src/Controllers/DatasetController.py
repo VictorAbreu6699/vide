@@ -42,7 +42,7 @@ async def show_dataset(dataset_id: int):
 
 @router.post("/", dependencies=[Depends(JWTHelper.validate_token)])
 async def upload_file(
-        name: str = Form(...), description: str = Form(...), file: UploadFile = File(...),
+        name: str = Form(...), description: Optional[str] = Form(None), file: UploadFile = File(...),
         token: str = Depends(JWTHelper.get_token_from_header)
 ):
     # Tipos de arquivos permitidos
@@ -58,7 +58,7 @@ async def upload_file(
         )
 
     try:
-        DatasetService.upload_file(name, description, file, token)
+        await DatasetService.upload_file(name, description, file, token)
     except Exception as e:
         return JSONResponse(
             status_code=500,
