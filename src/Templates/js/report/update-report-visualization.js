@@ -125,6 +125,123 @@ $('#form-report-visualization-visualization-id').on("change.select2", function()
     }
 })
 
+/*
+    Gera um elemento hmtl contendo campos a serem preenchidos para gerar uma visualização
+*/
+function generateVisualizationFields(container_id, visualization_id, report_id) {
+    result = request('GET', '/visualizations/get-visualization-fields/' + visualization_id)
+    if (result.status != 200) return;
+
+    result_dataset_columns = request('GET', '/datasets/get-dataset-columns/' + report_id)
+    if (result_dataset_columns.status != 200) return;
+
+    data_visualization_fields = result.data.data
+    data_visualization_fields_dataset_columns = result_dataset_columns.data.data
+    html = ""
+    $("#"+container_id).empty()
+
+    data_visualization_fields_dataset_columns = buildType(data_visualization_fields_dataset_columns)
+    data_visualization_fields = buildType(data_visualization_fields)
+
+    options = data_visualization_fields_dataset_columns.map(function(item){
+                return `<option value="${item.order}">${item.name} (${item.typeFormat})</option>`
+            })
+    options = options.join()
+    for (let i = 0; i < data_visualization_fields.length; i++) {
+        html += `<div class="mb-3 text-start">
+                    <label class="mb-2">${data_visualization_fields[i].name} (${data_visualization_fields[i].typeFormat})</label>
+                    <div class="d-flex">
+                        <select id="select-visualization-field-value-${i}" required style="background-color: #4E598D; color: white" name="visualization_field_value[]" class="form-control text-start visualization_field">
+                            <option value="" disabled selected>Selecione uma opção</option>
+                            ${options}
+                        </select>
+                        <input id="select-visualization-field-id-${i}" name="visualization_field_id[]" type="hidden" value="${data_visualization_fields[i].id}">
+                    </div>
+                </div>`
+    }
+
+    $("#"+container_id).append(html)
+
+    for (let i = 0; i < data_visualization_fields.length; i++) {
+        $('#select-visualization-field-value-'+i).off('change');
+        $('#select-visualization-field-value-'+i).select2({allowClear: true, "placeholder": "Selecione uma coluna"});
+        $('#select-visualization-field-value-'+i).on('change', validateSelect2ReportVisualizationField);
+        $('#select-visualization-field-value-'+i).on('change', allowSendForm);
+    }
+
+}
+
+function buildType(data){
+    data = data.map(function(item){
+        typeFormat = null;
+        switch (item.type) {
+          case "date":
+            typeFormat = "Data"
+            break;
+          case "string":
+            typeFormat = "Texto"
+            break;
+          case "number":
+            typeFormat = "Numérico"
+            break;
+          default:
+            typeFormat = "Indefinido"
+        }
+
+        item.typeFormat = typeFormat
+        return item
+    })
+
+    return data
+}
+
+function validateSelect2ReportVisualizationField() {
+    let selectedValues = [];
+
+    // Coletar todos os valores selecionados
+    $('.visualization_field').each(function() {
+        let val = $(this).val();
+        if (val) {
+            selectedValues.push(val);
+        }
+    });
+    // Desativar opções já selecionadas nos outros select2
+    $('.visualization_field').each(function() {
+        let currentSelect = $(this);
+        let currentValue = currentSelect.val();
+
+        currentSelect.find('option').each(function() {
+            let optionValue = $(this).val();
+
+            if (optionValue && optionValue !== currentValue) {
+                $(this).prop('disabled', selectedValues.includes(optionValue));
+            }
+        });
+    });
+
+    // Atualizar Select2 para refletir mudanças
+    $('.visualization_field').trigger("change.select2");
+}
+
+function allowSendForm(){
+    var allFilled = true;
+
+    $('.visualization_field').each(function() {
+        if ($(this).val() === null || $(this).val().length === 0) {
+            allFilled = false;
+            return false; // Interrompe o loop se encontrar um vazio
+        }
+    });
+
+    if(allFilled){
+        $("#form-report-btn-submit").prop("disabled", false)
+    }
+    else{
+        $("#form-report-btn-submit").prop("disabled", true)
+    }
+}
+
+
 $(document).ready(function(){
     let report_id = window.location.pathname.split("/").pop();
     $("#link-show-report").attr("href", "/relatorios/" + report_id);
