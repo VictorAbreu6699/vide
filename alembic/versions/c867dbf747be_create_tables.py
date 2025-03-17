@@ -79,7 +79,7 @@ def upgrade() -> None:
     sa.Column('dataset_id', sa.Integer(), nullable=False),
     sa.Column('column', sa.String(length=255), nullable=False),
     sa.ForeignKeyConstraint(['dataset_id'], ['datasets.id'], ),
-    sa.ForeignKeyConstraint(['report_visualization_id'], ['report_visualization.id'], ),
+    sa.ForeignKeyConstraint(['report_visualization_id'], ['report_visualizations.id'], ),
     sa.ForeignKeyConstraint(['visualization_field_id'], ['visualization_fields.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
