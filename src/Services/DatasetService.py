@@ -28,7 +28,7 @@ class DatasetService:
 
         if not dataset_columns:
             raise RuntimeError("Nenhuma coluna foi encontrada no arquivo!")
-        elif DatasetService.check_dataset_is_valid(dataset_columns):
+        elif not DatasetService.check_dataset_is_valid(dataset_columns):
             raise RuntimeError("O arquivo deve possuir pelo menos duas colunas nomeadas!")
 
         dataset = DatasetRepository().create({
@@ -62,7 +62,7 @@ class DatasetService:
             has_column_name = True if "Unnamed" not in col else False
 
             columns_info.append({
-                "name": f"coluna {i}" if has_column_name else col, "type": map_data_type(df_dataset[col]),
+                "name": f"coluna {i}" if not has_column_name else col, "type": map_data_type(df_dataset[col]),
                 "order": i, "has_column_name": has_column_name
             })
 
@@ -71,7 +71,7 @@ class DatasetService:
     @staticmethod
     def check_dataset_is_valid(dataset_columns: list[dict]) -> True:
         len_has_column_name = sum(1 for col in dataset_columns if col["has_column_name"])
-
+        print(len_has_column_name)
         if len_has_column_name < 2:
             return False
 

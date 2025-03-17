@@ -415,26 +415,53 @@ function generateVisualizationFields(container_id, visualization_id, report_id) 
     html = ""
     $("#"+container_id).empty()
 
+    data_visualization_fields_dataset_columns = buildType(data_visualization_fields_dataset_columns)
+    data_visualization_fields = buildType(data_visualization_fields)
+
+    options = data_visualization_fields_dataset_columns.map(function(item){
+                return `<option value="${item.id}">${item.name} (${item.typeFormat})</option>`
+            })
+    options = options.join()
     for (let i = 0; i < data_visualization_fields.length; i++) {
         html += `<div class="mb-3 text-start">
-                    <label class="mb-2">${data_visualization_fields[i].name}</label>
+                    <label class="mb-2">${data_visualization_fields[i].name} (${data_visualization_fields[i].typeFormat})</label>
                     <div class="d-flex">
-                        <select required style="background-color: #4E598D; color: white" name="visualization_field_value[]" class="form-control text-start visualization_field">
+                        <select id="select-visualization-field-value-${i}" required style="background-color: #4E598D; color: white" name="visualization_field_value[]" class="form-control text-start visualization_field">
                             <option value="" disabled selected>Selecione uma opção</option>
+                            ${options}
                         </select>
-                        <input name="visualization_field_id[]" type="hidden" value="${data_visualization_fields[i].id}">
+                        <input id="select-visualization-field-id-${i}" name="visualization_field_id[]" type="hidden" value="${data_visualization_fields[i].id}">
                     </div>
                 </div>`
     }
 
     $("#"+container_id).append(html)
 
-    $('.visualization_field').select2({
-        data: data_visualization_fields_dataset_columns.map(function(item){
-            return {"id": item.id, "text": item.name}
-        }),
-        allowClear: true,
-        maximumSelectionLength: 20,
-        placeholder: "Selecione a coluna"
-    });
+    for (let i = 0; i < data_visualization_fields.length; i++) {
+        $('#select-visualization-field-value-'+i).select2();
+    }
+}
+
+function buildType(data){
+    data = data.map(function(item){
+        typeFormat = null;
+        switch (item.type) {
+          case "date":
+            typeFormat = "Data"
+            break;
+          case "string":
+            typeFormat = "Texto"
+            break;
+          case "number":
+            typeFormat = "Numérico"
+            break;
+          default:
+            typeFormat = "Indefinido"
+        }
+
+        item.typeFormat = typeFormat
+        return item
+    })
+
+    return data
 }

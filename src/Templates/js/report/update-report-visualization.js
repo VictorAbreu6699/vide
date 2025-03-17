@@ -17,7 +17,7 @@ function fillModalVisualization(){
 //    $("#dataset-show-modal-download").attr("download", data.name + data.extension)
 //    $("#dataset-show-modal-download").attr("href", "/datasets/download-file/" + data.id)
 
-    let dataset_modal = new bootstrap.Modal(document.getElementById('report-add-new-visualziation-modal'), {
+    let dataset_modal = new bootstrap.Modal(document.getElementById('report-add-new-visualization-modal'), {
       keyboard: false
     })
 
@@ -117,8 +117,8 @@ $('#form-report-visualization-visualization-id').on("change.select2", function()
     visualization_id = $('#form-report-visualization-visualization-id').val()
     if (visualization_id != null){
         let report_id = window.location.pathname.split("/").pop();
-        generateVisualizationFields("visualization-fields", visualization_id, report_id)
         $("#visualization-fields-div").show()
+        generateVisualizationFields("visualization-fields", visualization_id, report_id)
     }
     else{
         $("#visualization-fields-div").hide()
