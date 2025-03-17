@@ -439,7 +439,9 @@ function generateVisualizationFields(container_id, visualization_id, report_id) 
 
     for (let i = 0; i < data_visualization_fields.length; i++) {
         $('#select-visualization-field-value-'+i).select2();
+        $('#select-visualization-field-value-'+i).on('change', validateSelect2);
     }
+
 }
 
 function buildType(data){
@@ -465,3 +467,34 @@ function buildType(data){
 
     return data
 }
+
+function validateSelect2() {
+    let selectedValues = [];
+    let val = $('#select-visualization-field-value-0').val()
+    console.log(val)
+    // Coletar todos os valores selecionados
+    $('.visualization_field').each(function() {
+        let val = $(this).val();
+        if (val) {
+            selectedValues.push(val);
+        }
+    });
+    console.log(selectedValues)
+    // Desativar opções já selecionadas nos outros select2
+//    $('.visualization_field').each(function() {
+//        let currentSelect = $(this);
+//        let currentValue = currentSelect.val();
+//
+//        currentSelect.find('option').each(function() {
+//            let optionValue = $(this).val();
+//            console.log(optionValue)
+//            if (optionValue && optionValue !== currentValue) {
+//                $(this).prop('disabled', selectedValues.includes(optionValue));
+//            }
+//        });
+//    });
+
+    // Atualizar Select2 para refletir mudanças
+    $('.visualization_field').trigger("change.select2");
+}
+
