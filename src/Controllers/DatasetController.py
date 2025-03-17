@@ -90,7 +90,7 @@ async def download_file(dataset_id: int):
 
 
 @router.get("/get-dataset-columns/{report_id}")
-async def get_dataset_columns(report_id: int):
+def get_dataset_columns(report_id: int):
     # Verificando se o relatorio existe
     report = ReportRepository().get_by_id(report_id)
     if not report:
@@ -99,9 +99,10 @@ async def get_dataset_columns(report_id: int):
             content={"message": "Relatório não encontrado!"}
         )
     dataset = DatasetRepository().get_by_id(report.dataset_id)
-    dataset = ModelHelper.model_to_dict(dataset)
+
+    dataset_columns = DatasetService.get_dataset_columns(dataset.path, dataset.extension)
 
     return JSONResponse(
-        status_code=201,
-        content={"message": "Sucesso!", "data": dataset}
+        status_code=200,
+        content={"message": "Sucesso!", "data": dataset_columns}
     )

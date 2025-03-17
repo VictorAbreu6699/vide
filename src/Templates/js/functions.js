@@ -403,12 +403,38 @@ function logout(){
 /*
     Gera um elemento hmtl contendo campos a serem preenchidos para gerar uma visualização
 */
-function generateVisualizationFields(container_id, visualization_id) {
+function generateVisualizationFields(container_id, visualization_id, report_id) {
     result = request('GET', '/visualizations/get-visualization-fields/' + visualization_id)
     if (result.status != 200) return;
-    data = result.data.data
+
+    result_dataset_columns = request('GET', '/datasets/get-dataset-columns/' + report_id)
+    if (result_dataset_columns.status != 200) return;
+
+    data_visualization_fields = result.data.data
+    data_visualization_fields_dataset_columns = result_dataset_columns.data.data
     html = ""
     $("#"+container_id).empty()
 
+    for (let i = 0; i < data_visualization_fields.length; i++) {
+        html += `<div class="mb-3 text-start">
+                    <label class="mb-2">${data_visualization_fields[i].name}</label>
+                    <div class="d-flex">
+                        <select required style="background-color: #4E598D; color: white" name="visualization_field_value[]" class="form-control text-start visualization_field">
+                            <option value="" disabled selected>Selecione uma opção</option>
+                        </select>
+                        <input name="visualization_field_id[]" type="hidden" value="${data_visualization_fields[i].id}">
+                    </div>
+                </div>`
+    }
+
     $("#"+container_id).append(html)
+
+    $('.visualization_field').select2({
+        data: data_visualization_fields_dataset_columns.map(function(item){
+            return {"id": item.id, "text": item.name}
+        }),
+        allowClear: true,
+        maximumSelectionLength: 20,
+        placeholder: "Selecione a coluna"
+    });
 }

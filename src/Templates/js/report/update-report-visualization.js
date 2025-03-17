@@ -116,7 +116,8 @@ $('#form-report-visualization-visualization-id').select2({
 $('#form-report-visualization-visualization-id').on("change.select2", function(){
     visualization_id = $('#form-report-visualization-visualization-id').val()
     if (visualization_id != null){
-        generateVisualizationFields("visualization-fields", visualization_id)
+        let report_id = window.location.pathname.split("/").pop();
+        generateVisualizationFields("visualization-fields", visualization_id, report_id)
         $("#visualization-fields-div").show()
     }
     else{
@@ -125,7 +126,7 @@ $('#form-report-visualization-visualization-id').on("change.select2", function()
 })
 
 $(document).ready(function(){
-    let id = window.location.pathname.split("/").pop();
-    $("#link-show-report").attr("href", "/relatorios/" + id);
+    let report_id = window.location.pathname.split("/").pop();
+    $("#link-show-report").attr("href", "/relatorios/" + report_id);
     createVisualizationCells()
 })

@@ -12,6 +12,7 @@ class DatasetColumn(Base):
     dataset_id = Column(Integer, ForeignKey(Dataset.id), nullable=False)
     name = Column(String(255), nullable=False)
     type = Column(Enum('number', 'string', 'date'))
+    order = Column(Integer, nullable=False, default=1)
     created_at = Column(TIMESTAMP, nullable=False, server_default=func.now())
     updated_at = Column(TIMESTAMP, nullable=False, server_default=func.now(), onupdate=func.now())
 
