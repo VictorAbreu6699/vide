@@ -41,7 +41,18 @@ function request(metod, url, params = []) {
   function getFormData(formElement) {
     var formData = {};
     $(formElement).serializeArray().forEach(function(field) {
-        formData[field.name] = field.value;
+        // Verifica se já existe uma chave com esse nome no objeto
+        if (formData[field.name]) {
+            // Se já for um array, adiciona o novo valor
+            if (Array.isArray(formData[field.name])) {
+                formData[field.name].push(field.value);
+            } else {
+                // Se for um valor único, transforma em array
+                formData[field.name] = [formData[field.name], field.value];
+            }
+        } else {
+            formData[field.name] = field.value;
+        }
     });
     return formData;
 }

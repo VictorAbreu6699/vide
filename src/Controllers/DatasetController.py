@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Form, UploadFile, File, Query
 from starlette.responses import JSONResponse, FileResponse
 from src.Helpers.JWTHelper import JWTHelper
 from src.Helpers.ModelHelper import ModelHelper
+from src.Repositories.DatasetColumnRepository import DatasetColumnRepository
 from src.Repositories.DatasetRepository import DatasetRepository
 from src.Repositories.ReportRepository import ReportRepository
 from src.Services.DatasetService import DatasetService
@@ -100,9 +101,12 @@ def get_dataset_columns(report_id: int):
         )
     dataset = DatasetRepository().get_by_id(report.dataset_id)
 
-    dataset_columns = DatasetService.get_dataset_columns(dataset.path, dataset.extension)
+    dataset_columns = DatasetColumnRepository().get_by_dataset_id(dataset_id=dataset.id)
+
+    if not dataset_columns.empty:
+        dataset_columns = dataset_columns[['id', 'dataset_id', 'name', 'type', 'order']]
 
     return JSONResponse(
         status_code=200,
-        content={"message": "Sucesso!", "data": dataset_columns}
+        content={"message": "Sucesso!", "data": dataset_columns.to_dict(orient="records")}
     )

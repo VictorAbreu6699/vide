@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, ForeignKey, JSON
 from sqlalchemy.orm import declarative_base
 
 from src.Models.Dataset import Dataset
+from src.Models.DatasetColumn import DatasetColumn
 from src.Models.ReportVisualization import ReportVisualization
 from src.Models.VisualizationField import VisualizationField
 
@@ -14,6 +15,6 @@ class ReportVisualizationDatasetColumn(Base):
     report_visualization_id = Column(Integer, ForeignKey(ReportVisualization.id), nullable=False)
     visualization_field_id = Column(Integer, ForeignKey(VisualizationField.id), nullable=False)
     dataset_id = Column(Integer, ForeignKey(Dataset.id), nullable=False)
-    column = Column(String(255), nullable=False)
+    dataset_column_id = Column(Integer, ForeignKey(DatasetColumn.id), nullable=False)
     position = Column(JSON(), nullable=True)
 

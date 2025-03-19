@@ -5,6 +5,14 @@ class BaseRepository:
     def __init__(self):
         self.db_session = Database().get_db()
 
+    def create(self, model, data: dict):
+        """Cria um novo campo no banco de dados."""
+        item = model(**data)
+        self.db_session.add(item)
+        self.db_session.commit()
+        self.db_session.refresh(item)
+        return item
+
     def bulk_insert(self, model, data: list[dict]):
         """
         Insere múltiplos registros em uma tabela usando SQLAlchemy.

@@ -4,6 +4,10 @@ userIsNotLogged();
 // Verifica se o usuário está logado de 60 em 60 segundos
 setInterval(userIsNotLogged, 60000);
 
+var report_new_visualization_modal = new bootstrap.Modal(document.getElementById('report-add-new-visualization-modal'), {
+      keyboard: false
+    })
+
 function fillModalVisualization(){
 //    result = request("GET", "/datasets/show-dataset/"+dataset_id)
 //    if(result.status != 201)
@@ -16,12 +20,9 @@ function fillModalVisualization(){
 //    $("#dataset-show-modal-created-at").text(created_at)
 //    $("#dataset-show-modal-download").attr("download", data.name + data.extension)
 //    $("#dataset-show-modal-download").attr("href", "/datasets/download-file/" + data.id)
-
-    let dataset_modal = new bootstrap.Modal(document.getElementById('report-add-new-visualization-modal'), {
-      keyboard: false
-    })
-
-    dataset_modal.show()
+    let report_id = window.location.pathname.split("/").pop();
+    $("#form-report-visualization-report-id").val(report_id)
+    report_new_visualization_modal.show()
 }
 
 function createVisualizationCells() {
@@ -144,18 +145,18 @@ function generateVisualizationFields(container_id, visualization_id, report_id) 
     data_visualization_fields = buildType(data_visualization_fields)
 
     options = data_visualization_fields_dataset_columns.map(function(item){
-                return `<option value="${item.order}">${item.name} (${item.typeFormat})</option>`
+                return `<option value="${item.id}">${item.name} (${item.typeFormat})</option>`
             })
     options = options.join()
     for (let i = 0; i < data_visualization_fields.length; i++) {
         html += `<div class="mb-3 text-start">
                     <label class="mb-2">${data_visualization_fields[i].name} (${data_visualization_fields[i].typeFormat})</label>
                     <div class="d-flex">
-                        <select id="select-visualization-field-value-${i}" required style="background-color: #4E598D; color: white" name="visualization_field_value[]" class="form-control text-start visualization_field">
+                        <select id="select-visualization-field-value-${i}" required style="background-color: #4E598D; color: white" name="field_value" class="form-control text-start visualization_field">
                             <option value="" disabled selected>Selecione uma opção</option>
                             ${options}
                         </select>
-                        <input id="select-visualization-field-id-${i}" name="visualization_field_id[]" type="hidden" value="${data_visualization_fields[i].id}">
+                        <input id="select-visualization-field-id-${i}" name="field_id" type="hidden" value="${data_visualization_fields[i].id}">
                     </div>
                 </div>`
     }
@@ -234,12 +235,29 @@ function allowSendForm(){
     });
 
     if(allFilled){
-        $("#form-report-btn-submit").prop("disabled", false)
+        $("#form-report-visualization-btn-submit").prop("disabled", false)
     }
     else{
-        $("#form-report-btn-submit").prop("disabled", true)
+        $("#form-report-visualization-btn-submit").prop("disabled", true)
     }
 }
+
+$('#form-report-visualization-btn-submit').on('click', function(e){
+    $("#alert-form-report-visualization").hide()
+    requestPost(
+        "/report-visualizations/",
+        getFormData("#form-report-visualization"),
+        function(response){
+            message = response.message
+            showAlertForm('alert-form-report', message, false)
+            setTimeout(report_new_visualization_modal.show(), 2000)
+        },
+        function(response){
+            response = response.responseJSON.message
+            showAlertForm('alert-form-report', response, true)
+        }
+    )
+})
 
 
 $(document).ready(function(){

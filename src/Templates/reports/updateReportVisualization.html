@@ -51,6 +51,7 @@
           </div>
           <div class="modal-body">
             <form id="form-report-visualization">
+                <input id="form-report-visualization-report-id" type="hidden" name="report_id">
                 <div class="mb-3 text-start">
                     <label class="mb-2">Nome</label>
                     <input id="form-report-visualization-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Nome">
@@ -72,7 +73,7 @@
                     <div id="visualization-fields"></div>
                 </div>
                 <div class="d-flex justify-content-center mt-3">
-                    <button disabled id="form-report-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Adicionar</button>
+                    <button disabled id="form-report-visualization-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Adicionar</button>
                 </div>
             </form>
           </div>
