@@ -1,4 +1,4 @@
-from typing import Optional, List, Type
+from typing import Optional
 
 import pandas as pd
 from sqlalchemy import or_, func
@@ -29,25 +29,6 @@ class ReportRepository:
             Report.id, Report.name, Report.description, Report.dataset_id, Dataset.name.label("dataset_name"),
             Report.user_id, Report.created_at, Report.updated_at
         )
-        # created_at
-        # :
-        # "2025-03-17 20:30:04"
-        # dataset_id
-        # :
-        # 16
-        # description
-        # :
-        # "teste"
-        # id
-        # :
-        # 7
-        # name
-        # :
-        # "Dengue regional"
-        # updated_at
-        # :
-        # "2025-03-17 20:30:04"
-        # user_id
 
         return query.filter(Report.id == report_id).first()
 
@@ -76,7 +57,7 @@ class ReportRepository:
         return pd.read_sql(query.statement, self.db_session.bind)
 
     def update(self, report_id: int, data: dict) -> Optional[Report]:
-        report = self.get_by_id(report_id)
+        report = self.db_session.query(Report).filter(Report.id == report_id).first()
         if report:
             for key, value in data.items():
                 setattr(report, key, value)
