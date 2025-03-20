@@ -75,3 +75,37 @@ def create_report(request: CreateReportRequest, token: str = Depends(JWTHelper.g
         status_code=201,
         content={"message": "Relátorio criado com sucesso!", "report_id": report.id}
     )
+
+
+@router.put("/{report_id}", dependencies=[Depends(JWTHelper.validate_token)])
+def create_report(report_id, request: CreateReportRequest, token: str = Depends(JWTHelper.get_token_from_header)):
+    report = ReportRepository().get_by_id(report_id)
+
+    if request.name is None or request.name == "":
+        return JSONResponse(
+            status_code=400,
+            content={"message": "É obrigatorio inserir o nome do relatório!"}
+        )
+
+    if request.description is None or request.description == "":
+        return JSONResponse(
+            status_code=400,
+            content={"message": "É obrigatorio inserir a descrição!"}
+        )
+
+    user = JWTHelper.get_user_from_token(token)
+
+    if report.user_id != user.id:
+        return JSONResponse(
+            status_code=403,
+            content={"message": "Somente o usuário que criou o relátorio pode edita-lo!"}
+        )
+
+    report = ReportRepository().update(report_id, {
+        "name": request.name, "description": request.description
+    })
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Relátorio atualizado com sucesso!"}
+    )

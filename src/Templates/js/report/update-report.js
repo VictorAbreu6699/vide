@@ -6,18 +6,15 @@ setInterval(userIsNotLogged, 60000);
 
 var report_id = window.location.pathname.split("/").pop();
 
-$('#form-report-btn-submit').on('click', function(e){
+$('#form-report-update-btn-submit').on('click', function(e){
     $("#alert-form-report").hide()
     requestPut(
         "/reports/" + report_id,
-        getFormData("#form-report"),
+        getFormData("#form-report-update"),
         function(response){
             message = response.message
             showAlertForm('alert-form-report', message, false)
-            // Após 2 segundos, redireciona para os relatorios
-            setTimeout(function () {
-                window.location.href = "/relatorios";
-            }, 2000);
+            $("#form-report-update-btn-submit").prop("disabled", true)
         },
         function(response){
             response = response.responseJSON.message
@@ -45,8 +42,7 @@ function fillReportOptions()
 $(document).ready(function(){
     $("#form-report-btn-update-visualization").attr("href", "/editar-relatorio/visualizacoes/" + report_id);
     fillReportOptions()
-    $("#form-report-update").on("change", function(){
-        console.log("oi")
+    $("#form-report-update").on("input", function(){
         $("#form-report-update-btn-submit").prop("disabled", false)
     })
 })
