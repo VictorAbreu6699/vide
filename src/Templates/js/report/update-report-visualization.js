@@ -249,12 +249,16 @@ $('#form-report-visualization-btn-submit').on('click', function(e){
         getFormData("#form-report-visualization"),
         function(response){
             message = response.message
-            showAlertForm('alert-form-report', message, false)
-            setTimeout(report_new_visualization_modal.show(), 2000)
+            showAlertForm('alert-form-report-visualization', message, false)
+            setTimeout(
+                function(){
+                    report_new_visualization_modal.hide()
+                }, 2000
+            )
         },
         function(response){
             response = response.responseJSON.message
-            showAlertForm('alert-form-report', response, true)
+            showAlertForm('alert-form-report-visualization', response, true)
         }
     )
 })

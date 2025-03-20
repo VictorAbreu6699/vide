@@ -12,12 +12,12 @@ def create_report_visualization_dataset_columns(request: CreateReportVisualizati
     if request.name is None or request.name == "":
         return JSONResponse(
             status_code=400,
-            content={"message": "É obrigatorio inserir o nome do relatório!"}
+            content={"message": "É obrigatorio inserir o nome da visualização!"}
         )
 
     ReportVisualizationService.store_report_visualization(request)
 
     return JSONResponse(
         status_code=201,
-        content={"message": "Relátorio criado com sucesso!"}
+        content={"message": "Vinculo de visualização com relátorio criada com sucesso!"}
     )

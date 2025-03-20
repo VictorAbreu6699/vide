@@ -50,12 +50,13 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
+            <div id="alert-form-report-visualization" style="display: none" class="alert mt-3" role="alert"></div>
             <form id="form-report-visualization">
                 <input id="form-report-visualization-report-id" type="hidden" name="report_id">
                 <div class="mb-3 text-start">
                     <label class="mb-2">Nome</label>
                     <input id="form-report-visualization-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Nome">
-                    <small>Caso não informar um nome, será utilizado um nome padrão.</small>
+                    <small>Este é o nome que será exibido abaixo da visualização no relatório.</small>
                 </div>
                 <div class="mb-3 text-start">
                     <label class="mb-2">Visualização</label>

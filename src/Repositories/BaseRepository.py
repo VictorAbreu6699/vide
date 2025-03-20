@@ -1,3 +1,5 @@
+from sqlalchemy.exc import SQLAlchemyError
+
 from src.Database.Database import Database
 
 
@@ -27,3 +29,25 @@ class BaseRepository:
         except Exception as e:
             self.db_session.rollback()
             print(f"Erro ao inserir: {e}")
+
+    def delete_record(self, model, **filters):
+        """
+        Função genérica para deletar registros do banco de dados.
+
+        :param model: Classe do modelo SQLAlchemy.
+        :param filters: Filtros de busca para o registro a ser deletado.
+        :return: True se a exclusão for bem-sucedida, False caso contrário.
+        """
+        try:
+            query = self.db_session.query(model).filter_by(**filters)
+            if query.first() is not None:
+                query.delete()
+                self.db_session.commit()
+                return True
+            else:
+                print("Registro(s) não encontrado(s).")
+                return False
+        except SQLAlchemyError as e:
+            self.db_session.rollback()
+            print(f"Erro ao tentar deletar o registro: {e}")
+            return False

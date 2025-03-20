@@ -31,10 +31,11 @@ $('#form-report-btn-submit').on('click', function(e){
         getFormData("#form-report"),
         function(response){
             message = response.message
+            report_id = response.report_id
             showAlertForm('alert-form-report', message, false)
             // Após 2 segundos, redireciona para os relatorios
             setTimeout(function () {
-                window.location.href = "/relatorios";
+                window.location.href = "/editar-relatorio/" + report_id;
             }, 2000);
         },
         function(response){

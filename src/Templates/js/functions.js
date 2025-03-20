@@ -109,6 +109,31 @@ function requestPut(endpoint, data, successCallback, errorCallback) {
     });
 }
 
+function requestDelete(endpoint, successCallback, errorCallback) {
+    $.ajax({
+        url: endpoint,
+        type: 'DELETE',
+        contentType: 'application/json',
+        beforeSend: function(xhr) {
+            // Adiciona o token JWT no header Authorization
+            token = getCookie("authToken")
+            if (token){
+                xhr.setRequestHeader("Authorization", token);
+            }
+        },
+        success: function(response) {
+            if (typeof successCallback === 'function') {
+                successCallback(response);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (typeof errorCallback === 'function') {
+                errorCallback(jqXHR, textStatus, errorThrown);
+            }
+        }
+    });
+}
+
 function setCookie(name, value, minutes) {
     let expires = "";
     if (minutes) {

@@ -1,7 +1,9 @@
+from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization
 from src.Models.ReportVisualizationDatasetColumn import ReportVisualizationDatasetColumn
 from src.Repositories.BaseRepository import BaseRepository
 from src.Repositories.ReportRepository import ReportRepository
+from src.Repositories.ReportVisualizationRepository import ReportVisualizationRepository
 from src.Repositories.VisualizationFieldRepository import VisualizationFieldRepository
 from src.Requests.CreateReportVisualizationDatasetColumnRequest import CreateReportVisualizationDatasetColumnRequest
 
@@ -40,3 +42,14 @@ class ReportVisualizationService:
             list_report_visualization_dataset_column.append(report_visualization_dataset_column)
 
         BaseRepository().bulk_insert(ReportVisualizationDatasetColumn, list_report_visualization_dataset_column)
+
+    @staticmethod
+    def delete_report_visualization(report_id: int):
+        df_report_visualizations = ReportVisualizationRepository().get_by_report_id(report_id)
+        for report_visualization_id in df_report_visualizations['id'].tolist():
+            BaseRepository().delete_record(
+                ReportVisualizationDatasetColumn,
+                report_visualization_id=report_visualization_id
+            )
+        BaseRepository().delete_record(ReportVisualization, report_id=report_id)
+        BaseRepository().delete_record(Report, id=report_id)

@@ -4,9 +4,11 @@ from fastapi import APIRouter, Depends, Query
 from starlette.responses import JSONResponse
 from src.Helpers.JWTHelper import JWTHelper
 from src.Helpers.ModelHelper import ModelHelper
+from src.Repositories.BaseRepository import BaseRepository
 from src.Repositories.DatasetRepository import DatasetRepository
 from src.Repositories.ReportRepository import ReportRepository
 from src.Requests.CreateReportRequest import CreateReportRequest
+from src.Services.ReportVisualizationService import ReportVisualizationService
 
 router = APIRouter(prefix="/reports", tags=['Reports'])
 
@@ -78,7 +80,7 @@ def create_report(request: CreateReportRequest, token: str = Depends(JWTHelper.g
 
 
 @router.put("/{report_id}", dependencies=[Depends(JWTHelper.validate_token)])
-def create_report(report_id, request: CreateReportRequest, token: str = Depends(JWTHelper.get_token_from_header)):
+def edit_report(report_id, request: CreateReportRequest, token: str = Depends(JWTHelper.get_token_from_header)):
     report = ReportRepository().get_by_id(report_id)
 
     if request.name is None or request.name == "":
@@ -101,11 +103,36 @@ def create_report(report_id, request: CreateReportRequest, token: str = Depends(
             content={"message": "Somente o usuário que criou o relátorio pode edita-lo!"}
         )
 
-    report = ReportRepository().update(report_id, {
+    ReportRepository().update(report_id, {
         "name": request.name, "description": request.description
     })
 
     return JSONResponse(
         status_code=200,
         content={"message": "Relátorio atualizado com sucesso!"}
+    )
+
+
+@router.delete("/{report_id}", dependencies=[Depends(JWTHelper.validate_token)])
+def delete_report(report_id, token: str = Depends(JWTHelper.get_token_from_header)):
+    report = ReportRepository().get_by_id(report_id)
+
+    user = JWTHelper.get_user_from_token(token)
+
+    if report.user_id != user.id:
+        return JSONResponse(
+            status_code=403,
+            content={"message": "Somente o usuário que criou o relátorio pode deleta-lo!"}
+        )
+    try:
+        ReportVisualizationService().delete_report_visualization(report_id)
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"message": f"Erro ao excluir relátorio! Erro: {str(e)}"}
+        )
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Relátorio excluido com sucesso!"}
     )
