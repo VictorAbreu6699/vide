@@ -23,7 +23,33 @@ class ReportRepository:
 
     def get_by_id(self, report_id: int) -> Optional[Report]:
         """Retorna um relatorio pelo ID."""
-        return self.db_session.query(Report).filter(Report.id == report_id).first()
+        query = self.db_session.query(Report).join(Dataset, Dataset.id == Report.dataset_id)
+
+        query = query.with_entities(
+            Report.id, Report.name, Report.description, Report.dataset_id, Dataset.name.label("dataset_name"),
+            Report.user_id, Report.created_at, Report.updated_at
+        )
+        # created_at
+        # :
+        # "2025-03-17 20:30:04"
+        # dataset_id
+        # :
+        # 16
+        # description
+        # :
+        # "teste"
+        # id
+        # :
+        # 7
+        # name
+        # :
+        # "Dengue regional"
+        # updated_at
+        # :
+        # "2025-03-17 20:30:04"
+        # user_id
+
+        return query.filter(Report.id == report_id).first()
 
     def get_all(self, search: str) -> pd.DataFrame:
         query = self.db_session.query(Report, User, Dataset).join(User, User.id == Report.user_id) \

@@ -51,7 +51,7 @@ function createReportCards() {
 
 function fillModalReport(report_id){
     result = request("GET", "/reports/show-report/"+report_id)
-    if(result.status != 201)
+    if(result.status != 200)
         return;
 
     data = result.data.data

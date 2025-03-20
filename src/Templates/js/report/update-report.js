@@ -4,30 +4,12 @@ userIsNotLogged();
 // Verifica se o usuário está logado de 60 em 60 segundos
 setInterval(userIsNotLogged, 60000);
 
-function fillModalDataset(dataset_id){
-    result = request("GET", "/datasets/show-dataset/"+dataset_id)
-    if(result.status != 201)
-        return;
-
-    data = result.data.data
-    $("#dataset-show-modal-label").text(data.name)
-    $("#dataset-show-modal-description").text(data.description)
-    created_at = moment(data.created_at, "YYYY-MM-DD HH:mm:ss").format('DD/MM/YYYY HH:mm:ss')
-    $("#dataset-show-modal-created-at").text(created_at)
-    $("#dataset-show-modal-download").attr("download", data.name + data.extension)
-    $("#dataset-show-modal-download").attr("href", "/datasets/download-file/" + data.id)
-
-    let dataset_modal = new bootstrap.Modal(document.getElementById('dataset-show-modal'), {
-      keyboard: false
-    })
-
-    dataset_modal.show()
-}
+var report_id = window.location.pathname.split("/").pop();
 
 $('#form-report-btn-submit').on('click', function(e){
     $("#alert-form-report").hide()
-    requestPost(
-        "/reports",
+    requestPut(
+        "/reports/" + report_id,
         getFormData("#form-report"),
         function(response){
             message = response.message
@@ -44,48 +26,27 @@ $('#form-report-btn-submit').on('click', function(e){
     )
 })
 
-$("#form-report-dataset-id").on("change.select2", function(e) {
-    if($(this).val() != null){
-        $("#btn-dataset-visualization-modal").prop("disabled", false)
-        $('#form-report-btn-submit').prop("disabled", false)
-    }
-    else{
-        $("#btn-dataset-visualization-modal").prop("disabled", true)
-        $('#form-report-btn-submit').prop("disabled", true)
-    }
-    $('#alert-form-report').hide()
-})
 
-$("#btn-dataset-visualization-modal").on("click", () => fillModalDataset($("#form-report-dataset-id").val()))
+function fillReportOptions()
+{
+    result = request('GET', '/reports/show-report/' + report_id)
+    if (result.status != 200) return;
+    report = result.data.data
 
-$('#form-report-dataset-id').select2({
-    ajax: {
-        url: '/datasets/get-datasets',
-        data: function (params) {
-          var query = {
-            search: params.term
-          }
+    $('#form-report-dataset-id').select2();
+    let newOption = new Option(report.dataset_name, report.dataset_id, false, false);
+    $('#form-report-dataset-id').append(newOption).trigger('change.select2');
+    $('#form-report-dataset-id').val(report.dataset_id).trigger('change.select2')
+    $("#form-report-name").val(report.name)
+    $('#form-report-dataset-id').val(report.dataset_id).trigger("change")
+    $("#form-report-description").val(report.description)
+}
 
-          // Query parameters will be ?search=[term]
-          return query;
-        },
-        dataType: 'json',
-        processResults: function (data) {
-            data = data.data
-            return {
-                results: data.map(dataset => ({
-                    id: dataset.id,
-                    text: dataset.name
-                }))
-            };
-        },
-        cache: true,
-        allowClear: true,
-        maximumSelectionLength: 20,
-        placeholder: "Selecione a fonte de dados"
-    }
-});
 $(document).ready(function(){
-    let id = window.location.pathname.split("/").pop();
-    $("#form-report-btn-update-visualization").attr("href", "/editar-relatorio/visualizacoes/" + id);
+    $("#form-report-btn-update-visualization").attr("href", "/editar-relatorio/visualizacoes/" + report_id);
+    fillReportOptions()
+    $("#form-report-update").on("change", function(){
+        console.log("oi")
+        $("#form-report-update-btn-submit").prop("disabled", false)
+    })
 })

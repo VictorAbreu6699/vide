@@ -83,6 +83,32 @@ function request(metod, url, params = []) {
     });
 }
 
+function requestPut(endpoint, data, successCallback, errorCallback) {
+    $.ajax({
+        url: endpoint,
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        beforeSend: function(xhr) {
+            // Adiciona o token JWT no header Authorization
+            token = getCookie("authToken")
+            if (token){
+                xhr.setRequestHeader("Authorization", token);
+            }
+        },
+        success: function(response) {
+            if (typeof successCallback === 'function') {
+                successCallback(response);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (typeof errorCallback === 'function') {
+                errorCallback(jqXHR, textStatus, errorThrown);
+            }
+        }
+    });
+}
+
 function setCookie(name, value, minutes) {
     let expires = "";
     if (minutes) {

@@ -33,7 +33,7 @@ async def show_report(report_id: int):
     report = ModelHelper.model_to_dict(report)
 
     return JSONResponse(
-        status_code=201,
+        status_code=200,
         content={"message": "Sucesso!", "data": report}
     )
 
