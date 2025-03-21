@@ -81,6 +81,47 @@
         </div>
       </div>
     </div>
+    <!-- Modal para editar o vinculo de relatorio com visualização-->
+    <div class="modal fade" id="report-update-visualization-modal">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1E1E2E">
+          <div class="modal-header">
+            <h5 class="modal-title" id="report-update-visualization-modal-label">Incluir visualização ao relatório</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="alert-form-update-report-visualization" style="display: none" class="alert mt-3" role="alert"></div>
+            <form id="form-update-report-visualization">
+                <input id="form-update-report-visualization-report-id" type="hidden" name="report_id">
+                <input id="form-report-update-visualization-report-visualization-id" type="hidden" name="report_visualization_id">
+                <div class="mb-3 text-start">
+                    <label class="mb-2">Nome</label>
+                    <input id="form-update-report-visualization-name" required style="background-color: #4E598D; color: white" type="text" name="name" class="form-control text-start" value="" placeholder="Nome">
+                    <small>Este é o nome que será exibido abaixo da visualização no relatório.</small>
+                </div>
+                <div class="mb-3 text-start">
+                    <label class="mb-2">Visualização</label>
+                    <div class="d-flex">
+                        <select id="form-update-report-visualization-visualization-id" required style="background-color: #4E598D; color: white" name="visualization_id" class="form-control text-start">
+                            <option value="" disabled selected>Selecione uma opção</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display: none" id="update-visualization-fields-div" class="mb-3 text-start">
+                    <label class="mb-2">Campos da visualização</label>
+                    <div class="d-flex">
+                    </div>
+                    <small>Atráves desse(s) campo(s), relaciona as colunas do relatorio com a fonte de dados.</small>
+                    <div id="update-visualization-fields"></div>
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <button disabled id="form-update-report-visualization-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Atualizar</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', path='/js/vendor/moment.js') }}"></script>
     <script src="{{ url_for('static', path='/js/functions.js') }}"></script>

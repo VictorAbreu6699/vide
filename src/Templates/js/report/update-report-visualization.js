@@ -8,12 +8,35 @@ var report_new_visualization_modal = new bootstrap.Modal(document.getElementById
       keyboard: false
     })
 
+var report_update_visualization_modal = new bootstrap.Modal(document.getElementById('report-update-visualization-modal'), {
+      keyboard: false
+    })
+
 var report_id = window.location.pathname.split("/").pop();
 
 function fillModalVisualization(){
     $("#form-report-visualization-report-id").val(report_id)
     report_new_visualization_modal.show()
 }
+
+function fillModalUpdateVisualization(report_visualization_id){
+    $("#form-report-update-visualization-report-id").val(report_id)
+    $("#form-report-update-visualization-report-visualization-id").val(report_visualization_id)
+    result = request("GET", "/report-visualizations/get_report_visualizations_to_edit/"+report_visualization_id)
+    if(result.status != 200)
+        return;
+
+    data = result.data.data
+
+    $("#form-update-report-visualization-name").val(data.name)
+    report_update_visualization_modal.show()
+
+    $('#report-update-visualization-modal').on('shown.bs.modal', function () {
+        $("#form-update-report-visualization-visualization-id").val(data.visualization_id).trigger("change.select2")
+    });
+
+}
+
 
 function createVisualizationCells() {
     result = request("GET", "/report-visualizations/"+report_id)
@@ -23,21 +46,35 @@ function createVisualizationCells() {
     let html = ''
     $("#row-visualizations").empty()
     for (let i = 0; i < report_visualizations.length; i++) {
-        html += `<div id="visualization-${i}" data-bs-toggle="tooltip" title="${report_visualizations[i].name}"  class="col-3 cell-visualization">
+        html += `<div style="cursor: pointer;" id="visualization-${i}" data-bs-toggle="tooltip" title="${report_visualizations[i].name}" class="col-3 cell-visualization">
                     <i style="font-size: 30px; color: white" class="fa fa-bar-chart" aria-hidden="true"></i>
+                    <input type="hidden" name="report_visualization_id" value="${report_visualizations[i].id}">
                 </div>`
     }
-    let cell_add_new_visualization = `<div id="add-new-visualization" class="col-3 cell-visualization">
+    let cell_add_new_visualization = `<div style="cursor: pointer;" id="add-new-visualization" class="col-3 cell-visualization">
                    <i style="font-size: 30px; color: white" class="fa fa-plus" aria-hidden="true"></i>
                </div>`
     html += cell_add_new_visualization
     $("#row-visualizations").append(html);
 
     $("#add-new-visualization").on("click", () => fillModalVisualization())
+    $(".cell-visualization:not(#add-new-visualization)").on("click", function(){
+        report_visualization_id = $(this).children("input[name='report_visualization_id']").val()
+        fillModalUpdateVisualization(report_visualization_id)
+    })
 
     // Inicializar o tooltip do Bootstrap
     let tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     let tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    // Muda o icone ao passar o mouse em cima
+    $(".cell-visualization:not(#add-new-visualization)").hover(
+      function() {
+        $(this).children("i").removeClass("fa-bar-chart").addClass("fa-pencil");
+      },
+      function() {
+        $(this).children("i").removeClass("fa-pencil").addClass("fa-bar-chart");
+      }
+    );
 }
 
 $('#form-report-btn-submit').on('click', function(e){
@@ -60,7 +97,7 @@ $('#form-report-btn-submit').on('click', function(e){
     )
 })
 
-$('#form-report-visualization-visualization-id').select2({
+$('#form-report-visualization-visualization-id, #form-update-report-visualization-visualization-id').select2({
     ajax: {
         url: '/visualizations/get-visualizations',
         data: function (params) {

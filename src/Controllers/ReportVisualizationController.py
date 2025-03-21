@@ -32,3 +32,13 @@ def get_report_visualizations(report_id: int):
         status_code=200,
         content={"message": "Sucesso!", "data": data.to_dict(orient="records")}
     )
+
+
+@router.get("/get_report_visualizations_to_edit/{report_visualization_id}")
+def get_report_visualizations_to_edit(report_visualization_id: int):
+    report_visualization = ReportVisualizationRepository().get_report_visualizations_to_edit(report_visualization_id)
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Sucesso!", "data": report_visualization}
+    )
