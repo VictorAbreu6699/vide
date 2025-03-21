@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from starlette.responses import JSONResponse
 from src.Helpers.JWTHelper import JWTHelper
+from src.Repositories.ReportVisualizationRepository import ReportVisualizationRepository
 from src.Requests.CreateReportVisualizationDatasetColumnRequest import CreateReportVisualizationDatasetColumnRequest
 from src.Services.ReportVisualizationService import ReportVisualizationService
 
@@ -20,4 +21,14 @@ def create_report_visualization_dataset_columns(request: CreateReportVisualizati
     return JSONResponse(
         status_code=201,
         content={"message": "Vinculo de visualização com relátorio criada com sucesso!"}
+    )
+
+
+@router.get("/{report_id}")
+def get_report_visualizations(report_id: int):
+    data = ReportVisualizationRepository().get_by_report_id(report_id)
+
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Sucesso!", "data": data.to_dict(orient="records")}
     )
