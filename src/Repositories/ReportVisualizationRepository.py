@@ -9,6 +9,8 @@ from src.Models.Dataset import Dataset
 from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization
 from src.Models.User import User
+from src.Models.Visualization import Visualization
+from src.Repositories.DatasetRepository import DatasetRepository
 from src.Repositories.ReportVisualizationDatasetColumnRepository import ReportVisualizationDatasetColumnRepository
 
 
@@ -24,7 +26,16 @@ class ReportVisualizationRepository:
 
     def get_report_visualizations_to_edit(self, report_visualization_id: int) -> dict:
         """ Busca o registro e as colunas vinculadas a ele"""
-        report_visualization = self.db_session.query(ReportVisualization).filter(
+        report_visualization = self.db_session.query(ReportVisualization).with_entities(
+            ReportVisualization.id,
+            ReportVisualization.report_id,
+            ReportVisualization.visualization_id,
+            Visualization.name.label("visualization_name"),
+            ReportVisualization.name,
+            ReportVisualization.position
+        ).join(
+            Visualization, ReportVisualization.visualization_id == Visualization.id
+        ).filter(
             ReportVisualization.id == report_visualization_id
         ).first()
 
