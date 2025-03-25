@@ -24,6 +24,12 @@ class ReportVisualizationRepository:
 
         return pd.read_sql(query.statement, self.db_session.bind)
 
+    def get_by_id(self, report_visualization_id: int) -> ReportVisualization:
+        """Retorna o registro buscando pelo ID."""
+        query = self.db_session.query(ReportVisualization).filter(ReportVisualization.id == report_visualization_id)
+
+        return query.first()
+
     def get_report_visualizations_to_edit(self, report_visualization_id: int) -> dict:
         """ Busca o registro e as colunas vinculadas a ele"""
         report_visualization = self.db_session.query(ReportVisualization).with_entities(
@@ -47,4 +53,13 @@ class ReportVisualizationRepository:
             orient="records"
         )
 
+        return report_visualization
+
+    def update(self, report_visualization_id: int, data: dict) -> Optional[Dataset]:
+        report_visualization = self.get_by_id(report_visualization_id)
+        if report_visualization:
+            for key, value in data.items():
+                setattr(report_visualization, key, value)
+            self.db_session.commit()
+            self.db_session.refresh(report_visualization)
         return report_visualization

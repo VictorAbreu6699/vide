@@ -3,6 +3,7 @@ from starlette.responses import JSONResponse
 from src.Helpers.JWTHelper import JWTHelper
 from src.Repositories.ReportVisualizationRepository import ReportVisualizationRepository
 from src.Requests.CreateReportVisualizationDatasetColumnRequest import CreateReportVisualizationDatasetColumnRequest
+from src.Requests.UpdateReportVisualizationDatasetColumnRequest import UpdateReportVisualizationDatasetColumnRequest
 from src.Services.ReportVisualizationService import ReportVisualizationService
 
 router = APIRouter(prefix="/report-visualizations", tags=['Reports'])
@@ -41,4 +42,22 @@ def get_report_visualizations_to_edit(report_visualization_id: int):
     return JSONResponse(
         status_code=200,
         content={"message": "Sucesso!", "data": report_visualization}
+    )
+
+
+@router.put("/{report_visualization_id}", dependencies=[Depends(JWTHelper.validate_token)])
+def update_report_visualization_dataset_columns(
+    report_visualization_id: int, request: UpdateReportVisualizationDatasetColumnRequest
+):
+    if request.name is None or request.name == "":
+        return JSONResponse(
+            status_code=400,
+            content={"message": "É obrigatorio inserir o nome da visualização!"}
+        )
+
+    ReportVisualizationService.edit_report_visualization(report_visualization_id, request)
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Vinculo de visualização com relátorio criada com sucesso!"}
     )

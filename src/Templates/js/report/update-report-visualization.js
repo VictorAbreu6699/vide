@@ -56,6 +56,7 @@ function fillModalUpdateVisualization(report_visualization_id){
     Gera um elemento hmtl contendo campos a serem preenchidos para gerar uma visualização
 */
 function generateUpdateVisualizationFields(container_id, visualization_id, report_id, report_visualization_dataset_columns) {
+    $("#form-update-report-visualization-report-id").val(report_id)
     result = request('GET', '/visualizations/get-visualization-fields/' + visualization_id)
     if (result.status != 200) return;
 
