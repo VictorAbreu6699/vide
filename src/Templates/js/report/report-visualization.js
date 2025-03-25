@@ -47,7 +47,7 @@ function createVisualizationCells() {
 
     $("#add-new-visualization").on("click", () => fillModalVisualization())
     $(".cell-visualization:not(#add-new-visualization)").on("click", function(){
-        report_visualization_id = $(this).children("input[name='report_visualization_id']").val()
+        report_visualization_id = $(this).children("input").val()
         fillModalUpdateVisualization(report_visualization_id)
     })
 
@@ -65,10 +65,10 @@ function createVisualizationCells() {
     );
 }
 
-function buildType(data){
+function buildType(data, type_column_name = "type"){
     data = data.map(function(item){
         typeFormat = null;
-        switch (item.type) {
+        switch (item[type_column_name]) {
           case "date":
             typeFormat = "Data"
             break;
@@ -87,6 +87,24 @@ function buildType(data){
     })
 
     return data
+}
+
+function allowSendForm(btn_send_id){
+    var allFilled = true;
+
+    $('.visualization_field').each(function() {
+        if ($(this).val() === null || $(this).val().length === 0) {
+            allFilled = false;
+            return false; // Interrompe o loop se encontrar um vazio
+        }
+    });
+
+    if(allFilled){
+        $("#"+btn_send_id).prop("disabled", false)
+    }
+    else{
+        $("#"+btn_send_id).prop("disabled", true)
+    }
 }
 
 $(document).ready(function(){

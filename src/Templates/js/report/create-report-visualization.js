@@ -107,7 +107,7 @@ function generateCreateVisualizationFields(container_id, visualization_id, repor
         $('#select-visualization-field-value-'+i).off('change');
         $('#select-visualization-field-value-'+i).select2({allowClear: true, "placeholder": "Selecione uma coluna"});
         $('#select-visualization-field-value-'+i).on('change', validateSelect2ReportVisualizationField);
-        $('#select-visualization-field-value-'+i).on('change', allowSendForm);
+        $('#select-visualization-field-value-'+i).on('change', () => allowSendForm("form-report-visualization-btn-submit"));
     }
 
 }
@@ -138,24 +138,6 @@ function validateSelect2ReportVisualizationField() {
 
     // Atualizar Select2 para refletir mudanças
     $('.visualization_field').trigger("change.select2");
-}
-
-function allowSendForm(){
-    var allFilled = true;
-
-    $('.visualization_field').each(function() {
-        if ($(this).val() === null || $(this).val().length === 0) {
-            allFilled = false;
-            return false; // Interrompe o loop se encontrar um vazio
-        }
-    });
-
-    if(allFilled){
-        $("#form-report-visualization-btn-submit").prop("disabled", false)
-    }
-    else{
-        $("#form-report-visualization-btn-submit").prop("disabled", true)
-    }
 }
 
 $('#form-report-visualization-btn-submit').on('click', function(e){
