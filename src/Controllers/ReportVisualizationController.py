@@ -59,5 +59,16 @@ def update_report_visualization_dataset_columns(
 
     return JSONResponse(
         status_code=201,
-        content={"message": "Vinculo de visualização com relátorio criada com sucesso!"}
+        content={"message": "Vinculo de visualização com relátorio editado com sucesso!"}
+    )
+
+
+@router.delete("/{report_visualization_id}", dependencies=[Depends(JWTHelper.validate_token)])
+def delete_report_visualization_dataset_columns(report_visualization_id: int):
+
+    ReportVisualizationService.delete_report_visualization(report_visualization_id)
+
+    return JSONResponse(
+        status_code=201,
+        content={"message": "Vinculo de visualização com relátorio excluido com sucesso!"}
     )

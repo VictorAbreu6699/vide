@@ -125,7 +125,7 @@ def delete_report(report_id, token: str = Depends(JWTHelper.get_token_from_heade
             content={"message": "Somente o usuário que criou o relátorio pode deleta-lo!"}
         )
     try:
-        ReportVisualizationService().delete_report_visualization(report_id)
+        ReportVisualizationService().delete_report(report_id)
     except Exception as e:
         return JSONResponse(
             status_code=500,

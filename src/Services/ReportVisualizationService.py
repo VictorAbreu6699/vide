@@ -89,7 +89,7 @@ class ReportVisualizationService:
         BaseRepository().bulk_insert(ReportVisualizationDatasetColumn, list_report_visualization_dataset_column)
 
     @staticmethod
-    def delete_report_visualization(report_id: int):
+    def delete_report(report_id: int):
         df_report_visualizations = ReportVisualizationRepository().get_by_report_id(report_id)
         for report_visualization_id in df_report_visualizations['id'].tolist():
             BaseRepository().delete_record(
@@ -98,3 +98,11 @@ class ReportVisualizationService:
             )
         BaseRepository().delete_record(ReportVisualization, report_id=report_id)
         BaseRepository().delete_record(Report, id=report_id)
+
+    @staticmethod
+    def delete_report_visualization(report_visualization_id: int):
+        BaseRepository().delete_record(
+            ReportVisualizationDatasetColumn,
+            report_visualization_id=report_visualization_id
+        )
+        BaseRepository().delete_record(ReportVisualization, id=report_visualization_id)

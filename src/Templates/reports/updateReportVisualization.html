@@ -114,10 +114,30 @@
                     <small>Atráves desse(s) campo(s), relaciona as colunas do relatorio com a fonte de dados.</small>
                     <div id="update-visualization-fields"></div>
                 </div>
-                <div class="d-flex justify-content-center mt-3">
+                <div class="d-flex justify-content-between mt-3">
                     <button disabled id="form-update-report-visualization-btn-submit" style="background-color: #4E598D; color: white" type="button" name="button" class="btn">Atualizar</button>
+                    <button id="btn-report-delete-visualization" style="color: white" type="button" name="button" class="btn btn-danger">Excluir</button>
                 </div>
             </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--  Modal para confirmar se deseja deletar relátorio  -->
+    <div class="modal fade" id="report-delete-visualization-modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1E1E2E">
+          <div class="modal-header">
+            <h5 class="modal-title">Excluir Visualização</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <div id="alert-form-report-visualization-delete" style="display: none" class="alert mt-3" role="alert"></div>
+              <p>Tem certeza que deseja excluir a visualização do relátorio? Todos os dados serão excluidos definitivamente.</p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button id="btn-confirm-report-delete-visualization" style="color: white" type="button" name="button" class="btn btn-danger">Excluir</button>
           </div>
         </div>
       </div>
@@ -132,5 +152,6 @@
     <script src="{{ url_for('static', path='/js/report/report-visualization.js') }}"></script>
     <script src="{{ url_for('static', path='/js/report/create-report-visualization.js') }}"></script>
     <script src="{{ url_for('static', path='/js/report/update-report-visualization.js') }}"></script>
+    <script src="{{ url_for('static', path='/js/report/delete-report-visualization.js') }}"></script>
 </body>
 </html>
