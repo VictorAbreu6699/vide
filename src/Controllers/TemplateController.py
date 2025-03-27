@@ -60,6 +60,7 @@ def update_report(request: Request):
         request=request, name="reports/updateReport.html"
     )
 
+
 @router.get("/editar-relatorio/visualizacoes/{report_id}")
 def update_report(request: Request):
     return templates.TemplateResponse(
@@ -67,7 +68,7 @@ def update_report(request: Request):
     )
 
 
-@router.get("/relatorio")
+@router.get("/relatorios/{report_id}")
 def reports(request: Request):
     return templates.TemplateResponse(
         request=request, name="relatorio.html"

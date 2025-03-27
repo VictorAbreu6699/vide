@@ -15,6 +15,7 @@ class FieldSeeder:
         data = [
             {"name": "Data", "type": FieldTypeEnum.DATE.value},
             {"name": "Casos", "type": FieldTypeEnum.NUMBER.value},
+            {"name": "Indicador Numérico", "type": FieldTypeEnum.NUMBER.value},
             {"name": "Estado", "type": FieldTypeEnum.STRING.value},
             {"name": "Cidade", "type": FieldTypeEnum.STRING.value},
             {"name": "Doença", "type": FieldTypeEnum.STRING.value},

@@ -19,6 +19,12 @@ class VisualizationSeeder:
                 "fields": [
                     "Data", "Casos", "Estado", "Cidade"
                 ]
+            },
+            {
+                "name": "Mapa Coroplético",
+                "fields": [
+                    "Data", "Indicador Numérico", "Estado", "Cidade"
+                ]
             }
         ]
         visualization_repository = VisualizationRepository()
