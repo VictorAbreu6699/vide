@@ -5,13 +5,16 @@ from sqlalchemy import pool
 
 from alembic import context
 
+from src.Models.City import City
 from src.Models.DatasetColumn import DatasetColumn
+from src.Models.Neighborhood import Neighborhood
 from src.Models.ReportVisualizationDatasetColumn import ReportVisualizationDatasetColumn
 from src.Models.Dataset import Dataset
 from src.Models.Field import Field
 from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization
 from src.Models.RevokedToken import RevokedToken
+from src.Models.State import State
 from src.Models.User import User
 from src.Models.Visualization import Visualization
 from src.Models.VisualizationField import VisualizationField
@@ -39,7 +42,10 @@ target_metadata = [
     ReportVisualization.metadata,
     ReportVisualizationDatasetColumn.metadata,
     RevokedToken.metadata,
-    DatasetColumn.metadata
+    DatasetColumn.metadata,
+    State.metadata,
+    City.metadata,
+    Neighborhood.metadata
 ]
 
 # other values from the config, defined by the needs of env.py,
