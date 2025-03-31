@@ -71,5 +71,5 @@ def update_report(request: Request):
 @router.get("/relatorios/{report_id}")
 def reports(request: Request):
     return templates.TemplateResponse(
-        request=request, name="relatorio.html"
+        request=request, name="show-report/show-report.html"
     )

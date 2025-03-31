@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIDE - </title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
+</head>
+<body>
+  <!-- Logo no topo -->
+  <header class="logo">
+    <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+  </header>
+
+  <!-- Contêiner principal -->
+  <div class="container">
+    <!-- Filtros -->
+    <aside id="filters">
+      <h3>Filtros</h3>
+      <label for="year">Ano:</label>
+      <select id="year">
+        <option value="2023">2023</option>
+        <option value="2024">2024</option>
+      </select>
+      <label for="disease">Enfermidade:</label>
+      <select id="disease">
+        <option value="Dengue">Dengue</option>
+        <option value="Zika">Zika</option>
+      </select>
+    </aside>
+
+    <!-- Mapa -->
+    <section id="map"></section>
+
+    <!-- Gráficos -->
+    <section id="charts">
+      <div class="chart-container">
+        <canvas id="chart-line"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="chart-bar"></canvas>
+      </div>
+      <div class="chart-container">
+        <canvas id="chart-pie"></canvas>
+      </div>
+    </section>
+  </div>
+
+  <script src="{{ url_for('static', path='/js/map.js') }}"></script>
+</body>
+</html>
