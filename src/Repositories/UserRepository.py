@@ -1,5 +1,7 @@
 from typing import Optional, Type
 
+import pandas as pd
+
 from src.Database.Database import Database
 from src.Helpers.CryptHelper import CryptHelper
 from src.Models.User import User
@@ -28,8 +30,10 @@ class UserRepository:
         """Retorna um usuário pelo email."""
         return self.db_session.query(User).filter(User.email == email).first()
 
-    def get_all(self) -> list[Type[User]]:
-        return self.db_session.query(User).all()
+    def get_all(self) -> pd.DataFrame:
+        query = self.db_session.query(User)
+
+        return pd.read_sql(query.statement, self.db_session.bind)
 
     def update(self, user_id: int, data: dict) -> Optional[User]:
         db_user = self.get_by_id(user_id)
