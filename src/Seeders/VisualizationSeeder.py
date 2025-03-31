@@ -23,7 +23,7 @@ class VisualizationSeeder:
             {
                 "name": "Mapa Coroplético",
                 "fields": [
-                    "Data", "Indicador Numérico", "Estado", "Cidade"
+                    "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
                 ]
             }
         ]

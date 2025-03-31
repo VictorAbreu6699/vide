@@ -114,9 +114,12 @@ function generateUpdateVisualizationFields(container_id, visualization_id, repor
 
 $('#form-update-report-visualization-btn-submit').on('click', function(e){
     $("#alert-form-update-report-visualization").hide()
+    data = getFormData("#form-update-report-visualization")
+    data.visualization_id = $("#form-update-report-visualization-visualization-id").val()
+    console.log($("#form-update-report-visualization-visualization-id").val())
     requestPut(
         "/report-visualizations/" + $("#form-report-update-visualization-report-visualization-id").val(),
-        getFormData("#form-update-report-visualization"),
+        data,
         function(response){
             message = response.message
             showAlertForm('alert-form-update-report-visualization', message, false)
