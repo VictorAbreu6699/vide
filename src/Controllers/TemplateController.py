@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
+from starlette.responses import JSONResponse
+
+from src.Repositories.ReportRepository import ReportRepository
 
 router = APIRouter()
 templates = Jinja2Templates(directory="src/Templates")
@@ -69,7 +72,13 @@ def update_report(request: Request):
 
 
 @router.get("/relatorios/{report_id}")
-def reports(request: Request):
+def reports(report_id, request: Request):
+    report = ReportRepository().get_by_id(report_id)
+    if not report:
+        return JSONResponse(
+            status_code=404,
+            content={"message": "Relátorio não encontrado!"}
+        )
     return templates.TemplateResponse(
-        request=request, name="show-report/show-report.html"
+        "show-report/show-report.html", {"request": request, "report_name": report.name}
     )

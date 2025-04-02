@@ -72,3 +72,13 @@ def delete_report_visualization_dataset_columns(report_visualization_id: int):
         status_code=201,
         content={"message": "Vinculo de visualização com relátorio excluido com sucesso!"}
     )
+
+
+@router.get("/get_report_visualizations_to_build_report/{report_id}")
+def get_report_visualizations_to_build_report(report_id: int):
+    df_report_visualizations = ReportVisualizationService.get_report_visualizations_to_build_report(report_id)
+    df_report_visualizations.to_html("testando.html")
+    return JSONResponse(
+        status_code=200,
+        content={"message": "Sucesso!", "data": df_report_visualizations.to_dict(orient="records")}
+    )

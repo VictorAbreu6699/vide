@@ -8,6 +8,7 @@ from src.Helpers.JWTHelper import JWTHelper
 from src.Models.DatasetColumn import DatasetColumn
 from src.Repositories.BaseRepository import BaseRepository
 from src.Repositories.DatasetRepository import DatasetRepository
+from src.Repositories.ReportRepository import ReportRepository
 
 
 class DatasetService:
@@ -78,7 +79,7 @@ class DatasetService:
         return True
 
     @staticmethod
-    def read_dataset_file(file_path: str, file_extension: str):
+    def read_dataset_file(file_path: str, file_extension: str) -> pd.DataFrame:
         match file_extension:
             case ".xlsx" | ".xls":
                 df_dataset = pd.read_excel(file_path)
@@ -88,5 +89,16 @@ class DatasetService:
                 df_dataset = pd.read_json(file_path)
             case _:
                 raise ValueError(f"Unsupported file format: {file_extension}")
+
+        return df_dataset
+
+    @staticmethod
+    def get_dataset_by_report_id(report_id) -> pd.DataFrame:
+        report = ReportRepository().get_by_id(report_id)
+        dataset_model = DatasetRepository().get_by_id(report.dataset_id)
+
+        df_dataset = DatasetService.read_dataset_file(
+            file_path=dataset_model.path, file_extension=dataset_model.extension
+        )
 
         return df_dataset

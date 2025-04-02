@@ -77,7 +77,6 @@ header.logo img {
   grid-area: charts;
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
   gap: 20px;
 }
 

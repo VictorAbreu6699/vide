@@ -42,6 +42,6 @@ class ReportVisualizationDatasetColumnRepository:
             Field.name.label("field_name")
         ).filter(
             ReportVisualizationDatasetColumn.report_visualization_id == report_visualization_id
-        )
+        ).order_by(ReportVisualizationDatasetColumn.id.asc())
 
         return pd.read_sql(query.statement, self.db_session.bind)

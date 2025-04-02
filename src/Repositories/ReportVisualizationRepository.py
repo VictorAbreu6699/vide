@@ -55,6 +55,23 @@ class ReportVisualizationRepository:
 
         return report_visualization
 
+    def get_report_visualizations_to_build_report(self, report_id: int) -> pd.DataFrame:
+        """ Busca o registro e as colunas vinculadas a ele"""
+        report_visualization_query = self.db_session.query(ReportVisualization).with_entities(
+            ReportVisualization.id,
+            ReportVisualization.report_id,
+            ReportVisualization.visualization_id,
+            Visualization.name.label("visualization_name"),
+            ReportVisualization.name,
+            ReportVisualization.position
+        ).join(
+            Visualization, ReportVisualization.visualization_id == Visualization.id
+        ).filter(
+            ReportVisualization.report_id == report_id
+        ).order_by(ReportVisualization.id.asc())
+
+        return pd.read_sql(report_visualization_query.statement, self.db_session.bind)
+
     def update(self, report_visualization_id: int, data: dict) -> Optional[Dataset]:
         report_visualization = self.get_by_id(report_visualization_id)
         if report_visualization:
