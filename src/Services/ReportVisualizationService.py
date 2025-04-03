@@ -1,9 +1,14 @@
+import numpy as np
 import pandas as pd
 
+from rapidfuzz import process, fuzz  # Alternativa moderna ao fuzzywuzzy
+
+from src.Helpers.DataframeHelper import DataframeHelper
 from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization
 from src.Models.ReportVisualizationDatasetColumn import ReportVisualizationDatasetColumn
 from src.Repositories.BaseRepository import BaseRepository
+from src.Repositories.CityRepository import CityRepository
 from src.Repositories.ReportRepository import ReportRepository
 from src.Repositories.ReportVisualizationDatasetColumnRepository import ReportVisualizationDatasetColumnRepository
 from src.Repositories.ReportVisualizationRepository import ReportVisualizationRepository
@@ -11,7 +16,6 @@ from src.Repositories.VisualizationFieldRepository import VisualizationFieldRepo
 from src.Requests.CreateReportVisualizationDatasetColumnRequest import CreateReportVisualizationDatasetColumnRequest
 from src.Requests.UpdateReportVisualizationDatasetColumnRequest import UpdateReportVisualizationDatasetColumnRequest
 from src.Services.DatasetService import DatasetService
-from src.VisualizationSchemas.ChoroplethMap import ChoroplethMap
 
 
 class ReportVisualizationService:
@@ -126,7 +130,9 @@ class ReportVisualizationService:
                 orient="records"
             )
 
-        ReportVisualizationService.__get_column_values_from_dataset(df_report_visualizations, report_id)
+        df_report_visualizations = ReportVisualizationService.__get_column_values_from_dataset(
+            df_report_visualizations, report_id
+        )
 
         return df_report_visualizations
 
@@ -134,17 +140,6 @@ class ReportVisualizationService:
     def __get_column_values_from_dataset(df_report_visualizations: pd.DataFrame, report_id: int):
         df_dataset = DatasetService.get_dataset_by_report_id(report_id)
 
-        # for index, row in df_report_visualizations.iterrows():
-        #     list_columns = list()
-        #     for i, field in enumerate(row.get("report_visualization_dataset_columns")):
-        #         dataset_column = df_dataset[field['dataset_column_name']]
-        #         if field['dataset_column_type'] == "date":
-        #             dataset_column = dataset_column.dt.strftime("%Y-%m-%d")
-        #
-        #         field["values"] = dataset_column.tolist()
-        #
-        #         list_columns.append(field)
-        #     df_report_visualizations.at[index, 'report_visualization_dataset_columns'] = list_columns
         df_report_visualizations = ReportVisualizationService.__create_visualization_schemas(
             df_report_visualizations, df_dataset
         )
@@ -153,24 +148,25 @@ class ReportVisualizationService:
 
     @staticmethod
     def __create_visualization_schemas(df_report_visualizations, df_dataset: pd.DataFrame) -> pd.DataFrame:
+        df_cities = CityRepository().get_all().rename(columns={"name": "city_name"})
         df_report_visualizations["data"] = None
         for index, row in df_report_visualizations.iterrows():
             df_report_visualization_dataset_columns = pd.DataFrame(row.get("report_visualization_dataset_columns"))
             match row.get("visualization_name"):
                 case "Mapa Coroplético":
                     df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_choropleth_map(
-                        df_report_visualization_dataset_columns, df_dataset
-                    )
+                        df_report_visualization_dataset_columns, df_dataset, df_cities
+                    ).to_dict(orient="records")
 
+        df_report_visualizations.drop(columns=["report_visualization_dataset_columns"], inplace=True)
 
         return df_report_visualizations
 
     @staticmethod
     def __build_choropleth_map(
-        df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame
-    ) -> list[dict]:
-        df_dataset = df_dataset.tail(10)
-
+        df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame, df_cities
+    ) -> pd.DataFrame:
+        df_cities = df_cities.copy()[["id", "state_name", "city_name", "latitude", "longitude"]]
         list_of_columns = []
         for index, column in df_report_visualization_dataset_columns.iterrows():
             dataset_column = df_dataset[column['dataset_column_name']]
@@ -182,12 +178,39 @@ class ReportVisualizationService:
                 "field_data": dataset_column.tolist()
             })
 
-            # sickness
-            # latitude
-            # longitude
-            # city_name
-            # cases
+        df_data = pd.DataFrame(data={item.get("field_name"): item.get("field_data") for item in list_of_columns})
+        df_data.rename(columns={
+            "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
+            "Indicador Numérico": "cases"
+        }, inplace=True)
 
-        exit(list_of_columns)
+        df_data['city_name_to_merge'] = df_data['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
+        df_cities['city_name_to_merge'] = df_cities['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
 
-        ChoroplethMap()
+        df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
+        df_cities['state_name_to_merge'] = df_cities['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
+
+        #Obtem latitude e longitude:
+        df_data = df_data.merge(
+            df_cities,
+            how="left",
+            on=["state_name_to_merge", "city_name_to_merge"]
+        ).replace(np.nan, None)
+
+        df_data["state_name"] = np.where(
+            df_data["state_name_y"].notnull(),
+            df_data["state_name_y"],
+            df_data["state_name_x"]
+        )
+
+        df_data["city_name"] = np.where(
+            df_data["city_name_y"].notnull(),
+            df_data["city_name_y"],
+            df_data["city_name_x"]
+        )
+
+        df_data.drop(inplace=True, columns=[
+            "state_name_to_merge", "city_name_to_merge", "state_name_y", "state_name_x", "city_name_y", "city_name_x"
+        ])
+
+        return df_data

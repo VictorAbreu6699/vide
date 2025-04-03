@@ -12,7 +12,7 @@ function buildVisualizations()
     data.forEach(function(report_visualization, index) {
         switch (report_visualization.visualization_name) {
             case "Mapa Coroplético":
-                buildChoroplethMap("map", [])
+                buildChoroplethMap("map", report_visualization.data)
                 break;
 
             default:
