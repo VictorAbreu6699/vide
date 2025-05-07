@@ -25,6 +25,91 @@ function buildVisualizations()
 
 }
 
+function buildMockTemplate(){
+    // Gráfico de Linha
+  const lineCtx = document.getElementById('chart-line').getContext('2d');
+  new Chart(lineCtx, {
+    type: 'line',
+    data: {
+      labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril'],
+      datasets: [
+        {
+          label: 'Confirmados',
+          data: [20, 40, 60, 80],
+          borderColor: '#8be9fd',
+          backgroundColor: 'rgba(139, 233, 253, 0.2)',
+        },
+        {
+          label: 'Prováveis',
+          data: [30, 50, 70, 90],
+          borderColor: '#bd93f9',
+          backgroundColor: 'rgba(189, 147, 249, 0.2)',
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: {
+          ticks: { color: '#ffffff' },
+          grid: { color: '#44475a' },
+        },
+        y: {
+          ticks: { color: '#ffffff' },
+          grid: { color: '#44475a' },
+        },
+      },
+      plugins: {
+        legend: { labels: { color: '#ffffff' } },
+      },
+    },
+  });
+
+  // Gráfico de Barras
+  const barCtx = document.getElementById('chart-bar').getContext('2d');
+  new Chart(barCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Janeiro', 'Fevereiro', 'Março'],
+      datasets: [
+        {
+          label: 'Casos',
+          data: [70, 90, 50],
+          backgroundColor: ['#50fa7b', '#ffb86c', '#ff5555'],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#ffffff' } },
+      },
+    },
+  });
+
+  // Gráfico de Pizza
+  const pieCtx = document.getElementById('chart-pie').getContext('2d');
+  new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+      labels: ['Janeiro', 'Fevereiro', 'Março'],
+      datasets: [
+        {
+          data: [30, 40, 30],
+          backgroundColor: ['#50fa7b', '#ffb86c', '#ff5555'],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#ffffff' } },
+      },
+    },
+  });
+}
+
 $(document).ready(function(){
     buildVisualizations()
+    buildMockTemplate()
 })
