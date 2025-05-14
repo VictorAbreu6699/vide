@@ -21,8 +21,6 @@ function buildVisualizations()
                 break;
         }
     });
-
-
 }
 
 function buildMockTemplate(){

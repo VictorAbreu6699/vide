@@ -214,3 +214,8 @@ class ReportVisualizationService:
         ])
 
         return df_data
+
+    @staticmethod
+    def build_filters(report_id: int, name: str):
+        pass
+

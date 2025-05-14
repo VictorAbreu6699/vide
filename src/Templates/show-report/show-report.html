@@ -4,11 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VIDE - {{report_name}}</title>
+  <link href="{{ url_for('static', path='/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', path='/css/app2.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/select2.min.css') }}">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="shortcut icon" type="image/jpg" href="{{ url_for('static', path='favicon.ico') }}"/>
+  <link rel="stylesheet" href="{{ url_for('static', path='/css/select2CustomStyle.css') }}">
 </head>
 <body>
   <!-- Logo no topo -->
@@ -20,17 +23,21 @@
   <div class="container">
     <!-- Filtros -->
     <aside id="filters">
-      <h3>Filtros</h3>
-      <label for="year">Ano:</label>
-      <select id="year">
-        <option value="2023">2023</option>
-        <option value="2024">2024</option>
-      </select>
-      <label for="disease">Enfermidade:</label>
-      <select id="disease">
-        <option value="Dengue">Dengue</option>
-        <option value="Zika">Zika</option>
-      </select>
+      <div id="filters-div" style="display: none">
+        <h3>Filtros</h3>
+        <div id="filter-year" style="display: none">
+          <label for="select-filter-year" class="mb-2">Ano:</label>
+          <select id="select-filter-year">
+            <option value="" selected disabled hidden>Selecione uma opção</option>
+          </select>
+        </div>
+        <div id="filter-sickness" style="display: none">
+          <label for="select-filter-sickness">Enfermidade:</label>
+          <select id="select-filter-sickness">
+            <option value="" selected disabled hidden>Selecione uma opção</option>
+          </select>
+        </div>
+      </div>
     </aside>
 
     <!-- Mapa -->
@@ -52,11 +59,12 @@
 
 <!--  <script src="{{ url_for('static', path='/js/map.js') }}"></script>-->
   <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', path='/js/vendor/select2.min.js') }}"></script>
   <script src="{{ url_for('static', path='/js/vendor/moment.js') }}"></script>
   <script src="{{ url_for('static', path='/js/functions.js') }}"></script>
   <script src="{{ url_for('static', path='/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', path='/js/app.js') }}"></script>
+  <script src="{{ url_for('static', path='/js/show-report/filters.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/choropleth-map.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/show-report.js') }}"></script>
 </body>

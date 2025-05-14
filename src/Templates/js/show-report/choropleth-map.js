@@ -1,4 +1,5 @@
 function buildChoroplethMap(container_id, data) {
+    buildSelectYear(data)
     data = groupDataByYear(data)
     // Inicializar o mapa usando a biblioteca Leaflet
     const map = L.map(container_id).setView([-14.2350, -51.9253], 4); // Centro aproximado do Brasil
