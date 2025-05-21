@@ -3,7 +3,6 @@ from starlette.responses import JSONResponse
 from src.Helpers.JWTHelper import JWTHelper
 from src.Repositories.ReportVisualizationRepository import ReportVisualizationRepository
 from src.Requests.CreateReportVisualizationDatasetColumnRequest import CreateReportVisualizationDatasetColumnRequest
-from src.Requests.FiltersRequest import FiltersRequest
 from src.Requests.UpdateReportVisualizationDatasetColumnRequest import UpdateReportVisualizationDatasetColumnRequest
 from src.Services.ReportVisualizationService import ReportVisualizationService
 
@@ -76,16 +75,6 @@ def delete_report_visualization_dataset_columns(report_visualization_id: int):
 
 @router.get("/get_report_visualizations_to_build_report/{report_id}")
 def get_report_visualizations_to_build_report(report_id: int):
-    df_report_visualizations = ReportVisualizationService.get_report_visualizations_to_build_report(report_id)
-
-    return JSONResponse(
-        status_code=200,
-        content={"message": "Sucesso!", "data": df_report_visualizations.to_dict(orient="records")}
-    )
-
-
-@router.get("/get_data_filters/{report_id}")
-def get_data_filters(request: FiltersRequest):
     df_report_visualizations = ReportVisualizationService.get_report_visualizations_to_build_report(report_id)
 
     return JSONResponse(

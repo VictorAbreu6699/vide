@@ -149,11 +149,16 @@ class ReportVisualizationService:
     @staticmethod
     def __create_visualization_schemas(df_report_visualizations, df_dataset: pd.DataFrame) -> pd.DataFrame:
         df_cities = CityRepository().get_all().rename(columns={"name": "city_name"})
+        df_report_visualizations["filters"] = None
         df_report_visualizations["data"] = None
+
         for index, row in df_report_visualizations.iterrows():
             df_report_visualization_dataset_columns = pd.DataFrame(row.get("report_visualization_dataset_columns"))
             match row.get("visualization_name"):
                 case "Mapa Coroplético":
+                    df_report_visualizations.at[index, "filters"] = ReportVisualizationService.__build_filters(
+                        df_report_visualization_dataset_columns, df_dataset
+                    )
                     df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_choropleth_map(
                         df_report_visualization_dataset_columns, df_dataset, df_cities
                     ).to_dict(orient="records")
@@ -190,7 +195,7 @@ class ReportVisualizationService:
         df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
         df_cities['state_name_to_merge'] = df_cities['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
 
-        #Obtem latitude e longitude:
+        # Obtem latitude e longitude:
         df_data = df_data.merge(
             df_cities,
             how="left",
@@ -216,6 +221,29 @@ class ReportVisualizationService:
         return df_data
 
     @staticmethod
-    def build_filters(report_id: int, name: str):
-        pass
+    def __build_filters(df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame) -> dict:
+        list_of_columns = []
+        for index, column in df_report_visualization_dataset_columns.iterrows():
+            dataset_column = df_dataset[column['dataset_column_name']]
+            if column['dataset_column_type'] == "date":
+                dataset_column = pd.to_datetime(dataset_column)
+
+            list_of_columns.append({
+                "field_name": column.get("field_name"),
+                "field_data": dataset_column.tolist()
+            })
+
+        df_data = pd.DataFrame(data={item.get("field_name"): item.get("field_data") for item in list_of_columns})
+        df_data.rename(columns={
+            "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
+            "Indicador Numérico": "cases"
+        }, inplace=True)
+
+        filters = {
+            'years': sorted(df_data['date'].dt.year.unique().tolist()),
+            'sicknesses': sorted(df_data['sickness'].unique().tolist())
+        }
+
+        return filters
+
 
