@@ -2,6 +2,8 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
     if(!reload){
         buildSelectYear(report_visualization.filters.years)
         buildSelectSickness(report_visualization.filters.sicknesses)
+        buildSelectState()
+        buildSelectCity()
     }
     data = groupDataByYear(report_visualization.data)
     // Inicializar o mapa usando a biblioteca Leaflet

@@ -57,3 +57,81 @@ function buildSelectSickness(data) {
     });
     created_filters.push("sickness")
 }
+
+function buildSelectState() {
+    if(created_filters.includes("state")){
+        return;
+    }
+
+    result = request("GET", "/states/get-states")
+    if(result.status != 200)
+        return;
+    data = result.data.data
+
+    data_select = data.map(function(item){
+        return {"id": item.id, "text": item.name}
+    })
+
+    $("#filters-div").show()
+    $("#filter-state").show()
+    $('#select-filter-state').select2({
+        data: data_select,
+        language: {
+            noResults: function() {
+                return "Nenhum resultado encontrado";
+            },
+            searching: function() {
+                return "Procurando...";
+            },
+            removeAllItems: function() {
+                return "Remover todos os itens";
+            }
+        },
+        placeholder: "Selecione uma opção",
+        allowClear: true
+    });
+    created_filters.push("state")
+}
+
+function buildSelectCity() {
+    if(created_filters.includes("city")){
+        return;
+    }
+
+    result = request("GET", "/cities/get-cities")
+    if(result.status != 200)
+        return;
+    data = result.data.data
+
+    data_select = data.map(function(item){
+        return {"id": item.id, "text": item.name, "state_id": item.state_id}
+    })
+
+    $("#filters-div").show()
+    $("#filter-city").show()
+    $('#select-filter-city').select2({
+        data: data_select,
+        language: {
+            noResults: function() {
+                return "Nenhum resultado encontrado";
+            },
+            searching: function() {
+                return "Procurando...";
+            },
+            removeAllItems: function() {
+                return "Remover todos os itens";
+            }
+        },
+        placeholder: "Selecione uma opção",
+        allowClear: true
+    });
+    created_filters.push("city")
+
+    // Neste ponto, e.params.data terá state_id
+    $('#select-filter-city').on('select2:select', function(e) {
+        let stateId = e.params.data.state_id;
+        if (stateId) {
+            $('#select-filter-state').val(stateId).trigger('change.select2');
+        }
+    });
+}
