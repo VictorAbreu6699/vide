@@ -91,14 +91,19 @@ function buildSelectState() {
         allowClear: true
     });
     created_filters.push("state")
+
+    $('#select-filter-state').on('select2:select', function(e){
+        created_filters = created_filters.filter(item => item !== "city")
+        buildSelectCity($(this).val())
+    })
 }
 
-function buildSelectCity() {
+function buildSelectCity(state_id = null) {
     if(created_filters.includes("city")){
         return;
     }
 
-    result = request("GET", "/cities/get-cities")
+    result = request("GET", "/cities/get-cities" + (state_id ? "?state_id="+state_id : ""))
     if(result.status != 200)
         return;
     data = result.data.data
@@ -106,6 +111,12 @@ function buildSelectCity() {
     data_select = data.map(function(item){
         return {"id": item.id, "text": item.name, "state_id": item.state_id}
     })
+
+    if(state_id){
+        $('#select-filter-city').select2('destroy');
+        // (opcional) Limpa o conteúdo se for necessário
+        $('#select-filter-city').empty();
+    }
 
     $("#filters-div").show()
     $("#filter-city").show()
@@ -125,6 +136,7 @@ function buildSelectCity() {
         placeholder: "Selecione uma opção",
         allowClear: true
     });
+    $('#select-filter-city').val(null).trigger('change.select2');
     created_filters.push("city")
 
     // Neste ponto, e.params.data terá state_id
