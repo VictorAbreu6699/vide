@@ -14,7 +14,7 @@ class CityRepository:
         self.db_session.bulk_save_objects(cities)
         self.db_session.commit()
 
-    def get_all(self, name: list[str] = None) -> pd.DataFrame:
+    def get_all(self, name: list[str] = None, state_id: int = None) -> pd.DataFrame:
         query = self.db_session.query(City).join(State, State.id == City.state_id)
 
         query = query.with_entities(
@@ -28,5 +28,8 @@ class CityRepository:
 
         if name:
             query = query.filter(City.name.in_(name))
+
+        if state_id:
+            query = query.filter(City.state_id == state_id)
 
         return pd.read_sql(query.statement, self.db_session.bind)
