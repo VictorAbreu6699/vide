@@ -96,6 +96,13 @@ function buildSelectState() {
         created_filters = created_filters.filter(item => item !== "city")
         buildSelectCity($(this).val())
     })
+
+    $('#select-filter-state').on('change', function(e){
+        if ($(this).val() == null){
+            created_filters = created_filters.filter(item => item !== "city")
+            buildSelectCity()
+        }
+    })
 }
 
 function buildSelectCity(state_id = null) {

@@ -1,4 +1,10 @@
+var map = null
+
 function buildChoroplethMap(container_id, report_visualization, reload = false) {
+    if(map != null){
+        map.remove()
+        map = null
+    }
     if(!reload){
         buildSelectYear(report_visualization.filters.years)
         buildSelectSickness(report_visualization.filters.sicknesses)
@@ -7,7 +13,7 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
     }
     data = groupDataByYear(report_visualization.data)
     // Inicializar o mapa usando a biblioteca Leaflet
-    const map = L.map(container_id).setView([-14.2350, -51.9253], 4); // Centro aproximado do Brasil
+    map = L.map(container_id).setView([-14.2350, -51.9253], 4); // Centro aproximado do Brasil
 
     // Adicionar o tile layer (fundo do mapa)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

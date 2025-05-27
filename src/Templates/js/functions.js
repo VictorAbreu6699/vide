@@ -461,3 +461,22 @@ function logout(){
         )
     }
 }
+
+function createUrlParams(params) {
+  const keys = Object.keys(params);
+  if (keys.length === 0) return '';
+
+  const query = keys
+    .map(keys => `${encodeURIComponent(keys)}=${encodeURIComponent(params[keys])}`)
+    .join('&');
+
+  return `?${query}`;
+}
+
+function showLoader() {
+  $('#loader').fadeIn();
+}
+
+function hideLoader() {
+  $('#loader').fadeOut();
+}

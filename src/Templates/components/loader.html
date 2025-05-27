@@ -1,0 +1,16 @@
+<!-- Loader oculto no início -->
+<div id="loader" style="
+display: none;
+position: fixed;
+top: 0;
+left: 0;
+width: 100vw;
+height: 100vh;
+background-color: rgba(255,255,255,0.7);
+z-index: 9999;
+display: flex;
+justify-content: center;
+align-items: center;
+">
+    <img src="{{ url_for('static', path='/img/load.gif') }}" alt="Carregando...">
+</div>

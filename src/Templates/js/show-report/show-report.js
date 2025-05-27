@@ -1,9 +1,11 @@
 // Pega o id do relátorio
 var report_id = window.location.pathname.split("/").pop();
 
-function buildVisualizations()
+function buildVisualizations(reload = false)
 {
-    result = request("GET", "/report-visualizations/get_report_visualizations_to_build_report/"+report_id)
+    showLoader()
+    filters = createUrlParams(getFormData("#form-filters"))
+    result = request("GET", "/report-visualizations/get_report_visualizations_to_build_report/"+report_id+filters)
     if(result.status != 200)
         return;
 
@@ -21,6 +23,7 @@ function buildVisualizations()
                 break;
         }
     });
+    hideLoader()
 }
 
 function buildMockTemplate(){
@@ -110,4 +113,10 @@ function buildMockTemplate(){
 $(document).ready(function(){
     buildVisualizations()
     buildMockTemplate()
+
+    $("#form-filters").on("change", function(){
+        $('#loader').fadeIn(100, function(){
+            buildVisualizations(true)
+        });
+    })
 })
