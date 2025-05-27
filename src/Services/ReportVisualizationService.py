@@ -114,7 +114,10 @@ class ReportVisualizationService:
         BaseRepository().delete_record(ReportVisualization, id=report_visualization_id)
 
     @staticmethod
-    def get_report_visualizations_to_build_report(report_id: int) -> pd.DataFrame:
+    def get_report_visualizations_to_build_report(
+        report_id: int,
+        year: str = None
+    ) -> pd.DataFrame:
 
         df_report_visualizations = ReportVisualizationRepository().get_report_visualizations_to_build_report(report_id)
         df_report_visualizations['report_visualization_dataset_columns'] = None

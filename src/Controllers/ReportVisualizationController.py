@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from typing import Optional
+
+from fastapi import APIRouter, Depends, Query
 from starlette.responses import JSONResponse
 from src.Helpers.JWTHelper import JWTHelper
 from src.Repositories.ReportVisualizationRepository import ReportVisualizationRepository
@@ -74,8 +76,14 @@ def delete_report_visualization_dataset_columns(report_visualization_id: int):
 
 
 @router.get("/get_report_visualizations_to_build_report/{report_id}")
-def get_report_visualizations_to_build_report(report_id: int):
-    df_report_visualizations = ReportVisualizationService.get_report_visualizations_to_build_report(report_id)
+def get_report_visualizations_to_build_report(
+    report_id: int,
+    year: Optional[int] = Query(None)
+):
+    df_report_visualizations = ReportVisualizationService.get_report_visualizations_to_build_report(
+        report_id=report_id,
+        year=year
+    )
 
     return JSONResponse(
         status_code=200,
