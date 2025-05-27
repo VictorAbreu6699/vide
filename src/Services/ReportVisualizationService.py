@@ -1,8 +1,5 @@
 import numpy as np
 import pandas as pd
-
-from rapidfuzz import process, fuzz  # Alternativa moderna ao fuzzywuzzy
-
 from src.Helpers.DataframeHelper import DataframeHelper
 from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization

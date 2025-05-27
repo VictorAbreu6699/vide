@@ -4,9 +4,6 @@ from src.Seeders.NeighborhoodSeeder import NeighborhoodSeeder
 from src.Seeders.StateSeeder import StateSeeder
 from src.Seeders.UserStartSeeder import UserStartSeeder
 from src.Seeders.VisualizationSeeder import VisualizationSeeder
-from alembic.config import Config
-from alembic import command
-import os
 
 
 class StartProjectSeeder:
