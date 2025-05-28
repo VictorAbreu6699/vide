@@ -78,11 +78,17 @@ def delete_report_visualization_dataset_columns(report_visualization_id: int):
 @router.get("/get_report_visualizations_to_build_report/{report_id}")
 def get_report_visualizations_to_build_report(
     report_id: int,
-    year: Optional[int] = Query(None)
+    year: Optional[str] = Query(None),
+    sickness: Optional[str] = Query(None),
+    state_id: Optional[int] = Query(None),
+    city_id: Optional[int] = Query(None)
 ):
     df_report_visualizations = ReportVisualizationService.get_report_visualizations_to_build_report(
         report_id=report_id,
-        year=year
+        year=year,
+        sickness=sickness,
+        state_id=state_id,
+        city_id=city_id
     )
 
     return JSONResponse(

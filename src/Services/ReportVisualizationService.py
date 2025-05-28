@@ -116,7 +116,10 @@ class ReportVisualizationService:
     @staticmethod
     def get_report_visualizations_to_build_report(
         report_id: int,
-        year: str = None
+        year: str = None,
+        sickness: str = None,
+        state_id: int = None,
+        city_id: int = None
     ) -> pd.DataFrame:
 
         df_report_visualizations = ReportVisualizationRepository().get_report_visualizations_to_build_report(report_id)
@@ -131,23 +134,36 @@ class ReportVisualizationService:
             )
 
         df_report_visualizations = ReportVisualizationService.__get_column_values_from_dataset(
-            df_report_visualizations, report_id
+            df_report_visualizations, report_id, year, sickness, state_id, city_id
         )
 
         return df_report_visualizations
 
     @staticmethod
-    def __get_column_values_from_dataset(df_report_visualizations: pd.DataFrame, report_id: int):
+    def __get_column_values_from_dataset(
+        df_report_visualizations: pd.DataFrame,
+        report_id: int,
+        year: str = None,
+        sickness: str = None,
+        state_id: int = None,
+        city_id: int = None
+    ):
         df_dataset = DatasetService.get_dataset_by_report_id(report_id)
 
         df_report_visualizations = ReportVisualizationService.__create_visualization_schemas(
-            df_report_visualizations, df_dataset
+            df_report_visualizations, df_dataset, year, sickness, state_id, city_id
         )
 
         return df_report_visualizations
 
     @staticmethod
-    def __create_visualization_schemas(df_report_visualizations, df_dataset: pd.DataFrame) -> pd.DataFrame:
+    def __create_visualization_schemas(
+        df_report_visualizations, df_dataset: pd.DataFrame,
+        year: str = None,
+        sickness: str = None,
+        state_id: int = None,
+        city_id: int = None
+    ) -> pd.DataFrame:
         df_cities = CityRepository().get_all().rename(columns={"name": "city_name"})
         df_report_visualizations["filters"] = None
         df_report_visualizations["data"] = None
@@ -160,7 +176,13 @@ class ReportVisualizationService:
                         df_report_visualization_dataset_columns, df_dataset
                     )
                     df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_choropleth_map(
-                        df_report_visualization_dataset_columns, df_dataset, df_cities
+                        df_report_visualization_dataset_columns,
+                        df_dataset,
+                        df_cities,
+                        year,
+                        sickness,
+                        state_id,
+                        city_id
                     ).to_dict(orient="records")
 
         df_report_visualizations.drop(columns=["report_visualization_dataset_columns"], inplace=True)
@@ -169,9 +191,17 @@ class ReportVisualizationService:
 
     @staticmethod
     def __build_choropleth_map(
-        df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame, df_cities
+        df_report_visualization_dataset_columns: pd.DataFrame,
+        df_dataset: pd.DataFrame,
+        df_cities: pd.DataFrame,
+        year: str = None,
+        sickness: str = None,
+        state_id: int = None,
+        city_id: int = None
     ) -> pd.DataFrame:
-        df_cities = df_cities.copy()[["id", "state_name", "city_name", "latitude", "longitude"]]
+        df_cities = df_cities.copy()[["id", "state_id", "state_name", "city_name", "latitude", "longitude"]].rename(
+            columns={"id": "city_id"}
+        )
         list_of_columns = []
         for index, column in df_report_visualization_dataset_columns.iterrows():
             dataset_column = df_dataset[column['dataset_column_name']]
@@ -213,6 +243,20 @@ class ReportVisualizationService:
             df_data["city_name_y"],
             df_data["city_name_x"]
         )
+
+        if state_id is not None:
+            df_data = df_data[df_data['state_id'] == state_id]
+
+        if city_id is not None:
+            df_data = df_data[df_data['city_id'] == city_id]
+
+        if sickness is not None:
+            df_data = df_data[df_data['sickness'] == sickness]
+
+        if year is not None:
+            df_data['date_parsed'] = pd.to_datetime(df_data['date'])
+            df_data = df_data[df_data['date_parsed'].dt.year == int(year)]
+            df_data.drop(inplace=True, columns=["date_parsed"])
 
         df_data.drop(inplace=True, columns=[
             "state_name_to_merge", "city_name_to_merge", "state_name_y", "state_name_x", "city_name_y", "city_name_x"
