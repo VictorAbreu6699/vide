@@ -29,7 +29,11 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
           fillOpacity: 0.7,
         })
         .addTo(map)
-        .bindPopup(`<strong>${row.city_name}</strong><br>Casos: ${row.total_cases}`);
+        .bindPopup(
+        `<a onClick="applyStateAndCityFilter(${row.state_id}, ${row.city_id})" role="link" tabindex="0" style="color: #0078A8 !important; text-decoration: underline; cursor: pointer;">
+            <strong>${row.city_name} - ${row.state_name}</strong>
+            </a><br>Casos: ${row.total_cases}`
+        );
     });
 
 }
@@ -43,7 +47,9 @@ function groupDataByYear(data) {
         if (!acc[key]) {
             acc[key] = {
                 sickness: item.sickness,
+                state_id: item.state_id,
                 state_name: item.state_name,
+                city_id: item.city_id,
                 city_name: item.city_name,
                 latitude: item.latitude,
                 longitude: item.longitude,
@@ -57,4 +63,12 @@ function groupDataByYear(data) {
     }, {});
 
     return Object.values(grouped);
+}
+
+function applyStateAndCityFilter(state_id, city_id){
+    $('#select-filter-state').val(state_id).trigger("change.select2")
+    $('#select-filter-city').val(city_id).trigger("change.select2")
+    $('#loader').fadeIn(100, function(){
+        buildVisualizations(true)
+    });
 }
