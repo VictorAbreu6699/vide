@@ -24,9 +24,9 @@ class StateRepository:
         self.db_session.bulk_save_objects(states)
         self.db_session.commit()
 
-    def get_by_id(self, user_id: int) -> Optional[State]:
+    def get_by_id(self, state_id: int) -> Optional[State]:
         """Retorna um estado pelo ID."""
-        return self.db_session.query(State).filter(State.id == user_id).first()
+        return self.db_session.query(State).filter(State.id == state_id).first()
 
     def update(self, state_id: int, data: dict) -> Optional[State]:
         db_state = self.get_by_id(state_id)

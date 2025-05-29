@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pandas as pd
 from src.Database.Database import Database
 from src.Models.City import City
@@ -33,3 +35,16 @@ class CityRepository:
             query = query.filter(City.state_id == state_id)
 
         return pd.read_sql(query.statement, self.db_session.bind)
+
+    def update(self, state_id: int, data: dict) -> Optional[City]:
+        db_city = self.get_by_id(state_id)
+        if db_city:
+            for key, value in data.items():
+                setattr(db_city, key, value)
+            self.db_session.commit()
+            self.db_session.refresh(db_city)
+        return db_city
+
+    def get_by_id(self, city_id: int) -> Optional[City]:
+        """Retorna um estado pelo ID."""
+        return self.db_session.query(City).filter(City.id == city_id).first()
