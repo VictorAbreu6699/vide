@@ -20,21 +20,17 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
         attribution: '© OpenStreetMap contributors',
     }).addTo(map);
 
-    // Adicionar os marcadores no mapa
-    data.forEach(row => {
-        L.circleMarker([row.latitude, row.longitude], {
-          color: 'red',
-          radius: 10,
-          fillColor: '#ff0000',
-          fillOpacity: 0.7,
-        })
-        .addTo(map)
-        .bindPopup(
+  data.forEach(row => {
+  L.geoJSON(row.geo_json, {
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup(
         `<a onClick="applyStateAndCityFilter(${row.state_id}, ${row.city_id})" role="link" tabindex="0" style="color: #0078A8 !important; text-decoration: underline; cursor: pointer;">
-            <strong>${row.city_name} - ${row.state_name}</strong>
-            </a><br>Casos: ${row.total_cases}`
-        );
-    });
+          <strong>${row.city_name} - ${row.state_name}</strong>
+        </a><br>Casos: ${row.total_cases}`
+      );
+    }
+  }).addTo(map);
+});
 
 }
 
@@ -54,6 +50,7 @@ function groupDataByYear(data) {
                 latitude: item.latitude,
                 longitude: item.longitude,
                 year: year,
+                geo_json: item.geo_json,
                 total_cases: 0
             };
         }

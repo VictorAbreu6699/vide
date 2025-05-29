@@ -36,7 +36,7 @@ class AddGeoJsonSeeder:
                     gdf = gpd.read_file(filename=file_path)
                     gdf['formated_name'] = gdf['name'].map(DataframeHelper.remove_accents_and_lowercase)
                     for city_index, city_row in df_cities_of_state.iterrows():
-                        city = gdf[gdf['formated_name'] == city_row['formated_name']]
+                        city = gdf[gdf['formated_name'] == city_row['formated_name']].drop(columns=['formated_name'])
 
                         if not city.empty:
                             # Converte para GeoJSON no formato dict
