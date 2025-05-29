@@ -1,3 +1,5 @@
+from typing import Optional
+
 import pandas as pd
 
 from src.Database.Database import Database
@@ -21,6 +23,19 @@ class StateRepository:
         states = [State(**item) for item in data]
         self.db_session.bulk_save_objects(states)
         self.db_session.commit()
+
+    def get_by_id(self, user_id: int) -> Optional[State]:
+        """Retorna um estado pelo ID."""
+        return self.db_session.query(State).filter(State.id == user_id).first()
+
+    def update(self, state_id: int, data: dict) -> Optional[State]:
+        db_state = self.get_by_id(state_id)
+        if db_state:
+            for key, value in data.items():
+                setattr(db_state, key, value)
+            self.db_session.commit()
+            self.db_session.refresh(db_state)
+        return db_state
 
     def get_all(self, name: list[str] = None) -> pd.DataFrame:
         query = self.db_session.query(State)

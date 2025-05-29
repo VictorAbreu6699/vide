@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DECIMAL
+from sqlalchemy import Column, Integer, String, DECIMAL, JSON
 from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
@@ -10,3 +10,4 @@ class State(Base):
     name = Column(String(255), nullable=False)
     latitude = Column(DECIMAL(40, 20))
     longitude = Column(DECIMAL(40, 20))
+    geo_json = Column(JSON)
