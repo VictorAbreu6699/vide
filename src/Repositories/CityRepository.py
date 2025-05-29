@@ -25,7 +25,8 @@ class CityRepository:
             State.name.label("state_name"),
             City.name,
             City.latitude,
-            City.longitude
+            City.longitude,
+            City.geo_json
         )
 
         if name:

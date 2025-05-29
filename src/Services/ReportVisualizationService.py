@@ -199,7 +199,7 @@ class ReportVisualizationService:
         state_id: int = None,
         city_id: int = None
     ) -> pd.DataFrame:
-        df_cities = df_cities.copy()[["id", "state_id", "state_name", "city_name", "latitude", "longitude"]].rename(
+        df_cities = df_cities.copy()[["id", "state_id", "state_name", "city_name", "latitude", "longitude", "geo_json"]].rename(
             columns={"id": "city_id"}
         )
         list_of_columns = []
@@ -225,7 +225,7 @@ class ReportVisualizationService:
         df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
         df_cities['state_name_to_merge'] = df_cities['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
 
-        # Obtem latitude e longitude:
+        # Obtem latitude, longitude e o geoJson:
         df_data = df_data.merge(
             df_cities,
             how="left",
