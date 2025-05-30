@@ -124,6 +124,7 @@ class ReportVisualizationService:
         state_id: int = None,
         city_id: int = None
     ) -> pd.DataFrame:
+
         df_report_visualizations = ReportVisualizationRepository().get_report_visualizations_to_build_report(report_id)
         df_report_visualizations['report_visualization_dataset_columns'] = None
 

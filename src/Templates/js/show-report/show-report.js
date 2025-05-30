@@ -115,8 +115,7 @@ $(document).ready(function(){
     buildMockTemplate()
 
     $("#form-filters").on("change", function(){
-        $('#loader').fadeIn(100, function(){
-            buildVisualizations(true)
-        });
+        $('#loader').fadeIn();
+        buildVisualizations(true)
     })
 })
