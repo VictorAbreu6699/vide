@@ -21,17 +21,10 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
     }).addTo(map);
     let heatData = [];
     data.forEach(row => {
-//      L.geoJSON(row.geo_json, {
-//        onEachFeature: function (feature, layer) {
-//          layer.bindPopup(
-//            `<a onClick="applyStateAndCityFilter(${row.state_id}, ${row.city_id})" role="link" tabindex="0" style="color: #0078A8 !important; text-decoration: underline; cursor: pointer;">
-//              <strong>${row.city_name} - ${row.state_name}</strong>
-//            </a><br>Casos: ${row.total_cases}`
-//          );
-//        }
-//      }).addTo(map);
+      if (row.geo_json == null) return
+      geo_json = JSON.parse(row.geo_json)
       // Cálculo do centróide
-      let layer = L.geoJSON(JSON.parse(row.geo_json));
+      let layer = L.geoJSON(geo_json);
       let bounds = layer.getBounds();
       let center = bounds.getCenter();
 

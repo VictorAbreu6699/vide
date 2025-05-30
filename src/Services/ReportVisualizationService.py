@@ -167,7 +167,7 @@ class ReportVisualizationService:
         state_id: int = None,
         city_id: int = None
     ) -> pd.DataFrame:
-        df_cities = CityService.get_or_create_parquet_to_cities().rename(columns={"name": "city_name"})
+        df_cities = CityService.get_or_create_parquet_to_cities(to_merge=True).rename(columns={"name": "city_name"})
         df_report_visualizations["filters"] = None
         df_report_visualizations["data"] = None
 
