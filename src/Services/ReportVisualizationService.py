@@ -233,7 +233,7 @@ class ReportVisualizationService:
             how="left",
             on=["state_name_to_merge", "city_name_to_merge"]
         ).replace(np.nan, None)
-
+        df_data = df_data[df_data['geo_json'].notnull()]
         df_data['geo_json'] = df_data['geo_json'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
 
         df_data["state_name"] = np.where(
