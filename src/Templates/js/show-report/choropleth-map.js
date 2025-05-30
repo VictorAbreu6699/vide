@@ -21,7 +21,7 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
     }).addTo(map);
 
   data.forEach(row => {
-  L.geoJSON(row.geo_json, {
+  L.geoJSON(JSON.parse(row.geo_json), {
     onEachFeature: function (feature, layer) {
       layer.bindPopup(
         `<a onClick="applyStateAndCityFilter(${row.state_id}, ${row.city_id})" role="link" tabindex="0" style="color: #0078A8 !important; text-decoration: underline; cursor: pointer;">

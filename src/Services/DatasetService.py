@@ -5,6 +5,7 @@ import pandas as pd
 from fastapi import UploadFile
 
 from src.Helpers.JWTHelper import JWTHelper
+from src.Models.Dataset import Dataset
 from src.Models.DatasetColumn import DatasetColumn
 from src.Repositories.BaseRepository import BaseRepository
 from src.Repositories.DatasetRepository import DatasetRepository
@@ -93,12 +94,28 @@ class DatasetService:
         return df_dataset
 
     @staticmethod
+    def get_or_create_parquet_to_dataset(dataset: Dataset) -> pd.DataFrame:
+        if not os.path.exists("storage/datasets/parquets"):
+            os.makedirs("storage/datasets/parquets")
+
+        file_path = os.path.join("storage/datasets/parquets", f"dataset_{dataset.id}" + ".parquet")
+
+        if os.path.exists(file_path):
+            df = pd.read_parquet(file_path)
+        else:
+            df = DatasetService.read_dataset_file(dataset.path, dataset.extension)
+            df.to_parquet(file_path)
+
+        return df
+
+
+    @staticmethod
     def get_dataset_by_report_id(report_id) -> pd.DataFrame:
         report = ReportRepository().get_by_id(report_id)
         dataset_model = DatasetRepository().get_by_id(report.dataset_id)
 
-        df_dataset = DatasetService.read_dataset_file(
-            file_path=dataset_model.path, file_extension=dataset_model.extension
+        df_dataset = DatasetService.get_or_create_parquet_to_dataset(
+            dataset=dataset_model
         )
 
         return df_dataset

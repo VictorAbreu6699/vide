@@ -14,6 +14,7 @@ from src.Repositories.ReportVisualizationRepository import ReportVisualizationRe
 from src.Repositories.VisualizationFieldRepository import VisualizationFieldRepository
 from src.Requests.CreateReportVisualizationDatasetColumnRequest import CreateReportVisualizationDatasetColumnRequest
 from src.Requests.UpdateReportVisualizationDatasetColumnRequest import UpdateReportVisualizationDatasetColumnRequest
+from src.Services.CityService import CityService
 from src.Services.DatasetService import DatasetService
 
 
@@ -123,7 +124,6 @@ class ReportVisualizationService:
         state_id: int = None,
         city_id: int = None
     ) -> pd.DataFrame:
-
         df_report_visualizations = ReportVisualizationRepository().get_report_visualizations_to_build_report(report_id)
         df_report_visualizations['report_visualization_dataset_columns'] = None
 
@@ -166,7 +166,7 @@ class ReportVisualizationService:
         state_id: int = None,
         city_id: int = None
     ) -> pd.DataFrame:
-        df_cities = CityRepository().get_all().rename(columns={"name": "city_name"})
+        df_cities = CityService.get_or_create_parquet_to_cities().rename(columns={"name": "city_name"})
         df_report_visualizations["filters"] = None
         df_report_visualizations["data"] = None
 
@@ -201,9 +201,13 @@ class ReportVisualizationService:
         state_id: int = None,
         city_id: int = None
     ) -> pd.DataFrame:
-        df_cities = df_cities.copy()[["id", "state_id", "state_name", "city_name", "latitude", "longitude", "geo_json"]].rename(
+        df_cities = df_cities.copy()[[
+            "id", "state_id", "state_name", "city_name", "latitude", "longitude", "geo_json", "city_name_to_merge",
+            "state_name_to_merge"
+        ]].rename(
             columns={"id": "city_id"}
         )
+
         list_of_columns = []
         for index, column in df_report_visualization_dataset_columns.iterrows():
             dataset_column = df_dataset[column['dataset_column_name']]
@@ -222,10 +226,7 @@ class ReportVisualizationService:
         }, inplace=True)
 
         df_data['city_name_to_merge'] = df_data['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
-        df_cities['city_name_to_merge'] = df_cities['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
-
         df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
-        df_cities['state_name_to_merge'] = df_cities['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
 
         # Obtem latitude, longitude e o geoJson:
         df_data = df_data.merge(
@@ -233,8 +234,6 @@ class ReportVisualizationService:
             how="left",
             on=["state_name_to_merge", "city_name_to_merge"]
         ).replace(np.nan, None)
-
-        df_data['geo_json'] = df_data['geo_json'].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
 
         df_data["state_name"] = np.where(
             df_data["state_name_y"].notnull(),
