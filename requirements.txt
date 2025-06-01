@@ -17,3 +17,5 @@ PyJWT~=2.9.0
 openpyxl~=3.1.5
 numpy~=2.2.6
 geopandas~=1.0.1
+pyarrow~=20.0.0
+fastparquet~=2024.11.0

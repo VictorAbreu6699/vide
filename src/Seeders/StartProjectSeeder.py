@@ -1,3 +1,4 @@
+from src.Seeders.AddGeoJsonSeeder import AddGeoJsonSeeder
 from src.Seeders.CitySeeder import CitySeeder
 from src.Seeders.FieldSeeder import FieldSeeder
 from src.Seeders.NeighborhoodSeeder import NeighborhoodSeeder
@@ -17,6 +18,7 @@ class StartProjectSeeder:
         CitySeeder.run()
         NeighborhoodSeeder.run()
         UserStartSeeder.run()
+        AddGeoJsonSeeder.run()
 
         print("Seeders executados com sucesso!")
 
