@@ -17,13 +17,13 @@ function buildVisualizations(reload = false)
                 buildChoroplethMap("map", report_visualization)
                 break;
             case "Gráfico polar por Enfermidade":
-                buildPolarGraphForSickness("polar-graph", report_visualization)
+                buildPolarGraphForSickness("polar-graph-sickness", report_visualization)
                 break;
-            case "Gráfico polar por Cidade":
-                buildPolarGraphForSickness("polar-graph", report_visualization)
-                break;
+//            case "Gráfico polar por Cidade":
+//                buildPolarGraphForCity("polar-graph-city", report_visualization)
+//                break;
             case "Gráfico polar por Estado":
-                buildPolarGraphForSickness("polar-graph", report_visualization)
+                buildPolarGraphForState("polar-graph-state", report_visualization)
                 break;
             default:
                 console.error("Tipo de visualização não implementada.");
@@ -99,7 +99,7 @@ function buildMockTemplate(){
 
 $(document).ready(function(){
     buildVisualizations()
-    buildMockTemplate()
+//    buildMockTemplate()
 
     $("#form-filters").on("change", function(){
         $('#loader').fadeIn();

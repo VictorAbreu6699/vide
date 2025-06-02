@@ -217,7 +217,7 @@ class ReportVisualizationService:
                             city_id
                         )
 
-                    df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_polar_graph_for_sickness(
+                    df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_polar_graph_for_city(
                         data_to_polar_graph
                     ).to_dict(orient="records")
 
@@ -234,7 +234,7 @@ class ReportVisualizationService:
                         )
 
                     df_report_visualizations.at[
-                        index, "data"] = ReportVisualizationService.__build_polar_graph_for_sickness(
+                        index, "data"] = ReportVisualizationService.__build_polar_graph_for_state(
                         data_to_polar_graph
                     ).to_dict(orient="records")
 
@@ -398,6 +398,18 @@ class ReportVisualizationService:
     @staticmethod
     def __build_polar_graph_for_sickness(dataframe: pd.DataFrame) -> pd.DataFrame:
         dataframe = dataframe.groupby("sickness")['cases'].mean().reset_index()
+
+        return dataframe
+
+    @staticmethod
+    def __build_polar_graph_for_state(dataframe: pd.DataFrame) -> pd.DataFrame:
+        dataframe = dataframe.groupby("state_name")['cases'].mean().reset_index()
+
+        return dataframe
+
+    @staticmethod
+    def __build_polar_graph_for_city(dataframe: pd.DataFrame) -> pd.DataFrame:
+        dataframe = dataframe.groupby("city_name")['cases'].mean().reset_index()
 
         return dataframe
 
