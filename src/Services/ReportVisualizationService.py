@@ -171,11 +171,12 @@ class ReportVisualizationService:
         df_report_visualizations["filters"] = None
         df_report_visualizations["data"] = None
 
+        data_to_polar_graph = None
         for index, row in df_report_visualizations.iterrows():
             df_report_visualization_dataset_columns = pd.DataFrame(row.get("report_visualization_dataset_columns"))
             match row.get("visualization_name"):
                 case "Mapa Coroplético":
-                    df_report_visualizations.at[index, "filters"] = ReportVisualizationService.__build_filters(
+                    df_report_visualizations.at[index, "filters"] = ReportVisualizationService.__build_filters_choropleth_map(
                         df_report_visualization_dataset_columns, df_dataset
                     )
                     df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_choropleth_map(
@@ -186,6 +187,55 @@ class ReportVisualizationService:
                         sickness,
                         state_id,
                         city_id
+                    ).to_dict(orient="records")
+
+                case "Gráfico polar por Enfermidade":
+                    if data_to_polar_graph is None:
+                        data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
+                            df_report_visualization_dataset_columns,
+                            df_dataset,
+                            df_cities,
+                            year,
+                            sickness,
+                            state_id,
+                            city_id
+                        )
+
+                    df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_polar_graph_for_sickness(
+                        data_to_polar_graph
+                    ).to_dict(orient="records")
+
+                case "Gráfico polar por Cidade":
+                    if data_to_polar_graph is None:
+                        data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
+                            df_report_visualization_dataset_columns,
+                            df_dataset,
+                            df_cities,
+                            year,
+                            sickness,
+                            state_id,
+                            city_id
+                        )
+
+                    df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_polar_graph_for_sickness(
+                        data_to_polar_graph
+                    ).to_dict(orient="records")
+
+                case "Gráfico polar por Estado":
+                    if data_to_polar_graph is None:
+                        data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
+                            df_report_visualization_dataset_columns,
+                            df_dataset,
+                            df_cities,
+                            year,
+                            sickness,
+                            state_id,
+                            city_id
+                        )
+
+                    df_report_visualizations.at[
+                        index, "data"] = ReportVisualizationService.__build_polar_graph_for_sickness(
+                        data_to_polar_graph
                     ).to_dict(orient="records")
 
         df_report_visualizations.drop(columns=["report_visualization_dataset_columns"], inplace=True)
@@ -269,7 +319,90 @@ class ReportVisualizationService:
         return df_data
 
     @staticmethod
-    def __build_filters(df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame) -> dict:
+    def get_data_to_polar_graph(
+        df_report_visualization_dataset_columns: pd.DataFrame,
+        df_dataset: pd.DataFrame,
+        df_cities: pd.DataFrame,
+        year: str = None,
+        sickness: str = None,
+        state_id: int = None,
+        city_id: int = None
+    ):
+        df_cities = df_cities.copy()[[
+            "id", "state_id", "state_name", "city_name", "latitude", "longitude", "geo_json", "city_name_to_merge",
+            "state_name_to_merge"
+        ]].rename(
+            columns={"id": "city_id"}
+        )
+
+        list_of_columns = []
+        for index, column in df_report_visualization_dataset_columns.iterrows():
+            dataset_column = df_dataset[column['dataset_column_name']]
+            if column['dataset_column_type'] == "date":
+                dataset_column = dataset_column.dt.strftime("%Y-%m-%d")
+
+            list_of_columns.append({
+                "field_name": column.get("field_name"),
+                "field_data": dataset_column.tolist()
+            })
+
+        df_data = pd.DataFrame(data={item.get("field_name"): item.get("field_data") for item in list_of_columns})
+        df_data.rename(columns={
+            "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
+            "Indicador Numérico": "cases"
+        }, inplace=True)
+
+        df_data['city_name_to_merge'] = df_data['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
+        df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
+
+        # Obtem latitude, longitude e o geoJson:
+        df_data = df_data.merge(
+            df_cities,
+            how="left",
+            on=["state_name_to_merge", "city_name_to_merge"]
+        ).replace(np.nan, None)
+
+        df_data["state_name"] = np.where(
+            df_data["state_name_y"].notnull(),
+            df_data["state_name_y"],
+            df_data["state_name_x"]
+        )
+
+        df_data["city_name"] = np.where(
+            df_data["city_name_y"].notnull(),
+            df_data["city_name_y"],
+            df_data["city_name_x"]
+        )
+
+        if state_id is not None:
+            df_data = df_data[df_data['state_id'] == state_id]
+
+        if city_id is not None:
+            df_data = df_data[df_data['city_id'] == city_id]
+
+        if sickness is not None:
+            df_data = df_data[df_data['sickness'] == sickness]
+
+        if year is not None:
+            df_data['date_parsed'] = pd.to_datetime(df_data['date'])
+            df_data = df_data[df_data['date_parsed'].dt.year == int(year)]
+            df_data.drop(inplace=True, columns=["date_parsed"])
+
+        df_data.drop(inplace=True, columns=[
+            "state_name_to_merge", "city_name_to_merge", "state_name_y", "state_name_x", "city_name_y", "city_name_x"
+        ])
+
+        return df_data
+
+
+    @staticmethod
+    def __build_polar_graph_for_sickness(dataframe: pd.DataFrame) -> pd.DataFrame:
+        dataframe = dataframe.groupby("sickness")['cases'].mean().reset_index()
+
+        return dataframe
+
+    @staticmethod
+    def __build_filters_choropleth_map(df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame) -> dict:
         list_of_columns = []
         for index, column in df_report_visualization_dataset_columns.iterrows():
             dataset_column = df_dataset[column['dataset_column_name']]

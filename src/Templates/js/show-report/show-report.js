@@ -16,9 +16,17 @@ function buildVisualizations(reload = false)
             case "Mapa Coroplético":
                 buildChoroplethMap("map", report_visualization)
                 break;
-
+            case "Gráfico polar por Enfermidade":
+                buildPolarGraphForSickness("polar-graph", report_visualization)
+                break;
+            case "Gráfico polar por Cidade":
+                buildPolarGraphForSickness("polar-graph", report_visualization)
+                break;
+            case "Gráfico polar por Estado":
+                buildPolarGraphForSickness("polar-graph", report_visualization)
+                break;
             default:
-                console.error("Tipo de visualização não reconhecido.");
+                console.error("Tipo de visualização não implementada.");
                 // Código para tratar visualizações desconhecidas
                 break;
         }
@@ -76,27 +84,6 @@ function buildMockTemplate(){
         {
           label: 'Casos',
           data: [70, 90, 50],
-          backgroundColor: ['#50fa7b', '#ffb86c', '#ff5555'],
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { labels: { color: '#ffffff' } },
-      },
-    },
-  });
-
-  // Gráfico de Pizza
-  const pieCtx = document.getElementById('chart-pie').getContext('2d');
-  new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-      labels: ['Janeiro', 'Fevereiro', 'Março'],
-      datasets: [
-        {
-          data: [30, 40, 30],
           backgroundColor: ['#50fa7b', '#ffb86c', '#ff5555'],
         },
       ],

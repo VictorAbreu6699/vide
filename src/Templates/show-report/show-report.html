@@ -15,7 +15,9 @@
   {% include "components/loader.html" %}
   <!-- Logo no topo -->
   <header class="logo">
-    <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+    <a href="/">
+      <img src="{{ url_for('static', path='/img/logo.png') }}" alt="Logo" id="logo" />
+    </a>
   </header>
 
   <!-- Contêiner principal -->
@@ -65,12 +67,11 @@
         <canvas id="chart-bar"></canvas>
       </div>
       <div class="chart-container">
-        <canvas id="chart-pie"></canvas>
+        <canvas id="polar-graph"></canvas>
       </div>
     </section>
   </div>
 
-<!--  <script src="{{ url_for('static', path='/js/map.js') }}"></script>-->
   <script src="{{ url_for('static', path='/leaflet/leaflet.js') }}"></script>
   <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="{{ url_for('static', path='/js/vendor/chart.js') }}"></script>
@@ -82,6 +83,7 @@
   <script src="{{ url_for('static', path='/js/app.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/filters.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/choropleth-map.js') }}"></script>
+  <script src="{{ url_for('static', path='/js/show-report/polar-graph.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/show-report.js') }}"></script>
 </body>
 </html>

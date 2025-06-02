@@ -15,13 +15,25 @@ class VisualizationSeeder:
     def run():
         data = [
             {
-                "name": "Grafico de linhas com número diário de casos por cidade e estado",
+                "name": "Mapa Coroplético",
                 "fields": [
-                    "Data", "Casos", "Estado", "Cidade"
+                    "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
                 ]
             },
             {
-                "name": "Mapa Coroplético",
+                "name": "Gráfico polar por Enfermidade",
+                "fields": [
+                    "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
+                ]
+            },
+            {
+                "name": "Gráfico polar por Cidade",
+                "fields": [
+                    "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
+                ]
+            },
+            {
+                "name": "Gráfico polar por Estado",
                 "fields": [
                     "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
                 ]
