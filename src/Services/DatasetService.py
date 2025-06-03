@@ -108,7 +108,6 @@ class DatasetService:
 
         return df
 
-
     @staticmethod
     def get_dataset_by_report_id(report_id) -> pd.DataFrame:
         report = ReportRepository().get_by_id(report_id)

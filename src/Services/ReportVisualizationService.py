@@ -1,7 +1,10 @@
 import json
+import re
 
 import numpy as np
 import pandas as pd
+import unicodedata
+
 from src.Helpers.DataframeHelper import DataframeHelper
 from src.Models.Report import Report
 from src.Models.ReportVisualization import ReportVisualization
@@ -19,6 +22,9 @@ from src.Services.DatasetService import DatasetService
 
 
 class ReportVisualizationService:
+    # Pré-compilação das expressões regulares (mais rápido)
+    RE_REMOVE_CHARS = re.compile(r"[^A-Za-z0-9\s-]")
+    RE_NORMALIZE_SPACES = re.compile(r'[-\s]+')
 
     @staticmethod
     def store_report_visualization(request: CreateReportVisualizationDatasetColumnRequest):
@@ -161,7 +167,8 @@ class ReportVisualizationService:
 
     @staticmethod
     def __create_visualization_schemas(
-        df_report_visualizations, df_dataset: pd.DataFrame,
+        df_report_visualizations,
+        df_dataset: pd.DataFrame,
         year: str = None,
         sickness: str = None,
         state_id: int = None,
@@ -179,6 +186,7 @@ class ReportVisualizationService:
                     df_report_visualizations.at[index, "filters"] = ReportVisualizationService.__build_filters_choropleth_map(
                         df_report_visualization_dataset_columns, df_dataset
                     )
+
                     df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_choropleth_map(
                         df_report_visualization_dataset_columns,
                         df_dataset,
@@ -259,33 +267,51 @@ class ReportVisualizationService:
             columns={"id": "city_id"}
         )
 
-        list_of_columns = []
-        for index, column in df_report_visualization_dataset_columns.iterrows():
-            dataset_column = df_dataset[column['dataset_column_name']]
-            if column['dataset_column_type'] == "date":
-                dataset_column = dataset_column.dt.strftime("%Y-%m-%d")
+        # Seleciona apenas as colunas necessárias do DataFrame original
+        col_names = df_report_visualization_dataset_columns['dataset_column_name'].tolist()
+        field_names = df_report_visualization_dataset_columns['field_name'].tolist()
+        types = df_report_visualization_dataset_columns['dataset_column_type'].tolist()
 
-            list_of_columns.append({
-                "field_name": column.get("field_name"),
-                "field_data": dataset_column.tolist()
-            })
+        # Subset do DataFrame original com as colunas usadas
+        df_data = df_dataset[col_names].copy()
 
-        df_data = pd.DataFrame(data={item.get("field_name"): item.get("field_data") for item in list_of_columns})
+        # Converte as colunas do tipo "date" para datetime
+        for col_name, col_type in zip(col_names, types):
+            if col_name == "date" or col_type == "date":
+                df_data[col_name] = pd.to_datetime(df_data[col_name])
+
+        # Renomeia as colunas com os field_names desejados
+        df_data.columns = field_names
         df_data.rename(columns={
             "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
             "Indicador Numérico": "cases"
         }, inplace=True)
         df_data = df_data[df_data['city_name'].notnull()]
         df_data = df_data[df_data['state_name'].notnull()]
-        df_data['city_name_to_merge'] = df_data['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
-        df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
+
+        def normalize_text(text: str) -> str:
+            if not isinstance(text, str):
+                return ""
+            nfkd = unicodedata.normalize('NFKD', text)
+            text = ''.join(c for c in nfkd if not unicodedata.combining(c))
+            text = ReportVisualizationService.RE_REMOVE_CHARS.sub('', text)
+            text = ReportVisualizationService.RE_NORMALIZE_SPACES.sub(' ', text)
+            return text.upper().strip()
+
+        # Cria dicionário de mapeamento apenas para valores únicos
+        city_map = {val: normalize_text(val) for val in df_data['city_name'].unique()}
+        state_map = {val: normalize_text(val) for val in df_data['state_name'].unique()}
+
+        # Aplica usando map com dicionário — muito mais rápido
+        df_data['city_name_to_merge'] = df_data['city_name'].map(city_map)
+        df_data['state_name_to_merge'] = df_data['state_name'].map(state_map)
 
         # Obtem latitude, longitude e o geoJson:
         df_data = df_data.merge(
             df_cities,
             how="left",
             on=["state_name_to_merge", "city_name_to_merge"]
-        ).replace(np.nan, None)
+        )
 
         df_data["state_name"] = np.where(
             df_data["state_name_y"].notnull(),
@@ -317,7 +343,7 @@ class ReportVisualizationService:
             "state_name_to_merge", "city_name_to_merge", "state_name_y", "state_name_x", "city_name_y", "city_name_x"
         ])
 
-        df_data = ReportVisualizationService.group_data_by_year(df_data)
+        df_data = ReportVisualizationService.group_data_by_year(df_data.replace(np.nan, None))
 
         return df_data
 
@@ -363,25 +389,44 @@ class ReportVisualizationService:
             columns={"id": "city_id"}
         )
 
-        list_of_columns = []
-        for index, column in df_report_visualization_dataset_columns.iterrows():
-            dataset_column = df_dataset[column['dataset_column_name']]
-            if column['dataset_column_type'] == "date":
-                dataset_column = dataset_column.dt.strftime("%Y-%m-%d")
+        # Seleciona apenas as colunas necessárias do DataFrame original
+        col_names = df_report_visualization_dataset_columns['dataset_column_name'].tolist()
+        field_names = df_report_visualization_dataset_columns['field_name'].tolist()
+        types = df_report_visualization_dataset_columns['dataset_column_type'].tolist()
 
-            list_of_columns.append({
-                "field_name": column.get("field_name"),
-                "field_data": dataset_column.tolist()
-            })
+        # Subset do DataFrame original com as colunas usadas
+        df_data = df_dataset[col_names].copy()
 
-        df_data = pd.DataFrame(data={item.get("field_name"): item.get("field_data") for item in list_of_columns})
+        # Converte as colunas do tipo "date" para datetime
+        for col_name, col_type in zip(col_names, types):
+            if col_name == "date" or col_type == "date":
+                df_data[col_name] = pd.to_datetime(df_data[col_name])
+
+        # Renomeia as colunas com os field_names desejados
+        df_data.columns = field_names
         df_data.rename(columns={
             "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
             "Indicador Numérico": "cases"
         }, inplace=True)
+        df_data = df_data[df_data['city_name'].notnull()]
+        df_data = df_data[df_data['state_name'].notnull()]
 
-        df_data['city_name_to_merge'] = df_data['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
-        df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
+        def normalize_text(text: str) -> str:
+            if not isinstance(text, str):
+                return ""
+            nfkd = unicodedata.normalize('NFKD', text)
+            text = ''.join(c for c in nfkd if not unicodedata.combining(c))
+            text = ReportVisualizationService.RE_REMOVE_CHARS.sub('', text)
+            text = ReportVisualizationService.RE_NORMALIZE_SPACES.sub(' ', text)
+            return text.upper().strip()
+
+        # Cria dicionário de mapeamento apenas para valores únicos
+        city_map = {val: normalize_text(val) for val in df_data['city_name'].unique()}
+        state_map = {val: normalize_text(val) for val in df_data['state_name'].unique()}
+
+        # Aplica usando map com dicionário — muito mais rápido
+        df_data['city_name_to_merge'] = df_data['city_name'].map(city_map)
+        df_data['state_name_to_merge'] = df_data['state_name'].map(state_map)
 
         # Obtem latitude, longitude e o geoJson:
         df_data = df_data.merge(
@@ -443,23 +488,26 @@ class ReportVisualizationService:
 
     @staticmethod
     def __build_filters_choropleth_map(df_report_visualization_dataset_columns: pd.DataFrame, df_dataset: pd.DataFrame) -> dict:
-        list_of_columns = []
-        for index, column in df_report_visualization_dataset_columns.iterrows():
-            dataset_column = df_dataset[column['dataset_column_name']]
-            if column['dataset_column_name'] == "date" or column['dataset_column_type'] == "date":
-                dataset_column = pd.to_datetime(dataset_column)
+        # Seleciona apenas as colunas necessárias do DataFrame original
+        col_names = df_report_visualization_dataset_columns['dataset_column_name'].tolist()
+        field_names = df_report_visualization_dataset_columns['field_name'].tolist()
+        types = df_report_visualization_dataset_columns['dataset_column_type'].tolist()
 
-            list_of_columns.append({
-                "field_name": column.get("field_name"),
-                "field_data": dataset_column.tolist()
-            })
+        # Subset do DataFrame original com as colunas usadas
+        df_data = df_dataset[col_names].copy()
 
-        df_data = pd.DataFrame(data={item.get("field_name"): item.get("field_data") for item in list_of_columns})
+        # Converte as colunas do tipo "date" para datetime
+        for col_name, col_type in zip(col_names, types):
+            if col_name == "date" or col_type == "date":
+                df_data[col_name] = pd.to_datetime(df_data[col_name])
+
+        # Renomeia as colunas com os field_names desejados
+        df_data.columns = field_names
+
         df_data.rename(columns={
             "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
             "Indicador Numérico": "cases"
         }, inplace=True)
-
         filters = {
             'years': sorted(df_data['date'].dt.year.unique().tolist()),
             'sicknesses': sorted(df_data['sickness'].unique().tolist())
