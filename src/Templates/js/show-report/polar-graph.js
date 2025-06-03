@@ -30,7 +30,7 @@ function buildPolarGraphForSickness(container_id, report_visualization, reload =
     }
 
     let labels = report_visualization.data.map(item => item.sickness);
-    let data = report_visualization.data.map(item => item.cases);
+    let data = report_visualization.data.map(item => item.percentual);
 
     polar_graph_sickness = buildPolarGraph(
         container_id, labels, data, "Percentual de Casos", "Concentração de casos por Enfermidade"
@@ -44,7 +44,7 @@ function buildPolarGraphForState(container_id, report_visualization, reload = fa
     }
 
     let labels = report_visualization.data.map(item => item.state_name);
-    let data = report_visualization.data.map(item => item.cases);
+    let data = report_visualization.data.map(item => item.percentual);
 
     polar_graph_state = buildPolarGraph(
         container_id, labels, data, "Percentual de Casos", "Concentração de casos por Estado"

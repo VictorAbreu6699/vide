@@ -58,21 +58,29 @@
     <!-- Mapa -->
     <section id="map"></section>
 
-    <!-- Gráficos -->
-    <section class="section-charts" style="
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      gap: inherit;
-    ">
-      <div class="chart-container">
+    <section>
+      <div class="">
         <canvas id="polar-graph-sickness"></canvas>
       </div>
-      <div class="chart-container">
+      <div class="">
         <canvas id="polar-graph-state"></canvas>
       </div>
     </section>
+    <!-- Gráficos -->
+<!--    <section class="section-charts" style="-->
+<!--      display: flex;-->
+<!--      flex-direction: row;-->
+<!--      flex-wrap: wrap;-->
+<!--      justify-content: space-evenly;-->
+<!--      gap: inherit;-->
+<!--    ">-->
+<!--      <div class="chart-container">-->
+<!--        <canvas id="polar-graph-sickness"></canvas>-->
+<!--      </div>-->
+<!--      <div class="chart-container">-->
+<!--        <canvas id="polar-graph-state"></canvas>-->
+<!--      </div>-->
+<!--    </section>-->
   </div>
 
   <script src="{{ url_for('static', path='/leaflet/leaflet.js') }}"></script>

@@ -213,22 +213,6 @@ class ReportVisualizationService:
                         data_to_polar_graph
                     ).to_dict(orient="records")
 
-                case "Gráfico polar por Cidade":
-                    if data_to_polar_graph is None:
-                        data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
-                            df_report_visualization_dataset_columns,
-                            df_dataset,
-                            df_cities,
-                            year,
-                            sickness,
-                            state_id,
-                            city_id
-                        )
-
-                    df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_polar_graph_for_city(
-                        data_to_polar_graph
-                    ).to_dict(orient="records")
-
                 case "Gráfico polar por Estado":
                     if data_to_polar_graph is None:
                         data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
@@ -470,19 +454,22 @@ class ReportVisualizationService:
 
     @staticmethod
     def __build_polar_graph_for_sickness(dataframe: pd.DataFrame) -> pd.DataFrame:
-        dataframe = dataframe.groupby("sickness")['cases'].mean().reset_index()
+        dataframe = dataframe.groupby("sickness")['cases'].sum().reset_index()
+
+        # Calcula a porcentagem em relação ao total
+        total = dataframe['cases'].sum()
+        dataframe['percentual'] = dataframe['cases'] / total * 100
 
         return dataframe
 
     @staticmethod
     def __build_polar_graph_for_state(dataframe: pd.DataFrame) -> pd.DataFrame:
-        dataframe = dataframe.groupby("state_name")['cases'].mean().reset_index()
+        # Soma de casos por cidade
+        dataframe = dataframe.groupby("state_name")['cases'].sum().reset_index()
 
-        return dataframe
-
-    @staticmethod
-    def __build_polar_graph_for_city(dataframe: pd.DataFrame) -> pd.DataFrame:
-        dataframe = dataframe.groupby("city_name")['cases'].mean().reset_index()
+        # Calcula a porcentagem em relação ao total
+        total = dataframe['cases'].sum()
+        dataframe['percentual'] = dataframe['cases'] / total * 100
 
         return dataframe
 
