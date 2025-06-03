@@ -275,7 +275,8 @@ class ReportVisualizationService:
             "Data": "date", "Estado": "state_name", "Cidade": "city_name", "Doença": "sickness",
             "Indicador Numérico": "cases"
         }, inplace=True)
-
+        df_data = df_data[df_data['city_name'].notnull()]
+        df_data = df_data[df_data['state_name'].notnull()]
         df_data['city_name_to_merge'] = df_data['city_name'].map(DataframeHelper.remove_accents_and_capitalize)
         df_data['state_name_to_merge'] = df_data['state_name'].map(DataframeHelper.remove_accents_and_capitalize)
 
@@ -316,7 +317,34 @@ class ReportVisualizationService:
             "state_name_to_merge", "city_name_to_merge", "state_name_y", "state_name_x", "city_name_y", "city_name_x"
         ])
 
+        df_data = ReportVisualizationService.group_data_by_year(df_data)
+
         return df_data
+
+    @staticmethod
+    def group_data_by_year(df: pd.DataFrame) -> pd.DataFrame:
+        # Converte a coluna de data para datetime
+        df['date'] = pd.to_datetime(df['date'], errors='coerce')
+
+        # Extrai o ano
+        df['year'] = df['date'].dt.year
+
+        # Agrupamento pelos mesmos campos da chave usada no JS
+        grouped = df.groupby([
+            'sickness',
+            'state_id',
+            'state_name',
+            'city_id',
+            'city_name',
+            'latitude',
+            'longitude',
+            'geo_json',
+            'year'
+        ]).agg(total_cases=('cases', 'sum')).reset_index()
+
+        grouped = grouped[grouped['total_cases'].notnull()]
+
+        return grouped
 
     @staticmethod
     def get_data_to_polar_graph(
@@ -418,7 +446,7 @@ class ReportVisualizationService:
         list_of_columns = []
         for index, column in df_report_visualization_dataset_columns.iterrows():
             dataset_column = df_dataset[column['dataset_column_name']]
-            if column['dataset_column_type'] == "date":
+            if column['dataset_column_name'] == "date" or column['dataset_column_type'] == "date":
                 dataset_column = pd.to_datetime(dataset_column)
 
             list_of_columns.append({

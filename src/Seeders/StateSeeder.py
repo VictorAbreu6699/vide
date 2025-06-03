@@ -40,7 +40,7 @@ class StateSeeder:
         ]
         state_repository = StateRepository()
         df_new_states = pd.DataFrame(data)
-        df_all_states = state_repository.get_all().drop(columns=['id'])
+        df_all_states = state_repository.get_all().drop(columns=['id', 'geo_json'])
 
         df_new_states = df_new_states.merge(
             df_all_states,

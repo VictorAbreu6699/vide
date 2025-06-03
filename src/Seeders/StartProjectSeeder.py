@@ -18,7 +18,7 @@ class StartProjectSeeder:
         CitySeeder.run()
         NeighborhoodSeeder.run()
         UserStartSeeder.run()
-        # AddGeoJsonSeeder.run() // EXECUTAR DIRETAMENTE NO ARQUIVO
+        AddGeoJsonSeeder.run()
 
         print("Seeders executados com sucesso!")
 
