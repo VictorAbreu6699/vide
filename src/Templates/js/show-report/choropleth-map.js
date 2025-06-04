@@ -11,7 +11,6 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
         buildSelectState()
         buildSelectCity()
     }
-//    data = groupDataByYear(report_visualization.data)
     data = report_visualization.data
     // Inicializar o mapa usando a biblioteca Leaflet
     map = L.map(container_id).setView([-14.2350, -51.9253], 4); // Centro aproximado do Brasil
@@ -62,34 +61,6 @@ function buildChoroplethMap(container_id, report_visualization, reload = false) 
       }
     }).addTo(map);
 
-}
-
-function groupDataByYear(data) {
-    const grouped = data.reduce((acc, item) => {
-        const dateObj = new Date(item.date); // Converte a data para objeto Date
-        const year = dateObj.getFullYear(); // Extrai o ano
-        const key = `${item.sickness}_${item.state_name}_${item.city_name}_${year}`;
-
-        if (!acc[key]) {
-            acc[key] = {
-                sickness: item.sickness,
-                state_id: item.state_id,
-                state_name: item.state_name,
-                city_id: item.city_id,
-                city_name: item.city_name,
-                latitude: item.latitude,
-                longitude: item.longitude,
-                year: year,
-                geo_json: item.geo_json,
-                total_cases: 0
-            };
-        }
-
-        acc[key].total_cases += item.cases;
-        return acc;
-    }, {});
-
-    return Object.values(grouped);
 }
 
 function applyStateAndCityFilter(state_id, city_id){

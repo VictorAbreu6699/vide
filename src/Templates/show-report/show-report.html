@@ -62,11 +62,11 @@
         <canvas id="polar-graph-state" style="background-color: #282a36;"></canvas>
       </div>
       <div class="col-6">
+        <canvas id="histogram-graph-sickness" style="background-color: #282a36;"></canvas>
+      </div>
+      <div class="col-6">
         <canvas id="polar-graph-sickness" style="background-color: #282a36;"></canvas>
       </div>
-<!--      <div class="col-6">-->
-<!--        <canvas id="polar-graph-sickness" style="background-color: #282a36;"></canvas>-->
-<!--      </div>-->
     </div>
 <!--    <section>-->
 <!--      <div class="">-->
@@ -94,7 +94,7 @@
   </div>
 
   <script src="{{ url_for('static', path='/leaflet/leaflet.js') }}"></script>
-  <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+  <script src="{{ url_for('static', path='/js/vendor/leaflet-heat.js') }}"></script>
   <script src="{{ url_for('static', path='/js/vendor/chart.js') }}"></script>
   <script src="{{ url_for('static', path='/js/vendor/jquery.min.js') }}"></script>
   <script src="{{ url_for('static', path='/js/vendor/select2.min.js') }}"></script>
@@ -104,7 +104,7 @@
   <script src="{{ url_for('static', path='/js/app.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/filters.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/choropleth-map.js') }}"></script>
-  <script src="{{ url_for('static', path='/js/show-report/polar-graph.js') }}"></script>
+  <script src="{{ url_for('static', path='/js/show-report/graphs.js') }}"></script>
   <script src="{{ url_for('static', path='/js/show-report/show-report.js') }}"></script>
 </body>
 </html>

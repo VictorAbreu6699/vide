@@ -178,7 +178,7 @@ class ReportVisualizationService:
         df_report_visualizations["filters"] = None
         df_report_visualizations["data"] = None
 
-        data_to_polar_graph = None
+        data_to_graphs = None
         for index, row in df_report_visualizations.iterrows():
             df_report_visualization_dataset_columns = pd.DataFrame(row.get("report_visualization_dataset_columns"))
             match row.get("visualization_name"):
@@ -198,8 +198,8 @@ class ReportVisualizationService:
                     ).to_dict(orient="records")
 
                 case "Gráfico polar por Enfermidade":
-                    if data_to_polar_graph is None:
-                        data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
+                    if data_to_graphs is None:
+                        data_to_graphs = ReportVisualizationService.get_data_to_graphs(
                             df_report_visualization_dataset_columns,
                             df_dataset,
                             df_cities,
@@ -210,12 +210,12 @@ class ReportVisualizationService:
                         )
 
                     df_report_visualizations.at[index, "data"] = ReportVisualizationService.__build_polar_graph_for_sickness(
-                        data_to_polar_graph
+                        data_to_graphs
                     ).to_dict(orient="records")
 
                 case "Gráfico polar por Estado":
-                    if data_to_polar_graph is None:
-                        data_to_polar_graph = ReportVisualizationService.get_data_to_polar_graph(
+                    if data_to_graphs is None:
+                        data_to_graphs = ReportVisualizationService.get_data_to_graphs(
                             df_report_visualization_dataset_columns,
                             df_dataset,
                             df_cities,
@@ -227,7 +227,24 @@ class ReportVisualizationService:
 
                     df_report_visualizations.at[
                         index, "data"] = ReportVisualizationService.__build_polar_graph_for_state(
-                        data_to_polar_graph
+                        data_to_graphs
+                    ).to_dict(orient="records")
+
+                case "Histograma por Ano":
+                    if data_to_graphs is None:
+                        data_to_graphs = ReportVisualizationService.get_data_to_graphs(
+                            df_report_visualization_dataset_columns,
+                            df_dataset,
+                            df_cities,
+                            year,
+                            sickness,
+                            state_id,
+                            city_id
+                        )
+
+                    df_report_visualizations.at[
+                        index, "data"] = ReportVisualizationService.__build_histogram_graph_for_year(
+                        data_to_graphs
                     ).to_dict(orient="records")
 
         df_report_visualizations.drop(columns=["report_visualization_dataset_columns"], inplace=True)
@@ -357,7 +374,7 @@ class ReportVisualizationService:
         return grouped
 
     @staticmethod
-    def get_data_to_polar_graph(
+    def get_data_to_graphs(
         df_report_visualization_dataset_columns: pd.DataFrame,
         df_dataset: pd.DataFrame,
         df_cities: pd.DataFrame,
@@ -454,6 +471,7 @@ class ReportVisualizationService:
 
     @staticmethod
     def __build_polar_graph_for_sickness(dataframe: pd.DataFrame) -> pd.DataFrame:
+        # Soma de casos por enfermidade
         dataframe = dataframe.groupby("sickness")['cases'].sum().reset_index()
 
         # Calcula a porcentagem em relação ao total
@@ -464,12 +482,20 @@ class ReportVisualizationService:
 
     @staticmethod
     def __build_polar_graph_for_state(dataframe: pd.DataFrame) -> pd.DataFrame:
-        # Soma de casos por cidade
+        # Soma de casos por estado
         dataframe = dataframe.groupby("state_name")['cases'].sum().reset_index()
 
         # Calcula a porcentagem em relação ao total
         total = dataframe['cases'].sum()
         dataframe['percentual'] = dataframe['cases'] / total * 100
+
+        return dataframe
+
+    @staticmethod
+    def __build_histogram_graph_for_year(dataframe: pd.DataFrame) -> pd.DataFrame:
+        # Soma de casos por ano
+        dataframe = ReportVisualizationService.group_data_by_year(dataframe)
+        dataframe = dataframe.groupby(["year", "sickness"])['total_cases'].sum().reset_index()
 
         return dataframe
 

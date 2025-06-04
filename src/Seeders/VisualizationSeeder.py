@@ -37,6 +37,12 @@ class VisualizationSeeder:
                 "fields": [
                     "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
                 ]
+            },
+            {
+                "name": "Histograma por Ano",
+                "fields": [
+                    "Data", "Indicador Numérico", "Estado", "Cidade", "Doença"
+                ]
             }
         ]
         visualization_repository = VisualizationRepository()

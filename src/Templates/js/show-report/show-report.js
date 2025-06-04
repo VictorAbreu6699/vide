@@ -19,9 +19,9 @@ function buildVisualizations(reload = false)
             case "Gráfico polar por Enfermidade":
                 buildPolarGraphForSickness("polar-graph-sickness", report_visualization)
                 break;
-//            case "Gráfico polar por Cidade":
-//                buildPolarGraphForCity("polar-graph-city", report_visualization)
-//                break;
+            case "Histograma por Ano":
+                buildHistogramGraphForYearAndSickness("histogram-graph-sickness", report_visualization)
+                break;
             case "Gráfico polar por Estado":
                 buildPolarGraphForState("polar-graph-state", report_visualization)
                 break;
