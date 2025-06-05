@@ -497,6 +497,10 @@ class ReportVisualizationService:
         dataframe = ReportVisualizationService.group_data_by_year(dataframe)
         dataframe = dataframe.groupby(["year", "sickness"])['total_cases'].sum().reset_index()
 
+        # Calcula a porcentagem em relação ao total
+        total = dataframe['total_cases'].sum()
+        dataframe['percentual'] = dataframe['total_cases'] / total * 100
+
         return dataframe
 
     @staticmethod

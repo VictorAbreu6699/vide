@@ -59,29 +59,29 @@ function buildHistogramGraphForYearAndSickness(container_id, report_visualizatio
 
     dados = report_visualization.data
 
-    let years = [...new Set(dados.map(d => d.year))].sort();
-    let sicknesses = [...new Set(dados.map(d => d.sickness))];
+    const anos = [...new Set(dados.map(d => d.year))].sort();
+    const doencas = [...new Set(dados.map(d => d.sickness))];
 
-    const datasets = sicknesses.map((sickness, index) => {
-        const color = `hsl(${index * 50}, 70%, 60%)`;
+    const datasets = doencas.map((doenca, index) => {
+        const cor = `hsl(${index * 50}, 70%, 60%)`;
 
-        const data = years.map(year => {
-            const item = dados.find(d => d.year === year && d.sickness === sickness);
-            return item ? item.total_cases : 0;
+        const data = anos.map(ano => {
+            const item = dados.find(d => d.year === ano && d.sickness === doenca);
+            return item ? item.percentual : 0;
         });
 
         return {
-            label: sickness,
+            label: doenca,
             data: data,
-            backgroundColor: color
+            backgroundColor: cor
         };
     });
 
     const ctx = document.getElementById(container_id).getContext('2d');
-    histogram_graph_year_sickness = new Chart(ctx, {
+    new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: years,
+            labels: anos,
             datasets: datasets
         },
         options: {
@@ -89,7 +89,14 @@ function buildHistogramGraphForYearAndSickness(container_id, report_visualizatio
             plugins: {
                 title: {
                     display: true,
-                    text: 'Casos por Ano e Doença'
+                    text: 'Distribuição Percentual de casos por Ano e Doença'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+                        }
+                    }
                 },
                 legend: {
                     position: 'top'
@@ -105,10 +112,13 @@ function buildHistogramGraphForYearAndSickness(container_id, report_visualizatio
                 },
                 y: {
                     beginAtZero: true,
-                    stacked: false,
+                    max: 100,
                     title: {
                         display: true,
-                        text: 'Total de Casos'
+                        text: 'Percentual (%)'
+                    },
+                    ticks: {
+                        callback: value => `${value}%`
                     }
                 }
             }
