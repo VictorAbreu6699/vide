@@ -78,7 +78,7 @@ function buildHistogramGraphForYearAndSickness(container_id, report_visualizatio
     });
 
     const ctx = document.getElementById(container_id).getContext('2d');
-    new Chart(ctx, {
+    histogram_graph_year_sickness = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: anos,
