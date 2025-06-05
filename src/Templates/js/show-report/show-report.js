@@ -25,6 +25,9 @@ function buildVisualizations(reload = false)
             case "Gráfico polar por Estado":
                 buildPolarGraphForState("polar-graph-state", report_visualization)
                 break;
+            case "Gráfico polar por Cidade":
+                buildPolarGraphForCity("polar-graph-city", report_visualization)
+                break;
             default:
                 console.error("Tipo de visualização não implementada.");
                 // Código para tratar visualizações desconhecidas

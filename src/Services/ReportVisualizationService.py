@@ -230,6 +230,23 @@ class ReportVisualizationService:
                         data_to_graphs
                     ).to_dict(orient="records")
 
+                case "Gráfico polar por Cidade":
+                    if data_to_graphs is None:
+                        data_to_graphs = ReportVisualizationService.get_data_to_graphs(
+                            df_report_visualization_dataset_columns,
+                            df_dataset,
+                            df_cities,
+                            year,
+                            sickness,
+                            state_id,
+                            city_id
+                        )
+
+                    df_report_visualizations.at[
+                        index, "data"] = ReportVisualizationService.__build_polar_graph_for_city(
+                        data_to_graphs
+                    ).to_dict(orient="records")
+
                 case "Histograma por Ano":
                     if data_to_graphs is None:
                         data_to_graphs = ReportVisualizationService.get_data_to_graphs(
@@ -488,9 +505,21 @@ class ReportVisualizationService:
         # Calcula a porcentagem em relação ao total
         total = dataframe['cases'].sum()
         dataframe['percentual'] = dataframe['cases'] / total * 100
+        dataframe = dataframe.sort_values(by=['percentual'], ascending=False).head(10)
 
         return dataframe
 
+    @staticmethod
+    def __build_polar_graph_for_city(dataframe: pd.DataFrame) -> pd.DataFrame:
+        # Soma de casos por cidade
+        dataframe = dataframe.groupby("city_name")['cases'].sum().reset_index()
+
+        # Calcula a porcentagem em relação ao total
+        total = dataframe['cases'].sum()
+        dataframe['percentual'] = dataframe['cases'] / total * 100
+        dataframe = dataframe.sort_values(by=['percentual'], ascending=False).head(10)
+
+        return dataframe
     @staticmethod
     def __build_histogram_graph_for_year(dataframe: pd.DataFrame) -> pd.DataFrame:
         # Soma de casos por ano

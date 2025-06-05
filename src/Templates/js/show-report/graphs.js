@@ -47,7 +47,21 @@ function buildPolarGraphForState(container_id, report_visualization, reload = fa
     let data = report_visualization.data.map(item => item.percentual);
 
     polar_graph_state = buildPolarGraph(
-        container_id, labels, data, "Percentual de Casos", "Concentração de casos por Estado"
+        container_id, labels, data, "Percentual de Casos", "Concentração de Casos por Estado (Top 10)"
+    )
+}
+
+function buildPolarGraphForCity(container_id, report_visualization, reload = false) {
+    if(polar_graph_city != null){
+        polar_graph_city.destroy()
+        polar_graph_city = null
+    }
+
+    let labels = report_visualization.data.map(item => item.city_name);
+    let data = report_visualization.data.map(item => item.percentual);
+
+    polar_graph_city = buildPolarGraph(
+        container_id, labels, data, "Percentual de Casos", "Concentração de Casos por Cidade (Top 10)"
     )
 }
 
