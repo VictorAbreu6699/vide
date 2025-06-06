@@ -103,7 +103,7 @@ function buildHistogramGraphForYearAndSickness(container_id, report_visualizatio
             plugins: {
                 title: {
                     display: true,
-                    text: 'Distribuição Percentual de casos por Ano e Doença'
+                    text: 'Distribuição Percentual de casos por Ano e Enfermidade'
                 },
                 tooltip: {
                     callbacks: {
