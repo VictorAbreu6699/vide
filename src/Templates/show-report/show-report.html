@@ -61,43 +61,20 @@
 
     <!-- Mapa -->
     <section id="map"></section>
-    <div class="row" style="background-color: #282a36; margin-left: 0px;">
-      <div class="col-6" style="margin-top: 10px">
+    <div class="row" style="background-color: #282a36; margin-left: 0px; display: none" id="graphs-div">
+      <div class="col-6" style="margin-top: 10px; display: none" id="histogram-graph-sickness-div">
         <canvas id="histogram-graph-sickness"></canvas>
       </div>
-      <div class="col-6" style="margin-top: 10px">
+      <div class="col-6" style="margin-top: 10px; display: none" id="polar-graph-sickness-div">
         <canvas id="polar-graph-sickness" style="max-height: 200px"></canvas>
       </div>
-      <div class="col-6" style="margin-top: 10px">
+      <div class="col-6" style="margin-top: 10px; display: none" id="polar-graph-state-div">
         <canvas id="polar-graph-state"></canvas>
       </div>
-      <div class="col-6" style="margin-top: 10px">
+      <div class="col-6" style="margin-top: 10px; display: none" id="polar-graph-city-div">
         <canvas id="polar-graph-city"></canvas>
       </div>
     </div>
-<!--    <section>-->
-<!--      <div class="">-->
-<!--        <canvas id="polar-graph-sickness"></canvas>-->
-<!--      </div>-->
-<!--      <div class="">-->
-<!--        <canvas id="polar-graph-state"></canvas>-->
-<!--      </div>-->
-<!--    </section>-->
-    <!-- Gráficos -->
-<!--    <section class="section-charts" style="-->
-<!--      display: flex;-->
-<!--      flex-direction: row;-->
-<!--      flex-wrap: wrap;-->
-<!--      justify-content: space-evenly;-->
-<!--      gap: inherit;-->
-<!--    ">-->
-<!--      <div class="chart-container">-->
-<!--        <canvas id="polar-graph-sickness"></canvas>-->
-<!--      </div>-->
-<!--      <div class="chart-container">-->
-<!--        <canvas id="polar-graph-state"></canvas>-->
-<!--      </div>-->
-<!--    </section>-->
   </div>
 
   <script src="{{ url_for('static', path='/leaflet/leaflet.js') }}"></script>

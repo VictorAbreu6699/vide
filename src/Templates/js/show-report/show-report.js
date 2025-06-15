@@ -17,15 +17,22 @@ function buildVisualizations(reload = false)
                 buildChoroplethMap("map", report_visualization)
                 break;
             case "Gráfico polar por Enfermidade":
+                $("#graphs-div").show()
+                $("#polar-graph-sickness-div").show()
                 buildPolarGraphForSickness("polar-graph-sickness", report_visualization)
                 break;
             case "Histograma por Ano":
+                $("#histogram-graph-sickness-div").show()
                 buildHistogramGraphForYearAndSickness("histogram-graph-sickness", report_visualization)
                 break;
             case "Gráfico polar por Estado":
+                $("#graphs-div").show()
+                $("#polar-graph-state-div").show()
                 buildPolarGraphForState("polar-graph-state", report_visualization)
                 break;
             case "Gráfico polar por Cidade":
+                $("#graphs-div").show()
+                $("#polar-graph-city-div").show()
                 buildPolarGraphForCity("polar-graph-city", report_visualization)
                 break;
             default:
