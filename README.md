@@ -1,6 +1,8 @@
 # 🚀 VIDE
 
 Este é um projeto web construído com [FastAPI](https://fastapi.tiangolo.com/), utilizando templates HTML integrados (Jinja2) e jQuery no front-end.
+Este projeto foi desenvolvido como parte do Trabalho de Conclusão de Curso (TCC) pelos desenvolvedores [Gabriel](https://github.com/gabrielgbr1) e [Victor](https://github.com/VictorAbreu6699).
+O artigo com a descrição do projeto pode ser acessado em: [vide.pdf](vide.pdf)
 
 ## 🧰 Tecnologias Utilizadas
 
